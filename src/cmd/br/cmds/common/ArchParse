@@ -1,0 +1,30 @@
+# Parse archive description, which is set into shell positional parameters
+# invoked as ".  ArchParse", so it affects current shell variables
+
+#	echo >/dev/tty "Description = $*"	# debug
+
+# Parse items from archive description file
+AR_DESC=$1 ; shift
+AR_NAME=$1 ; shift
+AR_SKIP="seek"		# by default, skip by seeking
+
+while [ -n "$*" ]
+do
+	case "$1" in
+	-b )	AR_BUFF="$2"; shift 2
+		;;
+
+	-p )	AR_SKIP="read"; shift
+		;;
+
+	-s )	AR_SIZE="$2"; shift 2
+		;;
+
+	* )	# Unknown option
+		echo >/dev/tty \
+			"Unknown option in archive description:" \
+			"\n\t'$*'"
+		shift
+		;;
+	esac
+done

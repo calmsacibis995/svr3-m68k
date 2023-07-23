@@ -1,0 +1,41 @@
+# Shell file to estimate archive requirements for incremental backup
+# required args:
+#	1 = base dir
+# optional args:
+#	2.. = places to visit, and bru flags
+
+. BUsetup
+
+[ "$1" ]  ||  FAIL "$0: Need directory to estimate from"
+DIR="$1"; shift
+PLACES="${*:-'.'}"	# by default, visit DIR
+[ -r $TEST_FLAG ]  &&  { echo "PLACES =" $PLACES; }
+
+
+MESSAGE="No estimate made on '$DIR'"
+.  ArchGet	# load my variables
+
+unset MESSAGE
+.  SinceFull		# take since last full backup
+
+# Perform estimate
+echo >/dev/tty \
+	"Estimating archive requirements for incremental backup of:" \
+	"\n\t'$DIR'" \
+	"\nPlease wait..."
+
+
+#	echo $0:args= "$@"	#debug
+#	type ESTIMATE	#debug
+ESTIMATE  $DIR  -l  -n $SINCE  $VERBOSE_EST  \
+	-f $AR_NAME $AR_REST  $PLACES  >$TEMP  2>&1
+
+read VOLUMES KBYTES FILES BLOCKS REST <$TEMP ; rm $TEMP
+echo $DIR $VOLUMES $KBYTES $FILES $BLOCKS  >$LAST_EST
+
+echo >/dev/tty "\n\nArchive estimate..."
+echo >/dev/tty "Comes from:	$DIR"
+echo >/dev/tty "Will write to:	$AR_NAME"
+echo >/dev/tty "Volumes:	$VOLUMES"
+echo >/dev/tty "Files:		$FILES"
+echo >/dev/tty "Bytes:		$KBYTES K"

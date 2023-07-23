@@ -1,0 +1,35 @@
+# Restore selected files from archive
+# required args:
+#	1 = dir to restore to
+# optional args:
+#	2.. = bru selection options
+# archive comes from description file
+
+
+. BUsetup
+
+set -f			# Inhibit expansion of CRITERIA
+
+[ "$1" ]  ||  FAIL "$0: Need directory to restore to"
+DIR="$1"; shift
+
+CRITERIA="$*"
+
+MESSAGE="Nothing restored to '$DIR'."
+.  ArchGet	# load my variables
+
+
+ShowCrit restore "$CRITERIA"	# display selection criteria
+echo >/dev/tty \
+	"Relative files from archive will be restored to:" \
+	"\n\t$DIR"
+
+ACTION="read"
+.  Confirm
+
+.  FPreserve		# preserve contents of private files
+
+# give all bru options
+RESTORE "$DIR"  $AR_NAME  $AR_REST  $CRITERIA
+
+.  FRestore		# restore contents of private files

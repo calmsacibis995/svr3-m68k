@@ -1,0 +1,24 @@
+# Check for correct run-level.  Give warning if not at 1,
+# but otherwise non-fatal.
+# invoke:   . RunCheck
+# input:
+#	SITE_RUN = this site's appropriate run-level for backups
+# output:
+#	RUN_LEVEL = current actual run-level
+
+SITE_RUN=${SITE_RUN:-'1'}	# run-level 1 is default for backups
+
+RUN_LEVEL=`who -r`
+RUN_LEVEL=` fexpr "$RUN_LEVEL" : '.*level[ 	]*\([0-6SQabc]\)' `
+
+[ "$RUN_LEVEL" -ne $SITE_RUN ]  &&  {
+	# Bad news: run level not correct
+	# Emit a warning only...
+	echo >/dev/tty \
+		"\n** WARNING ONLY --" \
+		"Run-level is $RUN_LEVEL instead of $SITE_RUN\n"
+}
+
+# Special action for certain run-levels
+[ "$RUN_LEVEL" -eq 1 ]  &&  { /etc/mountall >/dev/tty 2>&1; }
+

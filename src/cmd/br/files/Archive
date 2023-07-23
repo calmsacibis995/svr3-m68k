@@ -1,0 +1,1 @@
+Streaming-Tape		/dev/rmt/m350_0t		-b 128k   -s 60M    -p

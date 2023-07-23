@@ -1,0 +1,30 @@
+# Shell file estimates archive media requirements
+# Emits size info in simple numeric form
+# required args:
+#	1 = base directory
+# optional args:
+#	2..* = bru options
+
+[ $# -lt 1 ]  &&  { echo 1>&2 "$0: Need directory to estimate from"; exit 2; }
+
+DIR=$1; shift
+
+cd $DIR || exit
+
+# bru: 1 volume(s), 3 files, 8 archive blocks, 16 Kbytes
+#	echo >/dev/tty  $0:args= "$@"	# debug
+
+# Debug-level implementation
+#	pwd >/dev/tty; 	echo >/dev/tty bru -e "$@"
+#	echo 1 100 69 50	# 1 vol, 100K, 69 files, 50 ar-blocks
+#	exit 0
+
+# allow bru to take interrupts & quit's
+catch 'echo >/dev/tty "\nInterrupted\n"; echo 0 0 0 0; exit;'  2 3
+
+RESULT=`bru -e "$@" 2>&1  \
+	| tee /dev/tty  \
+	| awk '/volume\(s\)/ { print $2,$9,$4,$6 }' `
+
+#  VOLUMES KBYTES FILES BLOCKS
+echo ${RESULT:-"0 0 0 0"}

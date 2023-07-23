@@ -1,0 +1,25 @@
+# Shell and awk goodies to format 'df' output into a machine-useable form
+# optional args:
+#	1: mount-point to emit info for
+#	2..: not used
+
+FIRST=name	# prints actual name in awk
+
+# If any args, only emit info for selected mount-point,
+# if no args, emit information for all known file-systems.
+# We only use the first 10 characters of the supplied mount-point, since
+# mnttab only contains the first 10 chars, and 'df' will only emit these.
+[ "$1" ]  && {
+	FIRST=\"$1\"
+	NAME=`fexpr "X$1" : 'X\(.\{1,10\}\)' ` 
+	TEST="if ( name == \"$NAME\" )"
+}
+
+#	echo >/dev/tty ":$FIRST:"  :$NAME:  :$TEST:	# debug only
+
+
+df -t | tr '()' '  '  | awk \
+	'$1 ~ /^\//	{ name = $1; device = $2; Bused = $4; Iused = $6; }
+	$1 == "total:"	{ '"$TEST"'
+			    print '"$FIRST"', device, Bused, $2, Iused, $4;
+			} '

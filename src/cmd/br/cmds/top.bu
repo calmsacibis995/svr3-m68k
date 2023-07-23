@@ -1,0 +1,74 @@
+# Top-level shell file for backup/restore actions
+# Choose action, then invoke sub-file to perform the action.
+
+catch '' 2	# no interrupts
+catch '' 3	# no quits allowed
+
+BACK_CMDS=${BACK_CMDS:-$HOME/backups/cmds/common}	# debug use only
+. $BACK_CMDS/BUsetup		# setup variables and things
+
+DIR=${1:-$BASE_DIR}		# take arg, if any
+
+# Selection criteria files and remembered dir-name do not survive
+>$R_CRIT ; >$S_CRIT ; echo $DIR >$THE_DIR
+
+
+# Display initial banner and reassurance messages
+echo >/dev/tty	"\n\n\nB A C K U P    A N D    R E S T O R E"
+
+# Check that run-level is appropriate
+.  RunCheck		# puts current level in RUN_LEVEL
+
+
+while [ true ]		# Faster than exec'ing /bin/true
+do
+	# Read DIR from file where it is remembered
+	read DIR JUNK <$THE_DIR
+	DIR=${DIR:-$BASE_DIR}		# if empty, use BASE_DIR
+
+	ChooseQ	"Backup & Restore functions are:" \
+		"INCREMENTAL backup" \
+		"FULL backup" \
+		"SELECTED backup" \
+		"RESTORE files from archive" \
+		"ARCHIVE description change" \
+		"PREFERENCES"	>$TEMP
+	read ITEM CHOICE  <$TEMP;  rm $TEMP
+#	echo ITEM=":$ITEM:"  CHOICE=":$CHOICE:"		# debug statement
+
+	[ -r $TEST_FLAG ] &&  echo >/dev/tty  You chose: $CHOICE.
+	
+	case "$CHOICE" in	# I F S R A P Q
+		Q* )	# Quit
+			exit ;;
+	
+		I* )	# Incremental backup
+			cd incr; top.incr "$DIR" ; cd ..
+			;;
+	
+		F* )	# Full backup
+			cd full; top.full ; cd ..
+			;;
+	
+		S* )	# Selected backups
+			cd select; top.sel "$DIR" ; cd ..
+			;;
+	
+		R* )	# Restore from archive
+			cd restore; top.rest "$DIR" ; cd ..
+			;;
+	
+		A* )	# Change Archive device
+			cd arch; top.arch ; cd ..
+			;;
+	
+		P* )	# Set preferences
+			cd pref; top.pref ; cd ..
+			;;
+	
+		* )	# Program failure
+			FAIL "\n$0: funny choice:" $CHOICE $ITEM
+			;;	
+	esac
+	
+done

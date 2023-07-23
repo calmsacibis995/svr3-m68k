@@ -1,0 +1,9 @@
+#ident	@(#)adm:root	1.1.1.1
+#
+# The root crontab should be used to perform management of uucp
+# leftovers, policing/reporting of errdemon data.
+#
+45 23 * * * ulimit 5000; /bin/su uucp -c "/usr/lib/uucp/uudemon.cleanup" > /dev/null 2>&1
+41,11 * * * * /usr/lib/uucp/uudemon.hour > /dev/null
+1,30 * * * * /usr/lib/uucp/uudemon.poll > /dev/null
+0 5 * * 1 /etc/errstop 2>/dev/console;/bin/mv /usr/adm/errfile /usr/adm/oerrfile;/usr/lib/errdemon 2> /dev/console; /usr/bin/errpt /usr/adm/oerrfile | /bin/mail adm

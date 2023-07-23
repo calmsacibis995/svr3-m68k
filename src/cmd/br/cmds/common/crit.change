@@ -1,0 +1,40 @@
+# Change selection criteria for restore/backup
+# optional args:
+#	* = bru selection criteria
+# may be none or arbitrary args.
+# Get new criteria, then echo them to stdout on exit
+
+. BUsetup
+
+set -f			# Inhibit expansion of CRITERIA
+
+# Simple expedient: force user to input items literally
+CRITERIA="$*"
+
+echo >/dev/tty \
+	"Current selection criteria:" \
+	"\n\t$CRITERIA"
+
+echo >/dev/tty \
+	"\nEnter blank line for no change." \
+	"\nBegin line with '+' to append new input." \
+	"\nEnter keyboard EOF to erase all criteria." \
+	"\nOtherwise, type line exactly as you want it." \
+	"\nYour input: \c"
+
+read INPUT </dev/tty  || { echo >/dev/tty; INPUT="  "; }
+
+case "$INPUT" in
+	"" )	# Empty string = no change
+		echo $CRITERIA
+		;;
+
+	+* )	# Append things after '+'
+		THINGS=`fexpr "$INPUT" : '+\(.*\)' `	
+		echo $CRITERIA $THINGS
+		;;
+		
+	* )	# All else, replace with input
+		echo $INPUT
+		;;
+esac

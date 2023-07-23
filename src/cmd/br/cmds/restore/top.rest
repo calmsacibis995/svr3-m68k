@@ -1,0 +1,114 @@
+# Top-level shell file for restore functions
+# Choose action, then invoke sub-file to perform the action.
+# required args:
+#	1 = root-name of dir to restore to
+
+
+. BUsetup		# setup variables and things
+
+set -f			# Inhibit expansion of CRITERIA
+
+[ "$1" ]  ||  FAIL "Need default directory"
+DIR=$1
+
+[ -r "$R_CRIT" ]  ||  >$R_CRIT
+
+read CRITERIA <$R_CRIT
+unset KIND DEVICE B_FREE I_FREE B_TOTAL I_TOTAL
+
+while [ true ]		# Faster than exec'ing /bin/true
+do
+	ShowCrit restore $CRITERIA
+	[ -r $TEST_FLAG  -a  -n "$KIND" ]  &&  {
+		# display recovery info
+		echo >/dev/tty  \
+			"Recovery info: $KIND $DIR $DEVICE $B_FREE $I_FREE" \
+			"$B_TOTAL $I_TOTAL :"
+	}
+	ChooseQ	"Restore functions are:" \
+		"WHOLE archive view" \
+		"SELECTED archive view" \
+		"VERIFY an existing archive" \
+		"CHANGE selection criteria" \
+		"USE existing SELECTED-BACKUP criteria" \
+		"DIRECTORY other than '$DIR'" \
+		"EXAMINE archive header and EXTRACT recovery info" \
+		"FILE-SYSTEM REBUILD from recovery info" \
+		"RESTORE selected files from archive to '$DIR'" >$TEMP
+	read ITEM CHOICE  <$TEMP;  rm $TEMP
+#	echo ITEM=":$ITEM:"  CHOICE=":$CHOICE:"		# debug statement
+
+	[ -r $TEST_FLAG ] &&  echo >/dev/tty  You chose: $CHOICE.
+	
+	case "$CHOICE" in	# Q W S H C D F R
+		Q* )	# Quit
+			echo "$CRITERIA" >$R_CRIT
+			exit ;;
+	
+		W* )	# Whole archive view
+			view.sel		# selected, without criteria
+			;;
+
+		S* )	# Selected archive view
+			view.sel $CRITERIA
+			;;
+
+		H* )	# Header view
+			view.head			
+			;;
+
+		V* )	# Verify a previous backup
+			rest.ver
+			;;
+	
+		C* )	# Change selection criteria
+			CRITERIA=`crit.change $CRITERIA`
+			;;
+			
+		U* )	# Use SELECT criteria
+			read CRITERIA <$S_CRIT
+			;;
+			
+		D* )	# Directory change
+			DIR=`ChooseDir "$DIR" '' \
+			  "Relative files from archive will be restored to:" `
+			;;
+
+		E* )	# Extract recovery info from header
+			Recover >$TEMP  &&  {
+				# only change if info available
+				read <$TEMP  KIND DIR DEVICE B_FREE \
+					I_FREE B_TOTAL I_TOTAL JUNK
+				echo $DIR >$THE_DIR	# remember directory
+			}
+			rm -f $TEMP
+			;;
+			
+		F* )	# Rebuild file-system, using archived info
+			[ "$KIND" = "F" ]  &&  {
+				# can only recover from full backup
+				RECOVER=`RebuildFS $DIR $DEVICE $B_FREE \
+						$I_FREE $B_TOTAL $I_TOTAL `
+				# save new dir-name if successful
+				[ "$RECOVER" ]  &&  {
+					DIR=$RECOVER
+					read CRITERIA <$R_CRIT
+				}
+			}
+			[ "$KIND" != "F" ]  &&  {
+				echo >/dev/tty  \
+					"Need FULL-BACKUP recovery info"
+			}
+			;;
+
+		R* )	# Restore using current selection criteria
+			rest.sel "$DIR" $CRITERIA
+			;;
+
+		* )	# Program failure
+			echo >/dev/tty "\n$0: funny choice:" $CHOICE $ITEM
+			FAIL
+			;;	
+	esac
+	
+done

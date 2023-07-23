@@ -1,0 +1,103 @@
+*
+*	@(#)diskdefs	7.15	
+*
+* Disk Definition File
+*
+* name typ 'fmt' d st maxb rfs nls pss spt cyl hd pc il so sr sh ecc am aw [bks]
+*
+* name	-	unique disk name string
+* typ	-	unique disk type identifying number
+* 'fmt'	-	command to execute to format the disk (in single quotes). '#' 
+*		characters replaced by raw device name (appended if no '#'s)
+* d	-	diagnostic tracks (y - yes or n - no)
+* st	-	bad track strategy (p - perfect, s - software, h - hardware)
+* maxb	-	maximum number of bad tracks per disk
+* rfs	-	root file system offset from beginning of disk (in K bytes)
+* nls	-	number of logical sectors
+* pss	-	physical sector size
+* spt	-	number of sectors per track
+* cyl	-	number of cylinders per drive
+* hd	-	number of heads 
+* pc	-	precompensation cylinder
+* il	-	interleave factor
+* so	-	spiral offset
+* sr	-	stepping rate code
+* sh	-	starting head number of drive
+* ecc	-	error correcting code data burst length
+* am	-	attributes mask (device specific)
+* aw	-	attributes word (device specific)
+* blks	-	number of blocks for file system to be made in
+*		slice 0 - set to 0 for no file system to be made
+*	[ optional arguments follow but none or all must be present ]
+* gap1	-	inter-sector gap1
+* gap2	-	inter-sector gap2
+* gap3	-	inter-sector gap3
+* gap4	-	inter-sector gap4
+* eattw -	Extended attributes word
+*
+*	MVME320 Devices
+*
+* m32015: 15MB Micropolis (6 heads, 306 cylinders)
+m32015 32001 '/etc/m320fmt hard_disk_enable -h 6 -c 306' y s 60 96 29376 256 32 306 6 153 11 0 0 0 11 0 16
+*
+* m32040: 40MB Micropolis #1304 (6 heads, 830 cylinders)
+m32040m 32002 '/etc/m320fmt hard_disk_enable -h 6 -c 830' y s 60 96 77520 256 32 830 6 831 11 0 0 0 11 0 16
+*
+* m32040v: 40MB Vertex (5 heads, 987 cylinders)
+m32040v 32003 '/etc/m320fmt hard_disk_enable -h 5 -c 987' y s 60 96 77520 256 32 987 5 988 11 0 0 0 11 0 16
+*
+* m32040: 40MB Toshiba ("6" heads, 830 cylinders)
+m32040t 32011 '/etc/m320fmt hard_disk_enable -h 6 -c 830' y s 60 96 77520 256 32 830 6 512 11 0 0 0 11 0 16
+*
+* m32040: 40MB Tandon  ( 5 heads, 981 cylinders)
+m32040n 32012 '/etc/m320fmt hard_disk_enable -h 5 -c 981' y s 60 96 77520 256 32 981 5 489 11 0 0 0 11 0 16
+*
+* m32040: 40MB Miniscribe  ( 5 heads, 1024 cylinders)
+m32040s 32013 '/etc/m320fmt hard_disk_enable -h 5 -c 1024' y s 60 96 77520 256 32 1024 5 511 11 0 0 0 11 0 16
+*
+*
+* m32070m: 70MB Micropolis #1325 ( 8 heads, 1024 cylinders )
+m32070m 32004 '/etc/m320fmt hard_disk_enable -h 8 -c 1024' y s 136 640 130944 256 32 1024 8 1025 11 0 0 0 11 0 16
+*
+* m32070s: 70MB Miniscribe #6085 ( 8 heads, 1024 cylinders )
+m32070s 32005 '/etc/m320fmt hard_disk_enable -h 8 -c 1024' y s 100 640 130944 256 32 1024 8 511 11 0 0 0 11 0 16
+*
+* m32070p: 70MB Priam  ( 7 heads, 1166 cylinders )
+m32070p 32006 '/etc/m320fmt hard_disk_enable -h 7 -c 1166' y s 100 640 130944 256 32 1166 7 1167 11 0 0 0 11 0 16
+*
+* m32070t: 70MB Toshiba MK-56FA  ( 10 heads, 830 cylinders )
+m32070t 32007 '/etc/m320fmt hard_disk_enable -h 10 -c 830' y s 136 640 130944 256 32 830 10 512 11 0 0 0 11 0 16
+*
+*
+* m320140: 140MB Maxtor XT1140 ( 15 heads, 918 cylinders )
+m320140 32008 '/etc/m320fmt hard_disk_enable -h 15 -c 918' y s 150 840 220320 256 32 918 15 919 11 0 0 0 11 0 16
+*
+* m320dsdd5: 5.25" IBM format floppy
+m320dsdd5 32010 '/etc/m320fmt' n p 0 6 1276 256 16 80 2 40 1 0 0 0 0 0 79
+*
+* m320190: 190MB Maxtor XT2190 ( 15 heads, 1024 cylinders )
+m320190 32008 '/etc/m320fmt hard_disk_enable -h 15 -c 1024' y s 150 840 245760 256 32 1024 15 460 11 0 0 0 11 0 16
+
+*	M360 FIXED devices
+*
+*  m360168q: Fujitsu  M2322K   168Meg fixed smd drive 256 byte sectors
+m360168q 36000 '/etc/m360fmt' y h 70 960 526720 256 64 823 10 0 1 2 0 0 0 0 0 7 8 0 0 0 0
+*
+*  m360168: Fujitsu  M2322K   168Meg fixed smd drive 512 byte sectores
+m360168 36001 '/etc/m360fmt' y h 70 960 526720 512 32 823 10 0 1 2 0 0 0 0 0 0 7 8 0 0 0
+*
+*  m360337: Fujitsu  M2332K   337Meg fixed smd drive 512 byte sectores
+m360337 36002 '/etc/m360fmt' y h 350 640 1053440 512 64 823 10 0 1 2 0 0 0 65535 16 0 16 16 0 0 0
+*
+*	M360 CARTRIDGE devices
+*
+* m360cmd168:  Fujitsu 168meg cmd drive
+*
+m360cmd168 36001 '/etc/m360fmt' y h 70 960 52672 512 32 823 10 0 1 0 0 0 0 11 0
+*
+* m360cmd337:  Fujitsu 337meg cmd drive
+m360cmd337 36002 '/etc/m360fmt' y h 100 640 105344 512 64 823 10 0 1 0 0 0 11 0 0
+*
+*       M323 ESDI Controller Drives 
+*  m323182: CDC  WREN 3  182 Megabyte ESDI disk drive 512 byte sectors
+m323182 32301 '/etc/m323fmt' n h 144 315 609840 512 35 968 9 0 1 2 0 0 0 65535 16 0 16 16 0 0 0

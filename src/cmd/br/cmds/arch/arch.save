@@ -1,0 +1,22 @@
+# Shell file to save specified state in Archive descriptor file
+# required args:
+# 1 = archive-description file name
+# 2 = archive descriptive name
+# 3 = archive-device name
+# 4 = archive-media size
+# 5 = archive-device buffer size
+# 6 = archive-device seek/read
+
+. BUsetup
+
+[ $# -lt 6 ]  &&  FAIL "Not enough arguments to write new archive descriptor"
+
+case "$6" in
+	[Ss]* )	_P=""  ;;
+	[Rr]* )	_P="-p" ;;
+	* )	FAIL "Bad seek/read argument" ;;
+esac
+
+
+# Send arguments to designated file
+echo >"$1"  "$2  $3  -b $5  -s $4  $_P"

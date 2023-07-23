@@ -1,0 +1,42 @@
+# Someday, the .comments in objects will be more useful, but we'll
+# at least # leave in the main .c entries, since they do reflect the
+# versions of the .c's used to generate them, even if the versions do
+# not start at 1 (or anywhere close ... since most are AT&T version 
+# numbers).  Same is true for libraries, but we'll compress them,
+# to remove duplicate .h entries...
+
+RELEASE=${RELEASE:=R3V1}
+
+for i in /bin /local/bin /usr/bin /usr/lbin /etc/ /usr/lib/uucp /usr/lib/acct
+do
+    set -e; cd $i; set +e
+
+    mkdir -p Mcs/${RELEASE}
+
+    for j in `ls`
+    do
+	mcs -cp ${j} >Mcs/${RELEASE}/${j}
+	mcs -da "`mcs -p ${j} | egrep \"${j}:|${j}.c\"`" ${j}
+	crc -cd ${j} >> Mcs/${RELEASE}/${j}
+    done
+done
+
+set -e ; cd /usr/src/uts/m68k/cf ; set +e
+
+for i in `ls lib.*`
+do
+    mcs -d $i
+    ar ts $i
+done
+
+
+for i in /lib /usr/lib /lib/libp /usr/lib/libp
+do
+    set -e; cd $i; set +e
+
+    for j in `ls *.a`
+    do
+	mcs -c $j
+	ar ts $j
+    done
+done

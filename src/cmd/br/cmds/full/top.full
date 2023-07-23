@@ -1,0 +1,128 @@
+# Perform FULL BACKUP
+# This file prompts for user input and then delegates the desired
+# actions to other shell files or utilities.
+# args:	none
+
+
+. BUsetup		# setup variables and things
+
+# Check that run-level is appropriate
+.  RunCheck		# puts current level in RUN_LEVEL
+
+
+# Get the list of file-systems to backup
+[ -s $UNDONE ]  &&  read NOT_DONE <$UNDONE	# any left from last time?
+
+[ "$NOT_DONE" ]  &&  {
+	# Names left from last time.  Get permission to use these
+	echo >/dev/tty "During last full backup," \
+			"the following were not backed up:"
+	for NAME in $NOT_DONE
+	do
+		echo >/dev/tty "\t$NAME"
+	done	
+
+	REALLY=`YesNo "Use these names instead of complete list?" `
+
+	[ "$REALLY" ]  ||  NOT_DONE=""		# clear out the list
+	>$UNDONE				# clear out the file
+}
+	
+[ -z "$NOT_DONE" ]  &&  {
+	# if no names, get all new (less "/")
+	NOT_DONE=`FileSystems '[FfXx]' | grep -v '^/$'`
+	NOT_DONE="$NOT_DONE /"		# append "/" to list end
+	>$START_FULL		# start full-backup anew
+	>$FULL_LOG		# clear previous log
+}
+
+
+NOT_DONE=${NOT_DONE:-"/"}	# if none, do "/"
+DIR=""
+DONE=""
+
+MESSAGE="Last full backup completed:"
+.  SinceFull		# take since last full backup
+
+
+while [ true ]		# endless loop, ends via exit or break
+do
+	# If DIR is blank, gets first from NOT_DONE
+	echo $DIR $NOT_DONE  >$UNDONE		# save undone list in file
+	read DIR NOT_DONE  <$UNDONE		# read from file
+
+	# if DIR is empty, then exit loop
+	[ "$DIR" ]  ||  break
+
+
+	# If anything done, show "Done" items...
+	if [ "$DONE" ] ; then
+		echo >/dev/tty "\nFile-Systems already backed up are:"
+		for NAME in $DONE
+		do
+			echo >/dev/tty "\t$NAME"
+		done	
+	fi
+
+	# Show "Not done" items... first of which is $DIR
+	echo >/dev/tty "\nFile-Systems not yet backed up are:"
+	for NAME in $DIR $NOT_DONE
+	do
+		echo >/dev/tty "\t$NAME"
+	done	
+
+	ChooseQ	"Full backup functions are:" \
+		"ESTIMATE archive requirements for '$DIR'" \
+		"BACKUP '$DIR' now" >$TEMP
+	read ITEM CHOICE  <$TEMP;  rm $TEMP
+#	echo ITEM=":$ITEM:"  CHOICE=":$CHOICE:"		# debug statement
+
+	[ -r $TEST_FLAG ] &&  echo >/dev/tty  You chose: $CHOICE.
+	
+	case "$CHOICE" in	# Q E B
+		Q* )	# Quit
+			REALLY=`YesNo "Full backup was not completed." \
+				"\nDo you really want to quit?" `
+			[ "$REALLY" ]  ||  continue	# repeat loop
+			exit 1				# then leave.
+			;;
+	
+		E* )	# Estimate
+			full.est "$DIR"
+			;;
+	
+		B* )	# Backup now
+			full.do "$DIR"
+			if [ $? -eq 0 ] ; then
+				DONE="$DONE $DIR"	# add to done list
+			else
+				# Didn't work, for some reason
+				echo >/dev/tty \
+					"\nFailed to backup '$DIR'!!"
+				NOT_DONE="$NOT_DONE $DIR"	# to tail
+			fi
+			DIR=""		# always take next name
+			;;
+	
+		* )	# Program failure
+			FAIL "\nEOF detected:  Abandoning full backup"
+			;;	
+	esac
+done
+
+# If the loop ends, and control gets here, then whole backup was done OK
+# Move StartFull to LastFull, marking full-backup reference time as the
+# time that we started it.
+chmod  $MODES  $START_FULL
+rm -f $LAST_FULL		# old time marker is removed...
+mv  $START_FULL  $LAST_FULL	#  then new one is moved into its place
+
+# 'mv' changes the modification time of the directory, but not of
+# the file itself.  Thus, start-time is preserved.
+
+echo >/dev/tty \
+	"New incremental-backup reference-time is:\n\t\c"
+xdate >/dev/tty  "$DATE_HUMAN"  $LAST_FULL	# show 'touch-time'
+
+>$UNDONE		# list of not-done is empty
+exit 0

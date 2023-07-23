@@ -1,0 +1,24 @@
+# Emit selected line of archive header, less the first word.
+# A human-readable display is produced on the tty.
+# required args:
+#	1 = pattern to search for
+#	2 = archive-device name
+# optional args:
+#	3.. = other bru args, usually archive-device things
+
+[ $# -lt 2 ]  &&  { echo 1>&2 "$0: Not enough args"; exit 2; }
+
+# DEBUG-level implementation: simply emit some constants
+# comment out to get bona-fide implementation
+#	echo >/dev/tty $0: $*
+#	echo /tiny/fake d31a  100 30  300 75
+#	exit
+
+
+PATTERN="^$1"		# anchor to start of line
+shift
+
+catch  'exit'  2 3	# allow bru to catch interrupts & quits
+
+bru -g -f "$@"  |  tee /dev/tty  |  grep "$PATTERN"  |  \
+	{ read FIRST_WORD  REST; echo $REST; }

@@ -1,0 +1,12 @@
+# Skeleton shell file for incremental backup actions
+# required args:
+#	1 =
+# optional args:
+#	2 =
+
+
+DIR=${1:-`pwd`}
+
+# BACKUPS=${BACKUPS:-/u/gg/backups/cmds}	# debug use only
+. $BACKUPS/BUsetup
+

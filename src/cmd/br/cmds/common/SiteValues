@@ -1,0 +1,9 @@
+# Site parameters
+# Choose values for a particular site or system
+
+TAPE="Cartridge-Streaming-Tape		/dev/rst0   -b 128k  -s 60m   -p"
+TRK9="9-track-(2400-ft)-medium-density	/dev/rmt0   -b 64  -s 36M  -p"
+
+SITE_ARCH="$TAPE"	# default archive if Archive hosed
+
+SITE_RUN="S"		# run-level appropriate for backups

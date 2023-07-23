@@ -1,0 +1,17 @@
+# Shell file to verify any existing archive.
+# Simply run internal consistency check.
+# args:
+#	none
+
+
+. BUsetup
+
+MESSAGE="No verification done."
+.  ArchGet	# load my variables
+
+ACTION="read"
+.  Confirm
+
+# Now verify internal consistency of first archive on device
+
+VERIFY  $AR_NAME  $AR_REST  $VERBOSE_VER

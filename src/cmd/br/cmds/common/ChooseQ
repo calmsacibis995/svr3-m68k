@@ -1,0 +1,49 @@
+# Variation on 'Choose' where QUIT item is always the
+# last item, and it has item# = 0.
+
+# Make choice among listed items.
+# First argument is the "title" for the list of selections.
+# remaining arguments are the selections
+#  Show items, one per line, leading numbers.
+#  item 'QUIT' is last, and always has item# = 0
+#  Make choice.  echo selected item#, then text of item.
+
+# String indicating QUIT, also used to select final text item
+TEXT="QUIT this level"
+
+catch 'echo "0 $TEXT"; exit 0'  2	# Simulate '0' response for interrupt
+
+
+# Make a string of dashes the same length as the title, $1
+DASHES=`echo "$1\c" | tr '[ -~]' '[-*]' `
+
+echo >/dev/tty "\n$DASHES" "\n$1" 	# display separator & title
+shift
+
+
+I=0;  for ITEM in "$@"
+do
+	I=`fexpr $I + 1`
+	echo "  $I. $ITEM"
+done >/dev/tty
+
+# append 'QUIT' item to list on display
+echo "  0. $TEXT" >/dev/tty
+
+ITEM=-1				# force loop to execute at least once
+while [ "$ITEM" = ""  -o  "$ITEM" -lt 0  -o  "$ITEM" -gt $# ]
+do
+	echo "-- Your choice? [0-$#] \c" >/dev/tty
+	read ITEM </dev/tty  ||  {
+		echo >/dev/tty		# advance display one line
+		echo  0 $TEXT		# EOF same as 'QUIT'
+		exit 0			# stops on EOF
+	}
+	case $ITEM in [0-9]|[0-9][0-9]) ;; *) ITEM= ;; esac
+done
+
+# If selected item was not 'QUIT', then TEXT becomes selected text.
+# Since TEXT was initially 'QUIT', this selects desired text.
+[ "$ITEM" -gt 0 ]  &&  { shift `fexpr $ITEM - 1`; TEXT="$1"; }
+
+echo "$ITEM"  $TEXT		# echo item number, then item text

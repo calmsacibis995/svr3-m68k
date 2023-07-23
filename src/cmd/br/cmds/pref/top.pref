@@ -1,0 +1,150 @@
+# Change various preference items.
+# required args:
+#	none
+# optional args:
+#	none
+# get new preferences, save only in file.
+# parent must rerun any shell files that set preferences (eg: GetVerb)
+
+. BUsetup
+
+# Verbosity flags are already set via BUsetup
+# scheduled-time can be read from file
+[ -s $INCR_AT ]  ||  echo "02:00"  >$INCR_AT
+read INCR_TIME JUNK <$INCR_AT		# get time, ignore junk
+
+UNSAFE="These values are NOT SAVED."
+UNSAVED=""	# detects changes made to values
+
+
+while [ true ]
+do
+	# if not saved to file, say so
+	[ "$UNSAVED" ]  &&  echo >/dev/tty  "\n$UNSAVED"
+
+	# Menu presents toggles for verbosity flags
+	# VINC &c become "enable" or "disable" as appropriate.
+	# Repeat at every iteration, thereby toggling menu items
+	VINC="Enable ";  [ "$VERBOSE_INC" ]  &&  VINC="Disable"
+	VFUL="Enable ";  [ "$VERBOSE_FUL" ]  &&  VFUL="Disable"
+	VEST="Enable ";  [ "$VERBOSE_EST" ]  &&  VEST="Disable"
+	VVER="Enable ";  [ "$VERBOSE_VER" ]  &&  VVER="Disable"
+	VWRT="Enable ";  [ "$WRITE_VERIFY" ]  &&  VWRT="Disable"
+	VLOG="Enable ";  [ "$LOGGING" ]  &&  VLOG="Disable"
+
+
+	ChooseQ	"Select new preferences:" \
+		"$VWRT WRITE-VERIFY of new archives" \
+		"$VLOG LOGGING of full and incremental backups" \
+		"$VINC INCREMENTAL verbosity" \
+		"$VFUL FULL verbosity" \
+		"$VEST ESTIMATE verbosity" \
+		"$VVER VERIFY verbosity" \
+		"Change time for incrementals from:  $INCR_TIME" \
+		"Save new preferences"  \
+			    >$TEMP
+	read ITEM CHOICE  <$TEMP;  rm $TEMP
+	#	echo ITEM=":$ITEM:"  CHOICE=":$CHOICE:"	# debug statement
+
+	[ -r $TEST_FLAG ] &&  echo >/dev/tty  You chose: $CHOICE.
+	
+	case "$CHOICE" in	# Q S C [EeDd]
+	  Q* )	# Quit
+		[ "$UNSAVED" ]  &&  {
+			REALLY=`YesNo "$UNSAFE" \
+				"\nDo you really want to quit?" `
+			[ "$REALLY" ]  ||  \
+				continue	# while loop
+		}
+		exit
+		;;
+
+	  S* )	# Save new preferences in files
+		unset PREFS	# composite flags
+		[ "$WRITE_VERIFY" ]  &&  PREFS="Writ $PREFS"
+		[ "$VERBOSE_INC" ]  &&  PREFS="Incr $PREFS"
+		[ "$VERBOSE_FUL" ]  &&  PREFS="Full $PREFS"
+		[ "$VERBOSE_EST" ]  &&  PREFS="Estm $PREFS"
+		[ "$VERBOSE_VER" ]  &&  PREFS="Verf $PREFS"
+		[ "$LOGGING" ]      &&  PREFS="Logs $PREFS"
+		#	echo >/dev/tty verbose = :$PREFS:  # debug
+		echo $PREFS  >$PREF_FLAGS
+		echo $INCR_TIME  >$INCR_AT
+		echo >/dev/tty "Saved these preferences"
+		UNSAVED=""
+		;;
+	
+	  C* )	# Change incremental time
+		INCR_TIME=`ChangeItem "scheduling time" \
+			$INCR_TIME  '[0-2][0-9]:[0-5][0-9]$' \
+			"Enter time in 24-hour form:  00:00 - 23:59" `
+		UNSAVED="$UNSAFE"
+		;;
+
+	  [EeDd]* )	# All enable/disable choices
+		# Need to key on second word of $CHOICE
+		set -- $CHOICE
+
+		case "$2" in	# W I F V E
+		  W* )	# Write-verify new archives
+			if [ "$WRITE_VERIFY" ] ; then
+				unset WRITE_VERIFY
+			else
+				WRITE_VERIFY="-i"
+			fi
+			UNSAVED="$UNSAFE"
+			;;
+
+		  L* )	# Logging backups
+			if [ "$LOGGING" ] ; then
+				unset LOGGING
+			else
+				LOGGING="LogIt"
+			fi
+			UNSAVED="$UNSAFE"
+			;;
+
+		  I* )	# Incremental verbosity
+			if [ "$VERBOSE_INC" ] ; then
+				unset VERBOSE_INC
+			else
+				VERBOSE_INC="-v"
+			fi
+			UNSAVED="$UNSAFE"
+			;;
+
+		  F* )	# Full backup
+			if [ "$VERBOSE_FUL" ] ; then
+				unset VERBOSE_FUL
+			else
+				VERBOSE_FUL="-v"
+			fi
+			UNSAVED="$UNSAFE"
+			;;
+
+		  E* )	# estimates
+			if [ "$VERBOSE_EST" ] ; then
+				unset VERBOSE_EST
+			else
+				VERBOSE_EST="-v"
+			fi
+			UNSAVED="$UNSAFE"
+			;;
+
+		  V* )	# verifies
+			if [ "$VERBOSE_VER" ] ; then
+				unset VERBOSE_VER
+			else
+				VERBOSE_VER="-v"
+			fi
+			UNSAVED="$UNSAFE"
+			;;
+		esac
+		;;
+	
+	  * )	# Program failure
+		FAIL "\n$0: funny choice:" $CHOICE $ITEM
+		;;	
+	esac
+	
+done

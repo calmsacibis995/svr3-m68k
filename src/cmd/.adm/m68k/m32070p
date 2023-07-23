@@ -1,0 +1,27 @@
+35 36 37 38 39 40 41
+42 43 44 45 46 47 48
+49 50 51 52 53 54 55
+56 57 58 59 60 61 62
+63 64 65 66 67 68 69
+70 71 72 73 74 75 76
+77 78 79
+8120 8121 8122 8123 8124 8125 8126 
+8127 8128 8129 8130 8131 8132 8133 
+8134 8135 8136 8137 8138 8139 8140
+8141 8142 8143 8144 8145 8146 8147
+8148 8149 8150 8151 8152 8153 8154
+28 29 30 31 32 33 34
+21 22 23 24 25 26 27
+14 15 16 17 18 19 20
+.
+
+	@(#)m32070p	6.2	
+Alternate Track file
+70-Mbyte Priam Drive
+note: There are more than the 88 max alternates specified
+	in diskdefs. The "extra" alternates are used for
+	"cylinder fill". Also, "dinit" may only read in
+	88 alternate track numbers, so the first 80 are
+	the closest to the useable portion of the disk.
+	
+

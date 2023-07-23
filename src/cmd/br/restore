@@ -1,0 +1,50 @@
+# RecoverVerf -- verify recovery info sanity
+# input:
+#	DIR DEVICE B_FREE I_FREE B_TOTAL I_TOTAL
+# output:
+#	DIR DEVICE B_FREE I_FREE B_TOTAL I_TOTAL
+#	fails if insane values
+# invoke:
+#	. RecoverVerf
+
+
+# Reconstruction info is in variables, check for sane values
+DIGITS_5='[1-9][0-9]\{0,4\}$'		# 1-5 digit number
+DIGITS_6='[1-9][0-9]\{0,5\}$'		# 1-6 digit number
+
+# Verify that DEVICE is  valid local device
+fexpr "X$DEVICE" : 'X@.*'  >/dev/null  &&  \
+	FAIL "Can't recover to remote resource '$DEVICE'"
+
+fexpr "X$DEVICE" : 'X%.*'  >/dev/null  &&  \
+	FAIL "Can't recover to invalid device '$DEVICE'"
+
+fexpr "$B_FREE" : "$DIGITS_6" >/dev/null  ||  \
+	FAIL "Bad value of blocks used: $B_FREE"
+fexpr "$I_FREE" : "$DIGITS_5" >/dev/null  ||  \
+	FAIL "Bad value of i-nodes used: $I_FREE"
+fexpr "$B_TOTAL" : "$DIGITS_6" >/dev/null  ||  \
+	FAIL "Bad value of max blocks: $B_TOTAL"
+fexpr "$I_TOTAL" : "$DIGITS_5" >/dev/null  ||  \
+	FAIL "Bad value of max i-nodes: $I_TOTAL"
+
+# Verify numerical values are sensible: used < max
+[ $B_FREE -gt $B_TOTAL ]  &&  \
+	FAIL "Nonsense block values in info: $B_FREE : $B_TOTAL"
+[ $I_FREE -gt $I_TOTAL ]  &&  \
+	FAIL "Nonsense i-node values in info: $I_FREE : $I_TOTAL"
+
+# Verify sane ranges for i-node values
+[ $I_FREE -gt 65535  -o  $I_TOTAL -gt 65535 ]  && \
+	FAIL "i-node values not valid: $I_FREE : $I_TOTAL"
+
+#	echo >/dev/tty  --after--  $*		# debug only
+
+# Recover actual directory name from $DIR
+XDIR=`fexpr "X$DIR" : 'X.\(.*\)' `	# remove first char
+XDIR="/$XDIR"				# prepend a '/'
+[ "$DIR" != "$XDIR" ]  &&  {
+	echo >/dev/tty "WARNING: recovered directory name '$DIR'" \
+		"\nis truncated to 32 characters"
+}
+DIR=$XDIR

@@ -1,0 +1,25 @@
+# Get user confirmation
+# input parameters:
+#	AR_DESC  = archive descriptive name
+#	AR_NAME  = archive device name
+#	ACTION   = action to perform (read/write)
+#	DENIED   = if non-null, denial message, else uses default
+# output parameters:
+# 	program will have exited if 'no'
+
+# Make sure archive device is ready
+
+
+# Make descriptive-name without dashes
+echo $AR_DESC | tr '-' ' '  >$TEMP
+read THING <$TEMP ; rm  -f $TEMP
+
+INPUT=`YesNo \
+	"Prepare the $THING device\n\t$AR_NAME" \
+	"\nto $ACTION an archive.  When ready," \
+	"\nenter 'y' to continue, or 'n' to quit:" `
+
+unset THING
+
+# stop if response was NO
+[ "$INPUT" ]  ||  FAIL  "${DENIED:-No action taken}"

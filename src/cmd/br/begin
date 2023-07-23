@@ -1,0 +1,16 @@
+# Start backup program for real...
+
+# Check that we are using correct shell
+type catch 2>/dev/null | fgrep "builtin" 2>/dev/null 1>&2  ||  {
+	# We are not running the right version of the shell
+	echo "Doesn't work on this version of the shell." \
+		"\nQuitting with no action taken"
+	exit 2
+}
+
+BACK=/backups				# 'real' base of backup system
+BACK_CMDS=$BACK/cmds/common		# the 'real' place
+
+cd  $BACK/cmds
+
+. ./top.bu				# go on with top menu...

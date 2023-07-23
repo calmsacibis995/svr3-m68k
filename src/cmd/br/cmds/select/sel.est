@@ -1,0 +1,37 @@
+# Shell file to estimate archive requirements for selected backup
+# required args:
+#	1 = root-name
+# optional args:
+#	2..* = selection criteria
+
+
+. BUsetup
+
+set -f			# Inhibit expansion of CRITERIA
+
+[ $# -lt 1 ]  &&  FAIL "$0: No root-name provided"
+DIR=$1; shift
+CRITERIA="$*"
+
+MESSAGE="No estimate made on '$DIR'"
+.  ArchGet	# load my variables
+
+ShowCrit backup $CRITERIA
+
+echo >/dev/tty \
+	"Estimating archive requirements for SELECTED backup of:" \
+	"\n\t'$DIR'" \
+	"\nPlease wait..."
+
+
+# Note that the VERBOSE_EST flag has no effect on selected estimates
+ESTIMATE  $DIR  -f $AR_NAME $AR_REST \
+	$CRITERIA  >$TEMP  2>/dev/tty
+
+read VOLUMES KBYTES FILES BLOCKS REST <$TEMP ; rm $TEMP
+
+echo >/dev/tty "\n\nArchive estimate..."
+echo >/dev/tty "Device-name:	$AR_NAME"
+echo >/dev/tty "Volumes:	$VOLUMES"
+echo >/dev/tty "Files:		$FILES"
+echo >/dev/tty "Bytes:		$KBYTES K"

@@ -1,0 +1,17 @@
+# Shell file installs production version of B&R into chosen directory
+# Assumes 'at' and 'cron' are already in place, and also new shell.
+
+DIR=${1:-/backups}	# if any input arg, use it; else use /backups
+
+[ -d $DIR ]  ||  mkdir $DIR  ||  exit 2
+
+echo "Copying files to $DIR"
+
+cpio -padlum $DIR  <Names
+
+# 22Oct86 GLG - The current contents of Names assumes that an appropriate
+# version of 'bru' is already in place.  If this is not true, then install
+# the bru into '/backups/cmds/common' manually.  You can test the needed
+# features by making a SELECTED backup of a small directory, then using
+# the EXAMINE & EXTRACT function under the RESTORE menu.  Older versions
+# of 'bru' will not understand the needed option flags.

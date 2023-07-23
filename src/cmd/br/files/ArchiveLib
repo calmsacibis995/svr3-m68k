@@ -1,0 +1,6 @@
+Streaming-Tape		/dev/rmt/m350_0t	-b 128k   -s 60M    -p
+9-track(2400-foot)	/dev/rmt/m355_0   	-b 60k    -s 36M    -p
+9-track(3600-foot)	/dev/rmt/m355_0   	-b 60k    -s 66M    -p
+Diskette1-(655kb)	/dev/rSA/diskette1	-b 60k    -s 655k
+Diskette2-(1.2Mb)	/dev/rSA/diskette2	-b 60k    -s 1200k
+Null			/dev/null         	-b 20k    -s 2000M  -p

@@ -1,0 +1,16 @@
+# this startup program must reside in the '.../backups/cmds' directory
+# Start backup program for testing...
+
+# Check that we are using correct shell
+type catch 2>/dev/null | fgrep "builtin" 2>/dev/null 1>&2  ||  {
+	# We are not running the right version of the shell
+	catch () { echo $* >/dev/null; }
+}
+
+BACK=`pwd`/..			# 'fake' base of backup system
+BACK_CMDS=$BACK/cmds/common	# the 'fake' place
+
+# cd  $BACK/cmds
+
+. ./top.bu				# go on with top menu...
+

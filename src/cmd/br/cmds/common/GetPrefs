@@ -1,0 +1,25 @@
+# Read preference flags into shell variables.
+# invoke as ". GetPrefs" to set current shell's variables
+
+# Read the flags into shell variables...
+[ -r $PREF_FLAGS ]  ||  > $PREF_FLAGS     # create empty file if none
+read PREFS <$PREF_FLAGS
+
+# Flag values defualt to UNSET
+unset WRITE_VERIFY  VERBOSE_EST  VERBOSE_INC  VERBOSE_FUL  VERBOSE_VER
+unset LOGGING; INCR_LOG=/dev/null  FULL_LOG=/dev/null	# assume no logs made
+
+for NAME in $PREFS
+do
+	case $NAME in
+		[Ww]* )	WRITE_VERIFY="-i" ;;	# verify archive writes
+		[Ee]* ) VERBOSE_EST="-v"  ;;	# estimate
+		[Ff]* ) VERBOSE_FUL="-v"  ;;	# full
+		[Ii]* ) VERBOSE_INC="-v"  ;;	# incremental
+		[Vv]* ) VERBOSE_VER="-v"  ;;	# verify
+		[Ll]* ) LOGGING="LogIt"
+			INCR_LOG=$LOG_INCR  FULL_LOG=$LOG_FULL  ;;
+	esac
+done
+
+unset NAME PREFS

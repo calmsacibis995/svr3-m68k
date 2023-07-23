@@ -1,0 +1,19 @@
+# Schedule an unattended backup
+# required args:
+#	1 = hour to perform backup at
+#	2 = minute to perform backup at
+#	3..* = arguments for BACKUP
+
+ID=$LOGNAME		# name to execute BACKUP as
+
+[ $# -lt 2 ]  &&  { echo 1>&2 "$0: Not enough args"; exit 2; }
+
+HOUR=$1  MINUTE=$2 ; shift 2
+
+#	echo >/dev/tty $0: AT=$HOUR:$MINUTE
+#	echo >/dev/tty $0: "*=%$*%"
+
+# To really do something, remove the # in front of the 'at'
+	echo \
+		"$SHELL -c 'BACKUP  $*'" \
+	| at $HOUR:$MINUTE

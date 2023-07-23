@@ -1,0 +1,27 @@
+# Show selection criteria in convenient form
+# required args:
+#	1 = "restore" or "backup"
+# optional args:
+#	2.. = selection criteria, if any
+
+
+. BUsetup
+
+[ $# -lt 1 ]  &&  FAIL "Too few args to show selection criteria"
+
+
+ACTION="$1" ; shift
+
+# Temporary simple expression...
+echo >/dev/tty \
+	"A $ACTION now would select \c"
+	
+if [ "$*" ] ; then
+	echo >/dev/tty \
+		"files matching:\n\t$*"
+else
+	echo >/dev/tty \
+		"every file."
+fi
+
+# Make more elaborate version later

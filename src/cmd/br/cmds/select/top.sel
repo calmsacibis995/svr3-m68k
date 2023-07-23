@@ -1,0 +1,63 @@
+# Top-level shell file for selected backup
+# Choose action, then invoke sub-file to perform the action.
+# required args:
+#	1 = root-name of dir to backup from
+
+
+. BUsetup		# setup variables and things
+
+set -f			# Inhibit expansion of CRITERIA
+
+[ "$1" ]  ||  FAIL "Need default directory"
+DIR=$1
+
+[ -r "$S_CRIT" ]  ||  >$S_CRIT
+
+read CRITERIA <$S_CRIT
+
+while [ true ]		# Faster than exec'ing /bin/true
+do
+	ShowCrit backup $CRITERIA
+	ChooseQ	"Selected-backup functions are:" \
+		"CHANGE selection criteria" \
+		"USE existing RESTORE criteria" \
+		"DIRECTORY other than '$DIR'" \
+		"ESTIMATE archive requirements for selected files" \
+		"BACKUP selected files now" >$TEMP
+	read ITEM CHOICE  <$TEMP;  rm $TEMP
+#	echo ITEM=":$ITEM:"  CHOICE=":$CHOICE:"		# debug statement
+
+	[ -r $TEST_FLAG ] &&  echo >/dev/tty  You chose: $CHOICE.
+	
+	case "$CHOICE" in	# Q C U D E B
+		Q* )	# Quit
+			echo "$CRITERIA" >$S_CRIT
+			exit ;;
+	
+		C* )	# Change selection criteria
+			CRITERIA=`crit.change $CRITERIA`
+			;;
+			
+		U* )	# Use RESTORE criteria
+			read CRITERIA <$R_CRIT
+			;;
+			
+		D* )	# Directory change
+			DIR=`ChooseDir "$DIR" '' \
+			"Files will be backed-up from:" `
+			;;
+			
+		E* )	# Estimate for current selections
+			sel.est  $DIR  $CRITERIA
+			;;
+
+		B* )	# Backup using current selection criteria
+			sel.save $DIR  $CRITERIA
+			;;
+
+		* )	# Program failure
+			FAIL "\n$0: funny choice:" $CHOICE $ITEM
+			;;	
+	esac
+	
+done

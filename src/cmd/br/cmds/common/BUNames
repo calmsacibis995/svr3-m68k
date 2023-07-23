@@ -1,0 +1,11 @@
+# For each item in DiskInfo that has a backup-flag on it, emit on stdout:
+#	dev-name mount-point backup-flag
+
+
+BACK_FILES=${BACK_FILES:-$HOME/backups/files}
+DISKINFO="$BACK_FILES/DiskInfo"
+TIMESAT=$BACK_FILES/timesAt
+
+awk '$0 !~ /^#/  &&  $1 != "" {
+	print $1,$2,$3;
+}'  $DISKINFO 

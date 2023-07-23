@@ -1,0 +1,54 @@
+# Recover -- extract recovery info from archive header
+# args:
+#	none
+# output:
+#	stdout = KIND DIR DEVICE B_FREE I_FREE B_TOTAL I_TOTAL
+#	$? = 0 if stdout has info, 1 if no info
+
+
+. BUsetup
+
+MESSAGE="No recovery info extracted"
+.  ArchGet	# load my variables
+
+echo >/dev/tty "Prepare to extract recovery info from archive."
+ACTION="read"
+DENIED="No recovery info extracted"
+.  Confirm
+
+
+# Proceed to extract label info from current archive
+# Human-readable version goes to tty
+RECOVERY_INFO=`HEADER label  $AR_NAME $AR_REST`
+
+# prepare to use individual items
+set -- $RECOVERY_INFO
+expr >/dev/null  "$1" : '~[FIS]$'  ||  {
+	# Not an info-label, stop now
+	FAIL "No recovery info found on archive"
+}
+# [ "$RECOVERY_INFO" ]  ||  FAIL "No recovery info found on archive"
+
+#	echo >/dev/tty  --before-- $*			# debug only
+
+KIND=` expr "$1" : '~\(.\)' `	# get type of archive
+DIR=$2
+
+#####  If archive is a full backup...
+[ "$KIND" = 'F' ]  &&  {
+	DEVICE=$3  B_FREE=$4  I_FREE=$5  B_TOTAL=$6  I_TOTAL=$7
+	.  RecoverVerf		# verify and alter recovery info
+}
+
+
+######  If archive is of Incremental or Selected...
+expr >/dev/null "$KIND" : '[IS]'  &&  {
+	# Incremental or selected
+	DEVICE=%  B_FREE=0  I_FREE=0  B_TOTAL=0  I_TOTAL=0
+}
+
+
+
+# Emit the recovery info to stdout
+echo  $KIND  $DIR  $DEVICE  $B_FREE  $I_FREE  $B_TOTAL  $I_TOTAL
+exit 0

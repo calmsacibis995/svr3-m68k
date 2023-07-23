@@ -1,0 +1,50 @@
+# Shell file reads new values from LIBRARY for archive description
+# required args:
+# 1 = archive descriptive name
+# 2 = archive-device name
+# 3 = archive-media size
+# 4 = archive-device buffer size
+# 5 = archive-device seek/read
+#       Does read new values, echo 4 new values on stdout
+
+# debug behavior: echo all input args
+#       echo "$@";  exit
+
+
+.  BUsetup
+
+[ $# -lt 5 ]  &&  FAIL "Not enough arguments to change archive items"
+
+AR_DESC="$1"
+AR_NAME="$2"
+AR_SIZE="$3"
+AR_BUFF="$4"
+AR_SKIP="$5"
+
+
+# Read item names from library
+DEVICES=`awk '{print $1}' $ARCH_LIB `
+[ "$DEVICES" ]  ||  FAIL "No device library entries"
+
+set -- $DEVICES
+
+#	for i do  echo >/dev/tty ":$i:"; done	# debug only
+
+ChooseQ	"Choose an archive device:" \
+	"$@"  >$TEMP
+read ITEM CHOICE  <$TEMP;  rm $TEMP
+
+[ -r $TEST_FLAG ] &&  echo >/dev/tty  You chose: $CHOICE.
+	
+# If item wasn't QUIT...
+[ "$ITEM" -ne 0 ]  &&  {
+	# Pick selected item from library file
+	DEVICE_DESC=`fgrep "$CHOICE"  $ARCH_LIB`
+	[ "$DEVICE_DESC" ]  ||  "Couldn't find device description"
+
+	set --  $DEVICE_DESC
+
+	.  ArchParse	# then parse the items
+}
+
+echo  $AR_DESC  $AR_NAME  $AR_SIZE  $AR_BUFF  $AR_SKIP

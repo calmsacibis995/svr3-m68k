@@ -1,0 +1,21 @@
+# View selected files from archive
+# optional args:
+#	* = bru selection options
+# archive comes from description file
+
+
+. BUsetup
+
+set -f			# Inhibit expansion of CRITERIA
+
+CRITERIA="$*"
+
+MESSAGE="Nothing to view"
+.  ArchGet	# load my variables
+
+ShowCrit view $CRITERIA		# display selection criteria
+
+ACTION="read"
+.  Confirm
+
+VIEW  $AR_NAME  $AR_REST  $CRITERIA		# give all bru options

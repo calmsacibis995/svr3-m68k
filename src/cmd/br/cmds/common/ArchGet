@@ -1,0 +1,18 @@
+# Loads shell variables with archive descriptive info.
+#  invoked with ".  GetArch", so it's executed by current shell
+# input parameters:
+#	MESSAGE = message displayed on failure
+#	ARCHIVE = name of archive file
+# output parameters:
+#	AR_DESC = descriptive-name of archive
+#	AR_NAME = name of archive device
+#	AR_REST = all other archive descriptive info and options
+
+# Look for description-file
+[ -r $ARCHIVE ]  ||  FAIL "No archive description file."  "$MESSAGE"
+
+read AR_DESC AR_NAME AR_REST <$ARCHIVE
+#	echo >/dev/tty "Description = $AR_NAME $AR_REST"	# debug
+
+# Be sure description-file had something in it
+[ "$AR_DESC" ]  ||  FAIL "No archive description found." "$MESSAGE"

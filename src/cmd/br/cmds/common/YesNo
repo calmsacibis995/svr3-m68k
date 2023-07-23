@@ -1,0 +1,16 @@
+# Ask for yes/no response.  
+# Echo "YES" if Y/y; echo nothing if NO; keep asking if empty lines
+
+
+INPUT=""		# force to execute at least once
+until `fexpr "$INPUT" : '[YyNn].*' >/dev/null`
+do
+	echo >/dev/tty "$* [y/n] \c"
+	# the following idiom emits a new-line when user enters ^D
+	read INPUT </dev/tty  ||  echo >/dev/tty	# get user input
+done
+
+case "$INPUT" in
+	[Yy]* )	echo "YES";;
+	* )	;;
+esac

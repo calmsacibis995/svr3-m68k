@@ -1,0 +1,81 @@
+# Fundamental setup file for backups
+
+BACK=${BACK:-$HOME/backups}		# debug version
+# BACK=${BACK:-/backups}			# real version
+BACKUPS=${BACKUPS:-$BACK/cmds}
+BACK_FILES=${BACK_FILES:-$BACK/files}
+BACK_CMDS=${BACK_CMDS:-$BACKUPS/common}
+
+SHELL=${SHELL:-/bin/sh}		# assume a shell
+
+export	BACK BACKUPS BACK_FILES BACK_CMDS   PATH SHELL TERM
+
+INCR_AT=$BACK_FILES/IncrAt
+LAST_EST=$BACK_FILES/LastEst
+LAST_INCR=$BACK_FILES/LastIncr
+LAST_FULL=$BACK_FILES/LastFull
+START_FULL=$BACK_FILES/StartFull
+
+R_CRIT=$BACK_FILES/RCriteria	# restore criteria
+S_CRIT=$BACK_FILES/SCriteria	# backup  criteria
+THE_DIR=$BACK_FILES/TheDir	# remembered dir-name
+UNDONE=$BACK_FILES/NotDone	# FS's not done at last full-backup try
+
+ARCHIVE=$BACK_FILES/Archive
+ARCH_LIB=$BACK_FILES/ArchiveLib
+
+PREF_FLAGS=$BACK_FILES/Prefs
+
+LOG_INCR=$BACK_FILES/LogIncr
+LOG_FULL=$BACK_FILES/LogFull
+
+TEST_FLAG=$BACK_CMDS/!!TESTING!!	# exists only if we are testing
+
+PART=`fexpr "$PATH" : ".*$BACK_CMDS.*" `
+# if PATH doesn't include 'common', insert it.
+# then, if testing-flag is ON, insert 'phony' before 'common'.
+[ "$PART" -eq 0 ]  &&  PATH=":$BACK_CMDS:$PATH" \
+	&&  [ -r $TEST_FLAG ]  &&  PATH=":$BACK_CMDS/phony:$PATH" \
+
+PATH=` echo "$PATH" | tr -s ':' ':' `	# removes repeated :'s
+#	echo >/dev/tty "%$PATH%"	# debug
+
+
+TEMP=$BACK_FILES/butmp$$
+
+# Note that seconds is not read, permitting 'touch' to work, which
+# cannot set the seconds to other than 00.
+DATE_SIMPLE="+%y %m %d %H %M 00"	# readable by machine (seconds=00)
+DATE_TOUCH="+%m%d%H%M%y"		# readable by 'touch'
+DATE_HUMAN="+%a %b%d %h 19%y, at %r %z"	# readable by humans
+
+MODES=0644	# modes for private backup files
+
+FAIL () {
+	[ -n "$*" ]  &&  echo 1>&2 "\n#####" "$@"
+	exit 2		# real version
+}
+
+
+# Get different values set up if we are testing or not
+unset BASE_DIR	
+[ -s $TEST_FLAG ]  &&  {
+	# We are running in test state
+	read BASE_DIR JUNK  <$TEST_FLAG
+}
+
+# If no BASE_DIR previously set, use '/'
+BASE_DIR=${BASE_DIR:-/}
+
+USER_ID=`/usr/bin/id`
+USER_ID=`fexpr "$USER_ID" : "uid=\([0-9]*\)"`
+
+if [ "$USER_ID" -ne 0  -a  ! -r $TEST_FLAG ]
+then
+	echo 1>&2 "You must be the SuperUser (root) to perform backups." \
+		"\nNo action taken."
+	exit 2
+fi
+
+.  SiteValues	# get per-site values
+.  GetPrefs	# get preferences

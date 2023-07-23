@@ -1,0 +1,33 @@
+# Shell file sets variables to time of last full backup, if any
+# Date is modified-date of LAST_FULL, if any.
+# if no LAST_FULL file, create it, then mark it:  1 Jan 1970 00:00:00
+# input:
+#	MESSAGE = message to use before printing LAST_FULL date
+#		if null, don't even print the date.
+# output:
+#	YEAR MONTH DAY HOUR MINUTE SECOND
+#	SINCE = bru "since" time
+# are set to time of LAST_FULL
+# invoked via ".  SinceFull" to set variables in current shell
+
+
+[ -r "$LAST_FULL" ]  ||  {
+	>$LAST_FULL				# create file
+	chmod  $MODES  $LAST_FULL		# set its modes
+	#      mmddHHMMyy	seconds always zero
+	touch  0101000070  $LAST_FULL		# midnite, 1 Jan 1970
+}
+
+xdate  "$DATE_SIMPLE"  $LAST_FULL  >$TEMP
+read YEAR MONTH DAY HOUR MINUTE SECOND  JUNK  <$TEMP
+rm $TEMP
+
+SINCE="$MONTH/$DAY/$YEAR,$HOUR:$MINUTE:$SECOND"
+
+#	echo >/dev/tty $0:since=$SINCE	#debug
+
+# If we are signaled to tell "since" date, do it.
+[ "$MESSAGE" ]  &&  {
+	echo  >/dev/tty "$MESSAGE\n\t\c"
+	xdate >/dev/tty "$DATE_HUMAN"  $LAST_FULL
+}

@@ -1,0 +1,104 @@
+# RebuildFS -- rebuild a file-system using given recovery info
+# required args:
+#	1 = DIR
+#	2 = DEVICE less any leading "/dev/"
+#	3 = B_FREE blocks free
+#	4 = I_FREE i-nodes free
+#	5 = B_TOTAL  total blocks on FS
+#	6 = I_TOTAL  total i-nodes on FS
+# output:
+#	stdout = name of recovery directory
+#	$R_CRIT holds recovery criteria
+
+# *** incomplete ***
+
+. BUsetup
+
+[ $# -ne 6 ]  &&  FAIL "$0: not enough recovery info"
+
+MESSAGE="No file-system built"
+.  ArchGet	# load my variables
+
+DIR=$1  DEVICE=$2  B_FREE=$3  I_FREE=$4  B_TOTAL=$5  I_TOTAL=$6
+. RecoverVerf		# check for sane values of recovery variables
+
+
+# Define places to look for recovered device-name
+# Note that a "place' is a PAIR of names:
+#	first = prefix for RAW device
+#	second = prefix for BLOCK device
+# Search only looks for RAW device, assuming BLOCK will exist if RAW is found
+# Alter as appropriate for local UNIX conventions...
+SEARCH_PAIRS="\
+	/dev/r		/dev/ \
+	/dev/rdsk/	/dev/dsk/ "
+
+set -- $SEARCH_PAIRS
+#	echo >/dev/tty "# $#"				# debug only
+#	for i ; do  echo >/dev/tty  ":$i:" ; done	# debug only
+
+while [ "$1" ]
+do
+	PRE_RAW=$1  PRE_BLK=$2
+	# Check for char-special in RAW place
+	[ -c "$PRE_RAW$DEVICE" ]  &&  break	# stop search if found
+	shift 2					# get next 2 names
+done
+
+[ "$1" ]  ||  FAIL "Device '$DEVICE' not found"
+
+RAW_DEVICE=$PRE_RAW$DEVICE
+BLK_DEVICE=$PRE_BLK$DEVICE
+
+[ -r $TEST_FLAG ]  && ls -ld  >/dev/tty  $RAW_DEVICE $BLK_DEVICE
+
+
+# So we found the raw device...
+# If it's currently mounted, MOUNT_POINT = current mount-point
+# If not mounted, make a new file-system on it and mount it in
+# a temporary location.
+# In either case, (excepting failures) new DIR of parent = MOUNT_POINT
+# and tell user to RESTORE.
+MOUNT_POINT=` /etc/mount | awk '$3 =="'$BLK_DEVICE'" { print $1 }' `
+
+[ "$MOUNT_POINT" ]  &&  {	# already mounted
+	echo >/dev/tty \
+		"Device '$BLK_DEVICE' is already mounted to '$MOUNT_POINT'"
+}
+
+[ "$MOUNT_POINT" ]  ||  {	# not already mounted
+	# Can we write the raw device to make a FS on it?
+	[ -w $RAW_DEVICE ]  ||  FAIL "Can't write to '$RAW_DEVICE'"
+
+	# Not mounted, so make FS and mount in temp
+	echo >/dev/tty "Making new file-system on '$RAW_DEVICE'..."
+
+	# Put a '#' in front of the following 'echo' to really do mkfs
+#	echo  \
+	/etc/mkfs >/dev/tty  2>&1  $RAW_DEVICE  $B_TOTAL:$I_TOTAL  || \
+		FAIL "error $?: Failed to make file-system"
+
+	# If success, make temporary dir for mounting
+	TEMP_DIR="/!RECOVER:$$"
+	rmdir $TEMP_DIR  >/dev/null 2>&1	# remove any existing dir
+	mkdir >/dev/tty  2>&1  $TEMP_DIR  ||  FAIL "Failed to make recovery directory"
+
+#	echo  \
+	/etc/mount  >/dev/tty  2>&1  $BLK_DEVICE  $TEMP_DIR  || \
+		FAIL "Failed to mount recovery directory"
+
+	MOUNT_POINT=$TEMP_DIR
+	echo >/dev/tty  "Now set up to recover '$DIR' from archive." \
+	   "\nRecovery directory is:\n\t$MOUNT_POINT" \
+	   "\nRemember to remove the directory when it is no longer needed."
+}
+
+# By now we have determined where we can extract archive to.
+# Prepare the RESTORE descriptions to recover complete FS
+echo  $MOUNT_POINT  >$THE_DIR	# remember directory
+echo >/dev/tty \
+	"To complete the recovery process, choose RESTORE item from menu."
+
+
+# Emit new directory to waiting parent...
+echo $MOUNT_POINT

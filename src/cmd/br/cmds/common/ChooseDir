@@ -1,0 +1,56 @@
+# Change base-directory name to different directory
+# required args:
+#	1 = current base-directory name
+# optional args:
+#	2 = pattern to match in BACKUP field of FSNames
+#	3.. = message to show
+# get new base-directory name, echo to stdout
+
+. BUsetup
+
+[ "$1" ]  ||  FAIL "$0: Need a directory name"
+
+DIR="$1" ; shift
+[ -n "$1" ]  &&  {
+	PATTERN=${1:-'[A-Za-z]'}	# if empty pattern, use "any alpha"
+	shift
+}
+MESSAGE="${*:-Current directory is:}"
+
+echo >/dev/tty \
+	"$MESSAGE" \
+	"\n\t$DIR"
+
+NAMES=`FileSystems "$PATTERN"`	# only get FSnames matching pattern
+set --  NAMES=${NAMES:-"/"}	# if none, just use "/"
+NAME_COUNT=$#		# remember how many there are
+
+ChooseQ	"Choose directory:" \
+	$NAMES \
+	"-- Enter your own choice"  >$TEMP
+read ITEM CHOICE  <$TEMP;  rm $TEMP
+#	echo ITEM=":$ITEM:"  CHOICE=":$CHOICE:"		# debug statement
+
+[ -r $TEST_FLAG ] &&  echo >/dev/tty  You chose: $CHOICE.
+
+[ $ITEM -eq 0 ]  &&  CHOICE="$DIR"		# if QUIT, use DIR
+	
+[ $ITEM -gt $NAME_COUNT ]  &&  {
+	CHOICE=""		# force loop around once
+	until [ -d "$CHOICE" ]
+	do
+		echo >/dev/tty \
+			"\nType directory name exactly as you want it," \
+			"\nor empty line to retain '$DIR'." \
+			"\nYour input: \c"
+		read INPUT JUNK  </dev/tty
+
+		CHOICE=${INPUT:-$DIR}	# if empty line, use DIR
+
+		[ -d "$CHOICE" ]  ||  echo >/dev/tty \
+			"\n### '$CHOICE' is not a directory; try again"
+	done
+}
+
+echo ${CHOICE:-$DIR} >$THE_DIR		# save name in file
+echo ${CHOICE:-$DIR}

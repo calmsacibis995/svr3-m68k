@@ -1,0 +1,20 @@
+
+RELEASE=${RELEASE:=R3V1}
+
+if [ $# = 0 ]
+then
+    echo "Syntax: $0 <file>"
+    exit 1
+fi
+
+    dir=`dirname $1`
+    name=`basename $1`
+    mkdir -p $dir/Mcs/${RELEASE}
+
+    echo "Creating .comment listing in $dir/Mcs/${RELEASE}/${name}"
+    mcs -cp ${1} >$dir/Mcs/${RELEASE}/${name}
+    echo "Compressing .comment section in $dir/${name}"
+    mcs -da "`mcs -p ${1} | egrep \"${name}:|${name}.c\"`" ${1}
+    mcs -p ${1}
+    echo "Adding 'crc -cd' output to $dir/Mcs/${RELEASE}/${name}"
+    crc -cd ${1} |tee -a $dir/Mcs/${RELEASE}/${name}

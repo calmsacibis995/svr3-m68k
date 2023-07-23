@@ -1,0 +1,31 @@
+# Shell file actually does a backup
+# attended or unattended is determined by the '-B' input flag
+# required args:
+#	1: root-name (mount-point)
+#	2: touch-file  (append DIR here on successful backup)
+# optional args:
+#	3..: other bru options
+
+[ $# -lt 2 ]  &&  { echo 1>&2 "$0: Not enough args"; exit 2; }
+#	echo >/dev/tty "$0: $*"
+
+
+DIR=$1 TOUCH_FILE=$2; shift 2
+cd $DIR || exit 1
+
+sync; sync
+catch  'exit 1'  2 3	# allow bru to catch interrupts & quits
+			# Let caller know with non-0 exitval
+
+# Put a # before the 'pwd' to make this file really do something
+#	pwd;  echo  \
+	bru -c  "$@"  
+	# Bru errors are: 0=Success, 1=Warnings, 2=Errors
+
+	if [ $? -le 1 ]
+	then
+	    echo "$DIR completed OK" >>$TOUCH_FILE
+	    exit 0
+	else
+	    exit 1
+	fi

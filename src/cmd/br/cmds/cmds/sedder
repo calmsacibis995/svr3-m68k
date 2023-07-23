@@ -1,0 +1,11 @@
+# sed action to replace BUsetup refs
+
+for file in "$@"
+do
+	echo file: $file
+
+	sed '\|\$BACKUPS/BUsetup| s|\$BACKUPS/BUsetup|$BACK_CMDS/BUsetup|g' \
+		$file  >sed$$
+	mv $file  $file.BAK
+	mv sed$$  $file
+done

@@ -1,0 +1,13 @@
+# Shell file to view archives
+# required args:
+#	1 = archive device-name
+# optional args:
+#	2.. = bru selection options
+
+[ $# -lt 1 ]  &&  FAIL "$0: No archive-name given"
+
+catch  'exit'  2 3	# allow bru to catch interrupts & quits
+
+# Put a # before the 'echo' to make this file really do something
+#	echo >/dev/tty  \
+	bru -tv   -l -f "$@"

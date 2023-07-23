@@ -1,0 +1,17 @@
+# Shell file to restore archives
+# required args:
+#	1 = dir name to cd to before restore
+#	2 = archive device-name
+# optional args:
+#	3.. = bru selection options
+
+[ $# -lt 2 ]  &&  { echo 1>&2 "$0: Not enough args"; exit 2; }
+
+cd $1 || exit
+shift
+
+catch  'exit'  2 3	# allow bru to catch interrupts & quits
+
+# Put a # before the 'pwd' to make this file really do something
+#	pwd >/dev/tty ;	echo >/dev/tty \
+	bru -xv  -l -f "$@"

@@ -1,0 +1,26 @@
+# Shell sub-file preserves contents and dates of all B/R significant
+# files by reading the various values into shell variables.
+# This is done prior to a RESTORE so that they may be restored after
+# without any negative effect on a RESTORE overwriting the files.
+
+read  _INCR_AT		<$INCR_AT
+read  _LAST_EST		<$LAST_EST
+
+read  _R_CRIT		<$R_CRIT
+read  _S_CRIT		<$S_CRIT
+read  _THE_DIR		<$THE_DIR
+read  _UNDONE		<$UNDONE
+
+read  _ARCHIVE		<$ARCHIVE
+# translate white-space to visible
+_ARCH_LIB=`tr '\011\012 '  '|~^'  <$ARCH_LIB`
+
+read  _PREF_FLAGS	<$PREF_FLAGS
+
+[ -s $TEST_FLAG ]  &&  read  _TEST_FLAG  <$TEST_FLAG
+
+_T_LAST_EST=` xdate "$DATE_TOUCH"  $LAST_EST`
+_T_LAST_INCR=`xdate "$DATE_TOUCH"  $LAST_INCR`
+_T_LAST_FULL=`xdate "$DATE_TOUCH"  $LAST_FULL`
+_T_START_FULL=`xdate "$DATE_TOUCH"  $START_FULL`
+

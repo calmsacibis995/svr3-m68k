@@ -1,0 +1,11 @@
+# Simple shell file to read DiskInfo and emit
+# only the names matching the pattern
+# optional args:
+#	1 = pattern other than [A-Za-z] to match in "backup" field
+# output:
+#	stdout = list of file-system names, one per line
+#
+
+PAT=${1:-'[A-Za-z]'}	# take given pattern, or set default
+
+BUNames | awk '$3 ~ /^'"$PAT"'$/  {print $2}' 	# only get FSnames

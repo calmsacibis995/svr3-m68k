@@ -1,0 +1,13 @@
+#		Copyright (c) 1985 Motorola, Inc.   #
+#		All Rights Reserved		#
+
+
+<real_dev>  <alias>	<mntpt>	<fsize>		<perms>	<format_pgm >
+
+/dev/02s0   default	/flp	1264:144	RWF	/etc/fmtflp
+/dev/02s0   flp		/flp	1264:144	RWF	/etc/fmtflp
+/dev/02s0   bflp	/flp	1264:144	RWF	/etc/fmtbflp
+/dev/03s0   flp2	/flp2	1264:144	RWF	/etc/fmtflp
+/dev/03s0   bflp2	/flp2	1264:144	RWF	/etc/fmtbflp
+/dev/00s2   usr		/usr	84480		R	none
+/dev/01s0   w1		/w1	26880		R	none

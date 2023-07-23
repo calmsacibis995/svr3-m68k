@@ -1,0 +1,47 @@
+# Shell file to prompt and read new item value
+# required args:
+# 1 = thing is called...
+# 2 = current value
+# Optional args
+# 3 = fexpr pattern to match
+# 4 = error explanation string
+
+. BUsetup
+
+[ $# -lt 2 ]  &&  FAIL "Not enough arguments to change item"
+
+CALLED="$1"  VALUE="$2" ; shift 2
+
+PATTERN=".*"	# fexpr pattern matches anything
+
+[ "$1" ]  &&  { PATTERN="$1"; shift; }
+
+EXPLAIN="$*"		# rest of line is explanation
+
+# main loop to get new item text from user
+while [ true ]		# end loop only by exit
+do
+	echo >/dev/tty \
+		"\n$EXPLAIN" \
+		"\nEnter a blank line for no change" \
+		"\nChange $CALLED from '$VALUE' to: \c"
+
+	read </dev/tty INPUT
+	if [ "$INPUT" ] ; then
+		# new value was entered, check for correct pattern
+		LENGTH=`fexpr "$INPUT" : '.*' `		# find string length
+		MATCH=`fexpr "$INPUT" : "$PATTERN" `	# check pattern match
+		if [ "$LENGTH" -eq "$MATCH" ] ; then
+			echo "$INPUT"	# send input to caller
+			exit
+		else
+			echo >/dev/tty \
+				"Incorrect input form, please try again."
+		fi
+	else
+		echo >/dev/tty \
+			"No change to $CALLED."
+		echo "$VALUE"		# original value
+		exit
+	fi
+done

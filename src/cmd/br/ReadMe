@@ -1,0 +1,24 @@
+Files that the backup and restore systems needs, other than the average
+UNIX utilities...
+
+/bin/sh		modified Bourne shell  (GG)
+bru		the modified 6.6  bru or later  (GG)
+at		and directories in /usr/lib/cron & /usr/spool/cron
+cron		and associated directories
+
+The (GG) means that I modified the command to specifically support the B&R
+system.  At and cron are standard System 5 utilities and are only necessary
+if you use deferred backups.  Since deferred backups are so handy, it would
+be silly not to have 'at' and 'cron' on the system...
+
+
+22 Oct 86:
+  Fred has modified the normal bru so that the '-g' option is now supported.
+There are also hooks which allow local-only crossing of mounted file-systems.
+Therefore, Fred's new 'bru' should be the one that is used with the B&R
+system.  If it is not, then install the new version in '/backups/cmds/common'
+so that B&R will use it.
+  The changes that GG made to the Bourne shell have been merged into
+the release source for the 'sh' program.  The B&R system checks that it is
+running under the correct shell, and aborts if it finds it isn't.  Nothing
+in B&R is sensitive to the name of the shell, only to its capabilities.

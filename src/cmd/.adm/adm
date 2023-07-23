@@ -1,0 +1,9 @@
+#ident	@(#)adm:adm	1.2
+#
+# The adm crontab file should contain startup of process accounting
+# if this features is to be enabled
+#
+#0 4 * * 1-6 /usr/lib/acct/runacct 2> /usr/adm/acct/nite/fd2log
+#0 * * * * /usr/lib/acct/ckpacct
+#15 5 1 * * /usr/lib/acct/monacct
+#0 2 * * 1-6 /usr/lib/acct/dodisk

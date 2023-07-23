@@ -1,0 +1,27 @@
+# Shell sub-file restores contents and dates of all B/R significant
+# files by writing the various values from shell variables.
+# This is done so there are no negative side effects after
+# the RESTORE possibly overwrote some files.
+
+echo  $_INCR_AT		>$INCR_AT
+echo  $_LAST_EST	>$LAST_EST
+
+echo  $_R_CRIT		>$R_CRIT
+echo  $_S_CRIT		>$S_CRIT
+echo  $_THE_DIR		>$THE_DIR
+echo  $_UNDONE		>$UNDONE
+
+echo  $_ARCHIVE		>$ARCHIVE
+# translate visible to white-space
+echo "$_ARCH_LIB\c" | tr '|~^'  '\011\012 '  >$ARCH_LIB
+
+echo  $_PREF_FLAGS	>$PREF_FLAGS
+
+[ -s $TEST_FLAG ]  &&  echo  $_TEST_FLAG  >$TEST_FLAG
+
+# Restore the 'modified' time of the touch files
+touch  "$_T_LAST_EST"   $LAST_EST
+touch  "$_T_LAST_INCR"  $LAST_INCR
+touch  "$_T_LAST_FULL"  $LAST_FULL
+touch  "$_T_START_FULL" $START_FULL
+

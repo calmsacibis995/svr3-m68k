@@ -1,0 +1,65 @@
+#ident	"@(#).adm/m68k:mklost+found	1.2"
+#
+# mklost+found
+#
+# Make a lost+found directory.
+#
+
+PATH=$PATH:/usr/lbin
+
+
+
+set -ue
+umask 022
+
+if [ $# -ne 2 ]
+then
+	echo "Usage: ${0} dir {dev|count}" >&2
+	echo "e.g.\t${0}  /flp  /dev/rSA/diskette1\t-or-" >&2
+	echo "\t${0}  /usr  140" >&2
+	echo "Count is # of entries to reserve (will be rounded to mult of 32)"
+	exit 1
+fi
+
+# allow for holding 20% of the filesystem in lost+found
+
+if [ ${2} -gt 0 ]		# looks like a number
+then
+	count=`expr \( ${2} + 31 \) / 32`
+else
+	inodes=`fsinfo -i ${2}`
+	count=`expr \( \( ${inodes} / 50 \) + 31 \) / 32`
+fi
+
+set +e
+mkdir ${1}/lost+found 2>/dev/null
+set -e
+cd ${1}/lost+found
+
+echo "\nReserving `expr ${count} \* 32` entries"
+
+n=0
+while [ ${n} -lt ${count} ]
+do
+	> PoPuL8a${n} ; > PoPuL8b${n} ; > PoPuL8c${n} ; > PoPuL8d${n}
+	> PoPuL8e${n} ; > PoPuL8f${n} ; > PoPuL8g${n} ; > PoPuL8h${n}
+	> PoPuL8i${n} ; > PoPuL8j${n} ; > PoPuL8k${n} ; > PoPuL8l${n}
+	> PoPuL8m${n} ; > PoPuL8n${n} ; > PoPuL8o${n} ; > PoPuL8p${n}
+	> PoPuL8q${n} ; > PoPuL8r${n} ; > PoPuL8s${n} ; > PoPuL8t${n}
+	> PoPuL8u${n} ; > PoPuL8v${n} ; > PoPuL8w${n} ; > PoPuL8x${n}
+	> PoPuL8y${n} ; > PoPuL8z${n} ; > PoPuL8A${n} ; > PoPuL8B${n}
+	> PoPuL8C${n} ; > PoPuL8D${n}
+
+	# allow for . and .. being in first block
+
+	if [ ${n} -ne 0 ]
+	then
+		> PoPuL8E${n}30 ; > PoPuL8F${n}31
+	fi
+	n=`expr ${n} + 1`
+done
+
+if [ ${count} -ne 0 ]
+then
+	rm PoPuL8*
+fi

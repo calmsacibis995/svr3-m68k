@@ -1,0 +1,80 @@
+# Perform incremental backup on entire file-system.
+# Use various shell variables, if they have already been set,
+# else set default values and proceed.
+
+# This file prompts for user input and then delegates the desired
+# actions to other shell files or utilities.
+
+
+. BUsetup		# setup variables and things
+
+[ "$1" ]  ||  FAIL "Need default directory"
+DIR=$1
+
+# Check that run-level is appropriate
+.  RunCheck		# puts current level in RUN_LEVEL
+
+# Read the file-system names for full incremental
+# puts a leading "." on every name, assumes names start with "/"
+FILE_SYSTEMS=`FileSystems '[Ff]' | awk '{ print "."$1 }' `
+
+while [ true ]		# Faster than exec'ing /bin/true
+do
+	# Read DIR from file where it is remembered
+	read DIR JUNK <$THE_DIR
+	DIR=${DIR:-$BASE_DIR}		# if empty, use BASE_DIR
+
+	# Choose PLACES based on DIR
+	PLACES="."			# assume current directory
+	[ "$DIR" = "/" ]  &&  \
+		PLACES="-m $FILE_SYSTEMS"
+
+	if [ -r $LAST_INCR ] ; then
+		echo >/dev/tty \
+			"\nLast incremental on record occurred:\n\t\c"
+		xdate >/dev/tty  "$DATE_HUMAN" $LAST_INCR
+	else
+		echo >/dev/tty "\nNo previous incremental on record."
+	fi
+
+	MESSAGE="Incremental backup will include all files modified since:"
+	.  SinceFull		# take since last full backup
+
+	ChooseQ	"Incremental backup functions are:" \
+		"DIRECTORY other than '$DIR'" \
+		"ESTIMATE archive requirements for '$DIR'" \
+		"SCHEDULE an unattended backup for '$DIR'" \
+		"BACKUP '$DIR' now" >$TEMP
+	read ITEM CHOICE  <$TEMP;  rm $TEMP
+#	echo ITEM=":$ITEM:"  CHOICE=":$CHOICE:"		# debug statement
+
+	[ -r $TEST_FLAG ] &&  echo >/dev/tty  You chose: $CHOICE.
+	
+	case "$CHOICE" in
+		Q* )	# Quit
+			exit ;;
+	
+		D* )	# choose new directory
+			DIR=`ChooseDir "$DIR" '[Ff]' \
+			  "Incremental will proceed from:" `
+			;;
+
+		E* )	# Estimate
+			incr.est "$DIR" $PLACES
+			;;
+	
+		S* )	# Schedule an unattended backup
+			incr.sched "$DIR" $PLACES
+			;;
+	
+		B* )	# Backup now
+			incr.do "$DIR" $PLACES
+			;;
+	
+		* )	# Program failure
+			echo >/dev/tty "\n$0: funny choice:" $CHOICE $ITEM
+			FAIL
+			;;	
+	esac
+	
+done

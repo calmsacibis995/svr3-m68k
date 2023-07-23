@@ -1,0 +1,84 @@
+# Shell file reads new values from tty for archive description
+# required args:
+# 1 = archive descriptive name
+# 2 = archive-device name
+# 3 = archive-media size
+# 4 = archive-device buffer size
+# 5 = archive-device seek/read
+#	Does read new values, echo 4 new values on stdout
+
+# debug behavior: echo all input args
+#	echo "$@";  exit
+
+.  BUsetup
+
+[ $# -lt 5 ]  &&  FAIL "Not enough arguments to change archive items"
+
+AR_DESC="$1"
+AR_NAME="$2"
+AR_SIZE="$3"
+AR_BUFF="$4"
+AR_SKIP="$5"
+
+# # main loop of changing archive description items
+while [ true ]		# Faster than exec'ing /bin/true
+do
+	ChooseQ	"Change one of:" \
+		"descriptive-name:	$AR_DESC" \
+		"archive-name:	$AR_NAME" \
+		"media-size:	$AR_SIZE" \
+		"buffer-size:	$AR_BUFF" \
+		"skip blocks by:	${AR_SKIP}ing" >$TEMP
+	read ITEM CHOICE  <$TEMP;  rm $TEMP
+
+	[ -r $TEST_FLAG ] &&  echo >/dev/tty  You chose: $CHOICE.
+	
+	case "$CHOICE" in	# d a m b s Q
+		Q* )	# Quit
+			echo "$AR_DESC" "$AR_NAME" "$AR_SIZE" \
+				"$AR_BUFF" "$AR_SKIP"
+			exit
+			;;
+	
+		[Dd]* )	# descriptive-name
+			AR_DESC=`ChangeItem "descriptive-name" \
+				$AR_DESC  '[^ 	]*' \
+				"No blanks or tabs in descriptive-name" `
+			;;
+	
+		[Aa]* )	# archive-name
+			AR_NAME=`ChangeItem "archive-device name" \
+				$AR_NAME  '[^ 	]*' \
+				"No blanks or tabs in archive-device name" `
+			;;
+	
+		[Mm]* )	# media-size
+			AR_SIZE=`ChangeItem media-size \
+				$AR_SIZE '[0-9]\{1,\}[KkMm]\{0,1\}$' \
+				"Examples: 128k 512k 5m 60M" `
+			;;
+
+		[Bb]* )	# buffer-size
+			AR_BUFF=`ChangeItem buffer-size \
+				$AR_BUFF '[0-9]\{1,\}[KkMm]\{0,1\}$' \
+				"Examples: 4096 8k 32K 1M" `
+			;;
+
+		[Ss]* )	# seek/read
+			AR_SKIP=`ChangeItem seek/read \
+				$AR_SKIP '[SsRr].*' \
+				"Enter S for 'seek' or R for 'read'" `
+			case "$AR_SKIP" in
+				[Ss]* )	AR_SKIP="seek" ;;
+				[Rr]* )	AR_SKIP="read" ;;
+				* )	AR_SKIP="read" ;;	# default
+			esac
+			;;
+
+		* )	# Program failure
+			echo >/dev/tty "\n$0: funny choice:" $CHOICE $ITEM
+			FAIL
+			;;	
+	esac
+	
+done

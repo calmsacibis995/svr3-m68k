@@ -1,0 +1,32 @@
+# Shell file to estimate archive requirements for FULL BACKUP
+# required args:
+#	1 = root-name
+
+
+. BUsetup
+
+[ $# -lt 1 ]  &&  FAIL "$0: No root-name provided"
+DIR=$1
+
+MESSAGE="No estimate made on '$DIR'"
+.  ArchGet	# load my variables
+
+MESSAGE="Last full backup was completed:"
+.  SinceFull		# take since last full backup
+
+echo >/dev/tty \
+	"Estimating archive requirements for FULL backup of:" \
+	"\n\t'$DIR'" \
+	"\nPlease wait..."
+
+
+ESTIMATE  $DIR  -m  -l  $VERBOSE_EST  \
+	-f $AR_NAME $AR_REST .  >$TEMP  2>/dev/tty
+
+read VOLUMES KBYTES FILES BLOCKS REST <$TEMP ; rm $TEMP
+
+echo >/dev/tty "\n\nArchive estimate..."
+echo >/dev/tty "Device-name:	$AR_NAME"
+echo >/dev/tty "Volumes:	$VOLUMES"
+echo >/dev/tty "Files:		$FILES"
+echo >/dev/tty "Bytes:		$KBYTES K"

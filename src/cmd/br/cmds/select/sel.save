@@ -1,0 +1,35 @@
+# Backup selected files now
+# required args:
+#	1 = dir to backup from
+# optional args:
+#	2.. = bru selection options
+# archive comes from description file
+
+
+. BUsetup
+
+set -f			# Inhibit expansion of CRITERIA
+
+[ "$1" ]  ||  FAIL "$0: Need directory to backup from"
+DIR="$1"; shift
+
+CRITERIA="$*"
+
+MESSAGE="'$DIR' not backed up."
+.  ArchGet	# load my variables
+
+
+ShowCrit backup $CRITERIA	# display selection criteria
+echo >/dev/tty \
+	"Files will be backed-up from:" \
+	"\n\t$DIR"
+
+# If no archive label given in CRITERIA, put in automatic one
+LABEL="~S $DIR Selected backup"
+
+ACTION="write"
+.  Confirm
+
+# give all bru options
+BACKUP  $DIR  /dev/null    $WRITE_VERIFY  -f $AR_NAME  $AR_REST  \
+	-L "$LABEL"  $CRITERIA  .

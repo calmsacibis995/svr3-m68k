@@ -1,0 +1,80 @@
+# Change default archive device for backup/restore
+
+. BUsetup
+
+# set message for warnings
+UNSAFE="\nThese values are NOT SAVED in the archive description file."
+UNSAVED=""		# detects write to $ARCHIVE
+AR_CHANGED=""		# date archive-device was last changed
+AR_INPUT=""		# things read from $ARCHIVE file
+
+# Look for description-file
+[ -r $ARCHIVE ]  &&  {
+	read AR_INPUT <$ARCHIVE
+	AR_CHANGED=`xdate  "$DATE_HUMAN"  $ARCHIVE`
+}
+[ "$AR_INPUT" ]  ||  UNSAVED="$UNSAFE"	# unsaved if empty $ARCHIVE file
+
+set -- ${AR_INPUT:-$SITE_ARCH}	# use file-contents or site default
+
+.  ArchParse		# parse items in this shell file
+
+while [ true ]		# breaks loop by exiting this shell file
+do
+	echo >/dev/tty  \
+		"\nCurrent archive description of $AR_DESC...\n" \
+		"archive name:	$AR_NAME\n" \
+		"media size:	$AR_SIZE\n" \
+		"buffer size:	$AR_BUFF\n" \
+		"skip by:	${AR_SKIP}ing\n" \
+		"last changed:	$AR_CHANGED" \
+		"$UNSAVED"
+
+	ChooseQ	"You may:" \
+		"CHANGE individual values" \
+		"READ all-new values from library" \
+		"SAVE the values as shown" >$TEMP
+	read ITEM CHOICE  <$TEMP;  rm $TEMP
+
+	[ -r $TEST_FLAG ] &&  echo >/dev/tty  You chose: $CHOICE.
+
+	case "$CHOICE" in	# C S Q
+		Q* )	# Quit
+			[ "$UNSAVED" ]  &&  {
+				REALLY=`YesNo "$UNSAFE" \
+					"\nDo you really want to quit?" `
+				[ "$REALLY" ]  ||  \
+					continue	# while loop
+			}
+			exit
+			;;
+
+		C* )	# Change values
+			arch.change "$AR_DESC" "$AR_NAME" "$AR_SIZE" \
+				"$AR_BUFF" "$AR_SKIP" >$TEMP
+			read AR_DESC AR_NAME AR_SIZE AR_BUFF AR_SKIP <$TEMP
+			rm $TEMP
+			UNSAVED="\n$UNSAFE"
+			;;
+	
+		R* )	# READ new complete set of values
+                        arch.read "$AR_DESC" "$AR_NAME" "$AR_SIZE" \
+                                "$AR_BUFF" "$AR_SKIP" >$TEMP
+			read AR_DESC AR_NAME AR_SIZE AR_BUFF AR_SKIP <$TEMP
+			rm $TEMP
+			UNSAVED="\n$UNSAFE"
+			;;
+	
+		S* )	# Save changes
+                        arch.save $ARCHIVE "$AR_DESC" "$AR_NAME" \
+				"$AR_SIZE" "$AR_BUFF" "$AR_SKIP" >$TEMP
+			AR_CHANGED=`xdate  "$DATE_HUMAN" $ARCHIVE`
+			UNSAVED=""
+			;;
+	
+		* )	# Program failure
+			echo >/dev/tty "\n$0: funny choice:" $CHOICE $ITEM
+			FAIL
+			;;	
+	esac
+done

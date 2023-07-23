@@ -1,0 +1,54 @@
+# File uses other tricks to develop and emit header for a full FS backup
+# required args:
+#	1: mount-point to find info for
+# output:
+#	header for full backups
+#	~F Dir Device BlkUsed InoUsed BlkTotal InoTotal
+# the total length of the header is <= 63 chars
+
+[ $# -lt 1 ]  &&  { echo >/dev/tty 1>&2 "$0: need FS name"; exit 2; }
+
+
+INFO=` DiskSpace $1 `
+[ "$INFO" ]  ||  {
+	echo ~F $1 % 0 0 0 0	# correct form, but indicates nothing
+	exit
+}
+
+set -- $INFO
+# 1 = mount-point
+# 2 = device or resource-name
+# 3 = blocks-free
+# 4 = blocks-in-FS
+# 5 = i-nodes-free
+# 6 = i-nodes-in-FS
+
+DIR=$1  DEVICE=$2  BLK_FREE=$3  BLK_TOTAL=$4  INO_FREE=$5  INO_TOTAL=$6
+
+# First, compute "device-name" result
+if  fexpr "X$DEVICE" : 'X.*/.*' >/dev/null
+then
+	# Remove any leading "/dev/"
+	DEVICE=` fexpr "X$DEVICE" : 'X/dev/\(.*\)' `
+else
+	# no '/' in name, must be resource
+	DEVICE="@$DEVICE"
+fi
+
+# The combined length of DEVICE and DIR is <= 33 chars
+# DIRLIM is number telling max allowable length of directory name
+DIRLIM=` fexpr 33 - "$DEVICE" : '.*' `
+
+XDIR=`fexpr "X$DIR" : 'X\(.\{1,'$DIRLIM'\}\)' `	# take at most DIRLIM chars
+[ "$XDIR" != "$DIR" ]  &&  {
+	DIR=`fexpr "$DIR" : '.\(.*\)' `	# remove leading character
+	DIR="-$DIR"			# insert leading '-'
+}
+
+BLK_USED=`fexpr $BLK_TOTAL - $BLK_FREE`
+INO_USED=`fexpr $INO_TOTAL - $INO_FREE`
+
+echo	"~F" $DIR $DEVICE  \
+	$BLK_USED  $INO_USED \
+	$BLK_TOTAL $INO_TOTAL
+

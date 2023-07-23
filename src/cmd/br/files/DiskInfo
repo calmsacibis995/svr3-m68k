@@ -1,0 +1,6 @@
+# Edit this file so that it describes your system.
+# Comments are blank lines or any line starting with a '#'
+
+# dev-name	mount-point	backup-flag
+/dev/root	/		f
+/dev/usr	/usr		f

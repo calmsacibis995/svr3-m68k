@@ -1,0 +1,77 @@
+# Schedule an unattended backup
+# required args:
+#	1 = base dir
+# optional args:
+#	2.. = places to visit, and bru flags
+
+. BUsetup
+
+[ "$1" ]  ||  FAIL "$0: Need directory to backup from"
+DIR="$1"; shift
+PLACES="${*:-'.'}"	# by default, visit DIR
+[ -r $TEST_FLAG ]  &&  { echo "PLACES =" $PLACES; }
+
+
+unset MESSAGE
+.  SinceFull		# take since last full backup
+
+MESSAGE="Incremental backup not scheduled."
+.  ArchGet	# load my variables
+
+			
+# Incremental will occur at given time.  If time is less than current time,
+# this will be tomorrow, else it will be today.
+[ -s $INCR_AT ]  ||  echo 02:00  >$INCR_AT	# default of 2:00am if none
+
+NEXT_INCR=`tr ':' ' ' <$INCR_AT`		# get preferred hour & minute
+
+# Read any values from last estimate
+unset DIR_AT VOLUMES KBYTES FILES BLOCKS	# assume no values
+[ -r "$LAST_EST" ]  &&  {
+	# examine previous estimate.  Only DIR_AT is used
+	read DIR_AT JUNK  <$LAST_EST
+}
+
+
+# If no LastEst, or not from same dir, or if LastIncr done after LastEst ...
+[ ! -r "$LAST_EST"  -o  "$DIR" != "$DIR_AT"  -o \
+   `newer "$LAST_EST" "$LAST_INCR"` = "$LAST_INCR" ]  &&  {
+	# make estimate now, save results
+	echo >/dev/tty \
+		"No valid archive estimate found. " \
+		"Making estimate now.\n"
+	incr.est "$DIR"  $PLACES  || exit
+}
+
+read DIR_AT VOLUMES KBYTES FILES BLOCKS REST <$LAST_EST
+
+
+# be sleazy and check for greater than 1.  If user interrupts the
+# estimate, result is 0 volumes.  Thus test passes and schedules
+# the incremental anyway. 
+
+[ "$VOLUMES" -gt 1 ]  &&  {
+	# Requires more than one volume
+	echo >/dev/tty \
+		"This incremental backup requires more than one volume." \
+		"\nYou may not run it unattended." \
+		"\nBACKUP NOT SCHEDULED"
+	exit 1
+}
+
+# Make label for unattended incremental backup
+LABEL="~IU $DIR ($PLACES) Incr since $SINCE"
+
+echo >/dev/tty "Setup NOW for incremental backup LATER."
+ACTION="write"
+.  Confirm
+
+# Put stdout to log file (may be /dev/null). 
+# Put stderr to logfile and stdout, so it is
+# also available to scheduler (currently 'at')
+
+SCHEDULE  $NEXT_INCR \
+	$DIR  $LAST_INCR  $WRITE_VERIFY  -B  \
+	-L \"$LABEL\" $VERBOSE_INC \
+	-l -n $SINCE  -f $AR_NAME  $AR_REST  $PLACES \
+	" 2>&1 1>$INCR_LOG | tee -a $INCR_LOG"
