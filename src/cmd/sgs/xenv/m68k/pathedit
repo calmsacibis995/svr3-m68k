@@ -1,0 +1,44 @@
+#ident	"@(#)xenv:m68k/pathedit	1.27"
+#
+#	Master Pathedit for MOTOROLA M68K SGS
+#
+#
+
+chmod 0755 ../../optim/m68k/makefile ../../inc/m68k ../../xenv/m68k
+chmod 0755 ../../xenv/m68k/pted.unx ../../xenv/m68k/pted.native 
+chmod 0755 ../../xenv/m68k/pted.nonx ../../xenv/m68k/pted.shlink 
+chmod 0755 ../../xenv/m68k/pted.integr
+cont="T"
+echo "Enter target machine name (m68k, 3b15, 3b5, 3b2 or nonunix):  \c"
+while [ "$cont" = "T" ]
+do
+	mach=`line`
+	if [ "$mach" = "m68k" -o "$mach" = "3b2"  -o "$mach" = "3b5" -o "$mach" = "3b15" ]
+	then
+		cont="F"
+	elif [ "$mach" = "nonunix" ]
+	then
+		exec pted.nonx
+
+	else
+		echo "Illegal target machine name. Enter m68k, 3b15, 3b5, 3b2 or nonunix: \c"
+	fi
+done
+
+echo "Are you building native SGS (y or n):	\c"
+x=`line`
+if [ "$x" = "y" ]
+then
+	 exec pted.native $mach
+else
+	if [ -x pted.integr ]
+	then
+		pted.integr $mach
+		if [ 0 -ne $? ]
+		then
+			echo "header files not setup - cannot continue"
+			exit 1
+		fi
+	fi
+	exec pted.unx $mach
+fi

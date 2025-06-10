@@ -1,0 +1,49 @@
+Fri Sep  5 13:41:55 MST 1986 -- Make id=58
+	cc -c -I/usr/include -O enpconfig.c
+	cc -O -s  -o enpconfig enpconfig.o 
+undefined		first referenced
+ symbol  		    in file
+in_addr             		enpconfig.o
+gthstbname          		enpconfig.o
+ld fatal: Symbol referencing errors. No output written to enpconfig
+*** Error code 13
+
+Stop.
+Fri Sep  5 13:47:26 MST 1986 -- Make id=59
+	cc -O -s  -o enpconfig enpconfig.o -lcmcnet
+	cc -c -I/usr/include -O enpload.c
+	cc -O -s  -o enpload enpload.o -lcmcnet
+Fri Sep  5 14:10:50 MST 1986 -- Make id=60
+	cc -O -I/aq1/usr/include -c enpconfig.c
+	cc -O -s  -o enpconfig enpconfig.o -lcmcnet
+	cc -O -I/aq1/usr/include -c enpload.c
+	cc -O -s  -o enpload enpload.o -lcmcnet
+	cpset enpconfig /aq1/etc 0755 root sys
+	cpset enpload /aq1/etc 04755 root sys
+	cpset hosts /aq1/etc 0444 root sys
+	cpset hosts.equiv /aq1/etc 0444 root sys
+	cpset networks /aq1/etc 0444 root sys
+	cpset services /aq1/etc 0444 root sys
+	cpset protocols /aq1/etc 0444 root sys
+Fri Sep  5 14:11:02 MST 1986 -- Make id=61
+	cc -O -I/aq1/usr/include -c enpconfig.c
+	cc -O -s  -o enpconfig enpconfig.o -lcmcnet
+	cc -O -I/aq1/usr/include -c enpload.c
+	cc -O -s  -o enpload enpload.o -lcmcnet
+	cpset enpconfig /aq1/etc 0755 root sys
+	cpset enpload /aq1/etc 04755 root sys
+cpset: warning: couldn't set modes on '/aq1/etc'
+	cpset hosts /aq1/etc 0444 root sys
+	cpset hosts.equiv /aq1/etc 0444 root sys
+	cpset networks /aq1/etc 0444 root sys
+	cpset services /aq1/etc 0444 root sys
+	cpset protocols /aq1/etc 0444 root sys
+Fri Sep  5 14:15:17 MST 1986 -- Make id=62
+	cpset enpconfig /aq1/etc 0755 root sys
+	cpset enpload /aq1/etc 04755 root sys
+cpset: warning: couldn't set modes on '/aq1/etc/enpload'
+	cpset hosts /aq1/etc 0444 root sys
+	cpset hosts.equiv /aq1/etc 0444 root sys
+	cpset networks /aq1/etc 0444 root sys
+	cpset services /aq1/etc 0444 root sys
+	cpset protocols /aq1/etc 0444 root sys

@@ -1,0 +1,8 @@
+#ident	"@(#)sadmin:admin/menu/packagemgmt/rfs/tcpip/DESC	2.3"
+#head#			TCP/IP TRANSPORT PROVIDER ADDRESS GENERATION
+#head#				AND RFS INSTALLATION
+#menu#	Tcp/ip address and rfs subsystem management
+#help#
+#help#	This submenu will allow the viewing and installation of addresses
+#help#	for the CMC TCP/IP transport provider.  The setup command will
+#help#	fully create the necessary files for Remote File Sharing.

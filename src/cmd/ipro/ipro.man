@@ -1,0 +1,495 @@
+.TH IPRO 1
+.SH NAME
+.P
+ipro \- an In-Place ReOrganizer of UNIX filesystems.
+
+.SH SYNOPSIS
+.P
+.B ipro\^
+\[ \-vcCsS \]
+\[ \-i
+.I delta_inode_blocks\^
+\]
+\[ \-f
+.I delta_free_blocks\^
+\]
+                                                 \[ \-l
+.I log_file_name\^
+\]
+\[
+.I file_name_list\^
+\]
+
+.SH DESCRIPTION
+.P
+\fIIPRO (pronounced \(ga i\(rn \- pro\(rn )\fR
+is a program that reorganizes disk-based UNIX filesystems
+and performs the operations in-place.
+.I IPRO\^
+arranges for the files, the files' data/indirect blocks, and
+all free blocks in a UNIX filesystem
+to be (logically) contiguous on the disk.
+This is especially important when used in conjunction with "smart"
+disk sub-systems that employ track caching and sequential track
+read-ahead schemes.
+.P
+The files in the filesystem are sorted on their last modification
+times in ascending order; the files' data/indirect blocks are 
+arranged in the same manner.
+This will statistically minimize the distance between the data/indirect
+blocks of more recently created/modified/deleted files and the
+beginning of the free block section.
+As a consequence, future filesystem
+reorganization times will also be statistically minimized.
+Directory entries are also sorted on their last modification times
+but in decreasing order.
+This will help to minimize file name search times.
+.P
+Other
+.I IPRO\^
+features include the ability to
+increase/decrease the number of inode/free blocks in the filesystem,
+to handle different filesystem block sizes,
+to linearly verify the filesystem reorganization,
+and to erase all unused areas in the filesystem.
+.P
+The memory overhead of
+.I IPRO\^
+consists of a file table and a file block table;
+only one table exists at any one time with the file block table being
+the larger.
+The file table consists of a modification time stamp and three file
+addresses per file slot in the filesystem.
+The file block table consists of a single block address per
+data/indirect/free block in the filesystem.
+This translates to less than one-quarter
+of one percent of the size of the 
+filesystem when the filesystem block size is one Kbyte.
+.P
+.I IPRO\^
+is disk-bound on the number of file blocks determined to be
+out-of-place and is memory-bound on the number
+of file/free blocks within the filesystem to be reorganized.
+.P
+.I IPRO\^
+implements a sequential ripple insertion algorithm to effect the file
+and file block reorderings;
+only a single read/write per out-of-place record is then required.
+
+.SH OPTIONS
+.P
+The
+.I \-v\^
+(verbose) option allows informative output
+(the default action is to suppress the informative output).
+.P
+The
+.I \-c\^
+(command line, normal) option specifies that the command line 
+arguments are to be processed as filesystem names
+(this is the default action).
+.P
+The
+.I \-C\^
+(command line, special) option specifies that the command line
+arguments are to be processed as names of files
+which contain white-space separated filesystem names.
+.P
+Only one of the
+.I \-cC\^
+options may be present on the command line.
+.P
+The
+.I \-s\^
+(standard input, normal) option specifies that the standard input
+is to be read for filesystem names.
+.P
+The
+.I \-S\^
+(standard input, special) option specifies that the standard input
+is to be read for names of files which contain white-space
+separated filesystem names.
+.P
+Only one of the
+.I \-sS\^
+options may be present on the command line.
+.P
+Presently, the command line 
+is processed before the standard input.
+A mix of 
+.I \-cC\^
+and
+.I \-sS\^
+options is allowed as long as the above requirements are adhered to.
+.P
+If none of the 
+.I \-cCsS\^
+options are present on the command line, then a
+.I \-c\^
+option is implied in addition to all of the other options present.
+.P
+The
+.I \-i\^
+(inode block) option expands/contracts
+the inode block section of the filesystem by
+.I delta_inode_blocks\^
+blocks (no size change in the inode block section is the default action).
+.P
+The
+.I \-f\^
+(free block) option expands/contracts
+the free block section of the filesystem by
+.I delta_free_blocks\^
+blocks (no size change in the free block section is the default action).
+.P
+Both of the
+.I \-if\^
+options may be present on the command line.
+.P
+When using the
+.I \-i\^
+and
+.I \-f\^
+options,
+range checks will be performed
+to protect against deleting too many inode/free blocks,
+respectively.
+Note that it is necessary to quote any negative block count arguments
+of these options.
+.P
+The composite of the 
+.I \-i\^
+and the
+.I \-f\^
+options will also expand/contract the size of the filesystem if the sum
+of their arguments is non-zero.
+If an expansion occurs,
+.I IPRO\^
+does attempt a preliminary read and write on the
+last block of the newly resized filesystem but
+makes no assumptions concerning the contents of the new region.
+.P
+The
+.I \-l\^
+(log) option appends all output to
+.I log_file_name.\^
+.P
+The
+.I file_name_list\^
+is a list of names of device files
+(or names of files that contain white-space separated
+names of device files)
+that house valid UNIX filesystems.
+It is suggested that
+.B raw\^
+device file names be used for increased
+.I IPRO\^
+throughput but
+it is not mandatory.
+
+.SH FILES
+.P
+.I /etc/ipro\^
+.P
+.I /usr/include/sys/filsys.h\^
+
+.SH "SEE ALSO"
+.P
+.I dcopy(1),\^
+.I fsck(1),\^
+.I mkfs(1)\^
+
+.SH AUTHOR
+.P
+Norman L. Nealy
+
+.SH REQUIREMENTS
+.P
+The system should be in SINGLE-USER MODE.
+.P
+The operator should be superuser.
+.P
+The executable file,
+.I /etc/ipro,\^
+should have 
+.I 4750\^
+access permissions, be owned by
+.I root,\^
+and be in group,
+.I sys.\^
+.P
+The arguments to 
+.I IPRO\^
+should be device files that contain true UNIX filesystems.
+.P
+The filesystem(s) should not be mounted.
+.Put
+no restoration of the filesystem is required.
+For example,
+.P
+.in 6
+.I "PROC: ipro: /etc/inittab: isdevice: file is not a device file."\^
+.in 0
+.P
+A fatal message indicates an error and
+constitutes a corrupted filesystem.
+.I IPRO\^
+will terminate and
+an immediate restoration of the filesystem is required.
+For example,
+.P
+.in 6
+.I "FATAL: ipro: /dev/r00s2: loadblktbl: filesystem sections mismatch."\^
+.in 0
+
+.SH DIAGNOSTICS
+.P
+.I "PROC: ipro: /dev/r00s2: main: ref. -i/-f option: delta inode/free blocks muse written to the standard error file;
+the standard output file is reserved for future usage.
+.P
+Procedural and fatal messages are always displayed;
+redirect the standard error file if those messages (along with the
+informative messages) are not to be displayed.
+.P
+An informative message is for information purposes only.
+For example,
+.P
+.in 6
+.I "INFO: ipro: /dev/r00s2: Loading BLOCK Table."\^
+.in 0
+.P
+A procedural message indicates an error but
+does not impact filesystem contents.
+.I IPRO\^
+will terminate but
+no restoration of the filesystem is required.
+For example,
+.P
+.in 6
+.I "PROC: ipro: /etc/inittab: isdevice: file is not a device file."\^
+.in 0
+.P
+A fatal message indicates an error and
+constitutes a corrupted filesystem.
+.I IPRO\^
+will terminate and
+an immediate restoration of the filesystem is required.
+For example,
+.P
+.in 6
+.I "FATAL: ipro: /dev/r00s2: loadblktbl: filesystem sections mismatch."\^
+.in 0
+
+.SH DIAGNOSTICS
+.P
+.I "PROC: ipro: /dev/r00s2: main: ref. -i/-f option: delta inode/free blocks must be numeric."\^
+.P
+.in 6
+option arguments must be numbers of blocks.
+.in 0
+.P
+.I "PROC: ipro: /dev/r00s2: main: option violates command line specification."\^
+.P
+.in 6
+see the SYNOPSIS section of this manual page.
+.in 0
+.P
+.I "PROC: ipro: /DEV/R00S2: main: can't open file on command line/standard input."\^
+.P
+.in 6
+check file permissions, check if file exists.
+.in 0
+.P
+.I "PROC: ipro: /dev/r00s2: procfilsys: can't delete so many inode/free blocks."\^
+.P
+.in 6
+try fewer blocks.
+.in 0
+.P
+.I "PROC: ipro: /etc/inittab: isdevice: file is not a device file."\^
+.P
+.in 6
+check file types.
+.in 0
+.P
+.I "PROC: ipro: /dev/r00s2: procfilsys: can't open filesystem for update purposes."\^
+.P
+.in 6
+check filesystem permissions, check if filesystem exists.
+.in 0
+.P
+.I "PROC: ipro: /dev/r00s2: isfilsys: filesystem section size/free block list mismatch."\^
+.P
+.in 6
+check if this is a real filesystem, run
+.I fsck(1)\^
+before proceeding.
+.in 0
+.P
+.I "FATAL: ipro: /dev/r00s2: fsblockio: bad seek/read/write."\^
+.P
+.in 6
+restore filesystem, I/O error, probable seek past end of disk or read/write on bad disk block, run
+.I fsck(1)\^
+before proceeding.
+.in 0
+.P
+.I "FATAL: ipro: /dev/r00s2: loadblktbl: filesystem sections mismatch."\^
+.P
+.in 6
+restore filesystem, internal sections do not add up, run 
+.I fsck(1)\^
+before proceeding.
+.in 0
+
+.SH EXAMPLES
+.P
+For all of the following examples,
+the file,
+.I abc,\^
+contains the names of the files,
+.I /dev/r00s2\^
+and
+.I /dev/r01s0,\^
+and the file,
+.I def,\^
+contains the names of the files,
+.I /dev/rdsk/360_4s0\^
+and
+.I /dev/rdsk/320_0s0:\^
+.P
+\fI# ipro /dev/r00s2\fR
+.P
+.in 6
+reorganizes the filesystem,
+.I /dev/r00s2,\^
+and, by default, suppresses the
+informative output.
+Remember that if none of the
+.I \-cCsS\^
+options are present, then
+.I IPRO\^
+implies a
+.I \-c\^
+option in addition
+to all of the other options present.
+.in 0
+.P
+\fI# ipro \-v /dev/r01s0\fR
+.P
+.in 6
+reorganizes the filesystem,
+.I /dev/r01s0,\^
+and displays the informative output.
+.in 0
+.P
+\fI# ipro \-cv /dev/r01s0\fR
+.P
+.in 6
+same as above.
+.in 0
+.P
+\fI# ipro \-Cv \-l iprolog abc\fR
+.P
+.in 6
+reorganizes the filesystems,
+.I /dev/r00s2\^
+and
+.I /dev/r01s0,\^
+displays informative output, and logs output to the file,
+.I iprolog.\^
+.in 0
+.P
+\fI# cat abc | ipro \-sv \-l iprolog\fR
+.P
+.in 6
+same as above.
+.in 0
+.P
+\fI# echo abc | ipro \-Sv \-l iprolog\fR
+.P
+.in 6
+same as above.
+.in 0
+.P
+\fI# cat def | ipro \-csv /dev/r00s2 /dev/r01s0\fR
+.P
+.in 6
+reorganizes the filesystems,
+.I /dev/r00s2, /dev/r01s0, /dev/rdsk/360_4s0,\^
+and
+.I /dev/rdsk/320_0s0,\^
+in that order and displays informative output.
+.in 0
+.P
+\fI# echo def | ipro \-CSv abc\fR
+.P
+.in 6
+same as above.
+.in 0
+.P
+\fI# echo def | ipro \-cSv \`cat abc\`\fR
+.P
+.in 6
+same as above.
+.in 0
+.P
+\fI# echo /dev/rdsk/360_4s0 /dev/rdsk/320_0s0 | ipro \-vCs abc\fR
+.P
+.in 6
+same as above.
+.in 0
+.P
+\fI# ipro \-Cv abc def\fR
+.P
+.in 6
+same as above.
+.in 0
+.P
+\fI# echo abc def | ipro \-Sv\fR
+.P
+.in 6
+same as above.
+.in 0
+.P
+\fI# ipro \-f10 \-l logit /dev/r00s2\fR
+.P
+.in 6
+reorganizes the filesystem,
+.I /dev/r00s2,\^
+and adds 10 blocks to its free
+block section.
+Informative output is suppressed and output is logged to the file,
+.I logit.\^
+.in 0
+.P
+\fI# ipro \-f 6 \-i'-6' \-l logit \-v /dev/rdsk/360_4s0\fR
+.P
+.in 6
+reorganizes the filesystem,
+.I /dev/rdsk/360_4s0,\^
+adds 6 blocks to the free block
+section, and deletes 6 blocks from the inode block section.
+This operation keeps the overall size of the filesystem the same.
+Note the quotes around the
+.I '-6'\^
+option argument.
+Informative output is displayed and output is logged to the file,
+.I logit.\^
+.in 0
+.P
+\fI# echo def | ipro \-vSC \-i8 \-f9 \-l logit abc\fR
+.P
+.in 6
+while displaying informative output and logging output to the file,
+.I logit, IPRO\^
+will reorganize the filesystems,
+.I /dev/r00s2, /dev/r01s0, /dev/rdsk/360_4s0,\^
+and
+.I /dev/rdsk/320_0s0.\^
+Also, for each of those filesystems,
+it will add 8 blocks to the inode block section and
+will add 9 blocks to the free block section.
+Note that the above operations will increase the overall
+size of each filesystem by 17 blocks.
+.in 0

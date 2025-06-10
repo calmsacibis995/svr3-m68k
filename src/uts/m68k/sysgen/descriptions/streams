@@ -1,0 +1,124 @@
+Description File:	"STREAMS Handlers"
+Device Description:	""
+Description Keyword:	"osm"
+Device Name:	"osm"
+Handler Prefix:	"osm"
+Interrupt Vectors Size:	0
+Major Block Device Number:	0
+Major Character Device Number:	7
+Maximum Bus Request Level:	0
+Maximum Devices Per Controller:	1
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Has an open handler.
+Has a read handler.
+Has a write handler.
+Device Type Information:
+Allow only one of these devices.
+Do not create an interrupt vector for this device.
+This is a character device.
+Device Configuration Tables Declarations:
+Board Description:	""
+Description Keyword:	"osm #1"
+Device Type:	"osm"
+Bus Request Level:	0
+Address:	0
+Interrupt Vector Location:	0
+Default Number Of Devices:	1
+Device Description:	""
+Description Keyword:	"sp"
+Device Name:	"sp"
+Handler Prefix:	"sp"
+Interrupt Vectors Size:	0
+Major Block Device Number:	0
+Major Character Device Number:	8
+Maximum Bus Request Level:	0
+Maximum Devices Per Controller:	32
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Is a stream handler.
+Device Type Information:
+Allow only one of these devices.
+Do not create an interrupt vector for this device.
+This is a character device.
+Device Configuration Tables Declarations:
+Board Description:	""
+Description Keyword:	"sp #1"
+Device Type:	"sp"
+Bus Request Level:	0
+Address:	0
+Interrupt Vector Location:	0
+Default Number Of Devices:	10
+Device Description:	""
+Description Keyword:	"log"
+Device Name:	"log"
+Handler Prefix:	"log"
+Interrupt Vectors Size:	0
+Major Block Device Number:	0
+Major Character Device Number:	17
+Maximum Bus Request Level:	0
+Maximum Devices Per Controller:	32
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Is a stream handler.
+Device Type Information:
+Allow only one of these devices.
+Do not create a count field for this device.
+Do not create an interrupt vector for this device.
+This is a character device.
+Device Configuration Tables Declarations:
+Board Description:	""
+Description Keyword:	"log #1"
+Device Type:	"log"
+Bus Request Level:	0
+Address:	0
+Interrupt Vector Location:	0
+Default Number Of Devices:	10
+Device Description:	""
+Description Keyword:	"sck"
+Device Name:	"sck"
+Handler Prefix:	"sck"
+Interrupt Vectors Size:	0
+Major Block Device Number:	0
+Major Character Device Number:	18
+Maximum Bus Request Level:	0
+Maximum Devices Per Controller:	32
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Is a stream handler.
+Device Type Information:
+Allow only one of these devices.
+Do not create an interrupt vector for this device.
+This is a character device.
+Device Configuration Tables Declarations:
+Board Description:	""
+Description Keyword:	"sck #1"
+Device Type:	"sck"
+Bus Request Level:	0
+Address:	0
+Interrupt Vector Location:	0
+Default Number Of Devices:	10
+Device Description:	""
+Description Keyword:	"cln"
+Device Name:	"cln"
+Handler Prefix:	"cln"
+Interrupt Vectors Size:	0
+Major Block Device Number:	0
+Major Character Device Number:	11
+Maximum Bus Request Level:	0
+Maximum Devices Per Controller:	32
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Is a stream handler.
+Device Type Information:
+Allow only one of these devices.
+Do not create an interrupt vector for this device.
+This is a character device.
+Device Configuration Tables Declarations:
+Board Description:	""
+Description Keyword:	"cln #1"
+Device Type:	"cln"
+Bus Request Level:	0
+Address:	0
+Interrupt Vector Location:	0
+Default Number Of Devices:	10

@@ -1,0 +1,14 @@
+	if pdp11; \
+	then \
+		cc -s -O -DFsTYPE=1 -I/usr/include -o ./fsdb fsdb.c ;\
+	else \
+		cc -s -O -DFsTYPE=2 -I/usr/include -o ./fsdb fsdb.c ;\
+		cc -s -O -DFsTYPE=1 -I/usr/include -o ./fsdb1b fsdb.c ; \
+	fi
+	if pdp11; \
+	then \
+		: -n /etc ./fsdb ; \
+	else \
+		: -n /etc ./fsdb ; \
+		: -n /etc ./fsdb1b ; \
+	fi

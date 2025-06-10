@@ -1,0 +1,134 @@
+
+======== initpkg
+cd initpkg
+make -b -f initpkg.mk ARGS="" LDLIBS='-lc_s -lnsl_s' IFLAG="" FFLAG="" install
+	make -f initpkg.mk 
+	sh bcheckrc.sh 
+	cp bcheckrc /etc/bcheckrc
+	chmod 744 /etc/bcheckrc
+	chgrp sys /etc/bcheckrc
+	: 0101000070 /etc/bcheckrc
+	chown root /etc/bcheckrc
+	sh brc.sh 
+	cp brc /etc/brc
+	chmod 744 /etc/brc
+	chgrp sys /etc/brc
+	: 0101000070 /etc/brc
+	chown root /etc/brc
+	sh inittab.sh 
+	cp inittab /etc/inittab
+	chmod 644 /etc/inittab
+	chgrp sys /etc/inittab
+	: 0101000070 /etc/inittab
+	chown root /etc/inittab
+	sh fstab.sh  
+	cp fstab /etc/fstab
+	chmod 664 /etc/fstab
+	chgrp sys /etc/fstab
+	: 0101000070 /etc/fstab
+	chown root /etc/fstab
+	sh rstab.sh  
+	cp rstab /etc/rstab
+	chmod 664 /etc/rstab
+	chgrp sys /etc/rstab
+	: 0101000070 /etc/rstab
+	chown root /etc/rstab
+	sh mountall.sh 
+	cp mountall /etc/mountall
+	chmod 744 /etc/mountall
+	chgrp sys /etc/mountall
+	: 0101000070 /etc/mountall
+	chown root /etc/mountall
+	sh rc0.sh 
+	cp rc0 /etc/rc0
+	chmod 744 /etc/rc0
+	chgrp sys /etc/rc0
+	: 0101000070 /etc/rc0
+	chown root /etc/rc0
+	sh rc2.sh 
+	cp rc2 /etc/rc2
+	chmod 744 /etc/rc2
+	chgrp sys /etc/rc2
+	: 0101000070 /etc/rc2
+	chown root /etc/rc2
+	sh rc3.sh 
+	cp rc3 /etc/rc3
+	chmod 744 /etc/rc3
+	chgrp sys /etc/rc3
+	: 0101000070 /etc/rc3
+	chown root /etc/rc3
+	sh rmount.sh 
+	cp rmount /etc/rmount
+	chmod 744 /etc/rmount
+	chgrp sys /etc/rmount
+	: 0101000070 /etc/rmount
+	chown root /etc/rmount
+	sh rmountall.sh 
+	cp rmountall /etc/rmountall
+	chmod 744 /etc/rmountall
+	chgrp sys /etc/rmountall
+	: 0101000070 /etc/rmountall
+	chown root /etc/rmountall
+	sh rumountall.sh 
+	cp rumountall /etc/rumountall
+	chmod 744 /etc/rumountall
+	chgrp sys /etc/rumountall
+	: 0101000070 /etc/rumountall
+	chown root /etc/rumountall
+	sh shutdown.sh 
+	cp shutdown /etc/shutdown
+	chmod 744 /etc/shutdown
+	chgrp sys /etc/shutdown
+	: 0101000070 /etc/shutdown
+	chown root /etc/shutdown
+	sh umountall.sh 
+	cp umountall /etc/umountall
+	chmod 744 /etc/umountall
+	chgrp sys /etc/umountall
+	: 0101000070 /etc/umountall
+	chown root /etc/umountall
+	cp init.d/LINKBOOT /etc/linkboot
+	chmod 744 /etc/linkboot
+	chgrp sys /etc/linkboot
+	: 0101000070 /etc/linkboot
+	chown root /etc/linkboot
+	cd ./init.d; \
+	sh :mk.init.d.sh ROOT= CH=
+	cd ./rc0.d; \
+	sh :mk.rc0.d.sh ROOT= CH=
+ln: /etc/init.d/ANNOUNCE and /etc/rc0.d/K00ANNOUNCE are identical
+ln: /etc/init.d/acct and /etc/rc0.d/K30acct are identical
+ln: /etc/init.d/fumounts and /etc/rc0.d/K50fumounts are identical
+ln: /etc/init.d/rumounts and /etc/rc0.d/K60rumounts are identical
+ln: /etc/init.d/rfs and /etc/rc0.d/K65rfs are identical
+ln: /etc/init.d/nls_enp and /etc/rc0.d/K70nls_enp are identical
+ln: /etc/init.d/strlog and /etc/rc0.d/K75strlog are identical
+	cd ./rc2.d; \
+	sh :mk.rc2.d.sh ROOT= CH=
+ln: /etc/init.d/fumounts and /etc/rc2.d/K30fumounts are identical
+ln: /etc/init.d/rumounts and /etc/rc2.d/K40rumounts are identical
+ln: /etc/init.d/rfs and /etc/rc2.d/K50rfs are identical
+ln: /etc/init.d/firstcheck and /etc/rc2.d/S00firstcheck are identical
+ln: /etc/init.d/nodename and /etc/rc2.d/S00nodename are identical
+ln: /etc/init.d/setup and /etc/rc2.d/S00setup are identical
+ln: /etc/init.d/LINKBOOT and /etc/rc2.d/S01LINKBOOT are identical
+ln: /etc/init.d/MOUNTFSYS and /etc/rc2.d/S01MOUNTFSYS are identical
+ln: /etc/init.d/PRESERVE and /etc/rc2.d/S03PRESERVE are identical
+ln: /etc/init.d/RMTMPFILES and /etc/rc2.d/S05RMTMPFILES are identical
+ln: /etc/init.d/sysetup and /etc/rc2.d/S20sysetup are identical
+ln: /etc/init.d/acct and /etc/rc2.d/S30acct are identical
+ln: /etc/init.d/errlog and /etc/rc2.d/S34errlog are identical
+ln: /etc/init.d/lpsched and /etc/rc2.d/S38lpsched are identical
+ln: /etc/init.d/enp and /etc/rc2.d/S40enp are identical
+ln: /etc/init.d/enpdaemon and /etc/rc2.d/S45enpdaemon are identical
+ln: /etc/init.d/strlog and /etc/rc2.d/S47strlog are identical
+ln: /etc/init.d/nls_enp and /etc/rc2.d/S50nls_enp are identical
+ln: /etc/init.d/uucp and /etc/rc2.d/S70uucp are identical
+ln: /etc/init.d/cron and /etc/rc2.d/S75cron are identical
+	cd ./rc3.d; \
+	sh :mk.rc3.d.sh ROOT= CH=
+ln: /etc/init.d/rfs and /etc/rc3.d/S21rfs are identical
+	echo "**** initpkg.mk complete ****"
+**** initpkg.mk complete ****
+make -b -f initpkg.mk LDLIBS='-lc_s -lnsl_s' IFLAG="" FFLAG=""  clobber
+	rm -f bcheckrc brc inittab fstab rstab mountall rc0 rc2 rc3  rmount rmountall rumountall shutdown umountall linkboot

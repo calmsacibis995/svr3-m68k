@@ -1,0 +1,9 @@
+#ident	"@(#)sadmin:admin/menu/diagnostics/diskrepair/DESC	1.2"
+#menu#  disk repair 
+#head#			DISK REPAIR
+#help#
+#help#	These subcommands advise you on and allow you to repair problems 
+#help#  in the system.  The bad track handling program allows you to 
+#help#  redirect bad tracks to good tracks and repairs file system damage
+#help#  because of the repair.  Commands that attempt repair are for repair 
+#help#  people only.  You must know what you are doing!

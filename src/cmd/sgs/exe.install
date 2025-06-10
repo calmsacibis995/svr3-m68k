@@ -1,0 +1,8 @@
+cp as/m68k/as /bin/xxas
+cp cmd/m68k/cc /bin/xxcc
+cp comp2/m68k/c0 /lib/xxc0
+cp comp2/m68k/c1 /lib/xxc1
+cp cpp/m68k/cpp /lib/xxcpp
+cp hloptim/m68k/coptim /lib/xxcoptim
+cp ld/m68k/ld /bin/xxld
+cp optim/m68k/optim /lib/xxoptim

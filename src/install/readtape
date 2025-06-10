@@ -1,0 +1,227 @@
+# script to copy in files from tape
+# tape assumed to contain  cpio archive
+# created by   'cpio -ocvB'
+
+# We assume environment has been set up by .profile
+
+# if $1 is equal to update, we must do pre and post initialization
+
+# simulate function of /bin/tee (saving us 26 disk blocks)
+
+tee() {
+    >$1
+    while read line
+    do
+	echo $line
+	echo $line >>$1
+    done
+}
+
+PATH=:/bin:/usr/bin:/etc:/mnt/bin:/mnt/usr/bin:/mnt/etc:/mot/bin
+RELEASE=FE81.3
+if [ -z "$RT_ARCDEV" ]
+then
+    RT_ARCDEV=/dev/r40t
+fi
+export PATH RT_ARCDEV
+error=0
+UPDATE=no
+
+#Unless otherwise directed our cpio root is '/mnt'
+if [ -z "$ROOT" ]
+then
+	ROOT=/mnt
+fi
+
+#If environment isn't set up, default rootdev to '/dev/00s0'
+if [ -z "$ROOTDEV" ]
+then
+	ROOTDEV=00s0
+fi
+
+#If environment isn't set up, default usrdev to '/dev/00s2'
+if [ -z "$USRDEV" ]
+then
+	USRDEV=00s2
+fi
+
+#Check if we are doing and install or update
+if [ "$1" = update ]
+then
+	UPDATE=yes
+fi
+
+#echo "\n*** Insert installation tape in drive labeled:   4,0"
+echo
+
+ans=
+while [ "$ans" != g -a "$ans" != q ]
+do
+	echo ">>> Type  g  to go, or  q  to quit: \c"
+	read ans
+done
+
+if [ "$ans" = q ]
+then exit 1
+fi
+
+     echo "\n*** Mounting /dev/${ROOTDEV} as ${ROOT} (hard disk root)\n"
+     mount /dev/${ROOTDEV}  ${ROOT}
+     mntrtn=$?
+     set `ls -id ${ROOT}`
+     if [ $1 != 2 ]
+     then
+	echo "\n       **** Cannot mount /dev/${ROOTDEV} ****\n"
+        mount | grep "/dev/${ROOTDEV} "
+	exit 1
+     else
+	if [ $mntrtn != 0 ]	# mount failed; already mounted
+	then
+		echo "\n	**** ${ROOT} is already mounted on ****\n"
+		mount | grep "${ROOT} "
+		echo "\n>>> Do you want to continue?   <y/n>: \c"
+		read ans
+		while [ "$ans" != y -a "$ans" != n ]
+		do
+			echo ">>> Do you want to continue?   <y/n>: \c"
+			read ans
+		done
+
+		if [ "$ans" = n ]
+		then exit 1
+		fi
+	fi
+     fi
+
+
+     if [ ! -d ${ROOT}/tmp ]
+     then
+	mkdir ${ROOT}/tmp || exit 1
+     fi
+
+     if [ ! -d ${ROOT}/usr ]
+     then
+	mkdir ${ROOT}/usr ||  exit 1 
+     fi
+
+     echo "\n*** Mounting /dev/${USRDEV} as ${ROOT}/usr (hard disk usr)\n"
+     mount /dev/${USRDEV}  ${ROOT}/usr
+     mntrtn=$?
+     set `ls -id ${ROOT}/usr`
+     if [ $1 != 2 ]
+     then
+	echo "\n       **** Cannot mount /dev/${USRDEV} ****\n"
+	mount | grep "/dev/${USRDEV} "
+	exit 1
+     else
+	if [ $mntrtn != 0 ]	# mount failed; already mounted
+	then
+		echo "\n	**** ${ROOT}/usr was already mounted on ****\n"
+		mount | grep "${ROOT}/usr "
+		echo "\n>>> Do you want to continue?   <y/n>: \c"
+		read ans
+		while [ "$ans" != y -a "$ans" != n ]
+		do
+			echo ">>> Do you want to continue?   <y/n>: \c"
+			read ans
+		done
+
+		if [ "$ans" = n ]
+		then exit 1
+		fi
+	fi
+     fi
+
+
+     echo "\n*** Retensioning tape ... This will take about 2 minutes...."
+     if [ "$0" != Readtape ]	# Don't bother if called as Readtape
+     then
+	 m350ctl -t $RT_ARCDEV
+     fi
+     if [ $? != 0 ]
+     then
+	echo "\n	**** Cannot retension tape - aborting ****\n"
+	umount /dev/${USRDEV}
+	sleep 5
+	umount /dev/${ROOTDEV}
+	exit 1
+    fi
+
+     cd $ROOT
+    
+    #child (cpio) should get sig.  We should continue...
+    usrint=0
+    trap 'echo ;usrint=1' 1 2 15
+
+     echo "*** Copying files ... This will take about 15 minutes...."
+     cpio -icBdum < $RT_ARCDEV 2>&1 | tee ${ROOT}/message
+     if [ $? != 0 ]
+     then
+	error=1
+	if [ $usrint = 1 ]
+	then echo "\n	*** User abort ***\n"
+	fi
+    else 
+	# see if there's something besides message 'xxxx b[lock]s' in file
+	rtn=`grep -vc lock ${ROOT}/message`
+	if [ ! -z "$rtn" ]
+	then set $rtn
+	fi
+	if [ $1 -gt 1 ]
+	then error=1
+	fi
+    fi
+    if [ $error = 1 ]
+    then
+	echo "*** Error in reading tape."
+	echo "*** Examine the file '${ROOT}/message' for a list of"
+	echo "*** errors and/or files which weren't retrieved"
+#	echo "\n*** It is normal to get the following errors:"
+#	cat <<EOM
+#		cannot unlink current <bin/cpio> (errno:26)
+#		Cannot create <bin/cpio> (errno:26)
+#		Cannot link <bin/rsh> & <bin/sh> (errno:17)
+#EOM
+	exit 1
+    fi
+
+     sync;sync;sync
+     echo "*** Copy done"
+
+# Since this release is only on the Winchester, don't bother doing all
+# this 70Mb specific stuff.  Assume that this will now be linked
+# correctly on the cpio tape as distributed.  If the need arises to
+# support 337Mb SMD with the same tape, the correct files (e.g. unix337)
+# will be there, and only a new bootable floppy would really be necessary
+#
+#     echo "*** Setting environment for 70Meg Winchester-based system\n"
+#     set -x
+#     ln ${ROOT}/unix70 ${ROOT}/unix
+#     ln ${ROOT}/unix ${ROOT}/stand/unix
+#     ln ${ROOT}/dev/swap70 ${ROOT}/dev/swap
+#     cp ${ROOT}/etc/rc70 ${ROOT}/etc/rc
+#     cp ${ROOT}/etc/checklist70 ${ROOT}/etc/checklist
+#     cp ${ROOT}/mot/etc/perms70 ${ROOT}/mot/etc/perms
+#     set +x
+
+     cd /
+     umount /dev/${USRDEV}
+     echo "\n*** Labeling root and usr filesystems"
+     ${ROOT}/etc/labelit /dev/r${USRDEV} usr $RELEASE >/dev/null 2>&1
+     if [ $? != 0 ]
+     then
+	echo "\n\t*** Couldn't label  /dev/r${USRDEV}"
+     fi
+     umount /dev/${ROOTDEV}
+     mount /dev/${ROOTDEV} ${ROOT} -r
+     ${ROOT}/etc/labelit /dev/r${ROOTDEV} root $RELEASE >/dev/null 2>&1
+     if [ $? != 0 ]
+     then
+	echo "\n\t*** Couldn't label  /dev/r${ROOTDEV}"
+     fi
+     umount /dev/${ROOTDEV}
+
+     sync;sync;sync
+     echo "\n*** Installation complete.  You must RESET the system"
+     echo "*** and allow it to autoboot from the hard disk."
+     echo "\n\t**** WAIT 30 SECONDS THEN RESET THE SYSTEM ****\n"

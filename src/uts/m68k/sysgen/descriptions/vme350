@@ -1,0 +1,60 @@
+* vme350
+*
+Description File:	"MVME350 Cartridge Streaming Tape Controller Board"
+*
+* M350MAXBSI
+*
+Parameter Description:	"vme350 Max block size in bytes"
+Description Keyword:	"M350MAXBSI"
+Parameter Name:	"m350maxbsize"
+Conf.c Name:	"M350MAXBSIZE"
+Default Value:	"(64*1024)"
+*
+* vme350
+*
+Device Description:	"vme350 Cartridge Tape Driver"
+Description Keyword:	"vme350"
+Device Name:	"vme350"
+Handler Prefix:	"m350"
+Interrupt Vectors Size:	4
+Major Block Device Number:	3
+Major Character Device Number:	22
+Maximum Bus Request Level:	3
+Maximum Devices Per Controller:	1
+Page Registers Size:	32
+Block Or Character Device Handler Lines:
+Has separate open/close routines for block/character devices.
+Has an initialization handler.
+Has a power-failure handler.
+Has an open handler.
+Has a close handler.
+Has a read handler.
+Has a write handler.
+Has an ioctl handler.
+Device Type Information:
+Create interrupt vector array for this device.
+Create character and/or block major device numbers for this device.
+Create interrupt level array for this device.
+This is a block device.
+This is a character device.
+Device Configuration Tables Declarations:
+*
+* vme350 #1
+*
+Board Description:	"vme350 Controller #1"
+Description Keyword:	"vme350 #1"
+Device Type:	"vme350"
+Bus Request Level:	3
+Address:	0xffff5000
+Interrupt Vector Location:	0x3cc
+Default Number Of Devices:	0
+*
+* vme350 #2
+*
+Board Description:	"vme350 Controller #2"
+Description Keyword:	"vme350 #2"
+Device Type:	"vme350"
+Bus Request Level:	3
+Address:	0xffff5100
+Interrupt Vector Location:	0x3c8
+Default Number Of Devices:	0

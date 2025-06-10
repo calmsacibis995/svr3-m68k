@@ -1,0 +1,19 @@
+#ident	"@(#)initpkg:init.d/acct	1.3"
+
+case $1 in
+'start')
+	set `who -r`
+	if [ $9 = S ]
+	then
+		rm -f /usr/adm/acct/nite/lock*
+		/bin/su - adm -c /usr/lib/acct/startup
+		echo "Process accounting started."
+	fi
+	;;
+'stop')
+	/usr/lib/acct/shutacct
+	;;
+*)
+	echo "usage: /etc/init.d/acct {start|stop}"
+	;;
+esac

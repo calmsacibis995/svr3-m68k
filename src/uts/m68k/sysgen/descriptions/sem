@@ -1,0 +1,70 @@
+Description File:	"Semaphore Parameters"
+Device Description:	""
+Description Keyword:	"sem"
+Device Name:	"sem"
+Handler Prefix:	"sem"
+Interrupt Vectors Size:	0
+Major Block Device Number:	0
+Major Character Device Number:	0
+Maximum Bus Request Level:	0
+Maximum Devices Per Controller:	1
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Has an initialization handler.
+Device Type Information:
+Do not create a count field for this device.
+This is a required device.
+This is an interrupt driven device.
+Device Configuration Tables Declarations:
+Board Description:	""
+Description Keyword:	"sem #1"
+Device Type:	"sem"
+Bus Request Level:	0
+Address:	0
+Interrupt Vector Location:	0
+Default Number Of Devices:	1
+Parameter Description:	"Size Of Semaphore Set Control Map"
+Description Keyword:	"SEMMAP"
+Parameter Name:	"semmap"
+Conf.c Name:	"SEMMAP"
+Default Value:	"10"
+Parameter Description:	"Number Of Semaphore Id's In The Kernel"
+Description Keyword:	"SEMMNI"
+Parameter Name:	"semmni"
+Conf.c Name:	"SEMMNI"
+Default Value:	"10"
+Parameter Description:	"Number Of Semaphores In The System"
+Description Keyword:	"SEMMNS"
+Parameter Name:	"semmns"
+Conf.c Name:	"SEMMNS"
+Default Value:	"60"
+Parameter Description:	"Number Of Undo Structures In The System"
+Description Keyword:	"SEMMNU"
+Parameter Name:	"semmnu"
+Conf.c Name:	"SEMMNU"
+Default Value:	"30"
+Parameter Description:	"Maximum # Of Semaphores Per Identifier"
+Description Keyword:	"SEMMSL"
+Parameter Name:	"semmsl"
+Conf.c Name:	"SEMMSL"
+Default Value:	"25"
+Parameter Description:	"Maximum Number Of Semaphore Operations"
+Description Keyword:	"SEMOPM"
+Parameter Name:	"semopm"
+Conf.c Name:	"SEMOPM"
+Default Value:	"10"
+Parameter Description:	"Maximum Number Of Undo Entries"
+Description Keyword:	"SEMUME"
+Parameter Name:	"semume"
+Conf.c Name:	"SEMUME"
+Default Value:	"10"
+Parameter Description:	"Maximum Value A Semaphore Can Have"
+Description Keyword:	"SEMVMX"
+Parameter Name:	"semvmx"
+Conf.c Name:	"SEMVMX"
+Default Value:	"32767"
+Parameter Description:	"Adustment On Exit For Maximum Value"
+Description Keyword:	"SEMAEM"
+Parameter Name:	"semaem"
+Conf.c Name:	"SEMAEM"
+Default Value:	"16384"

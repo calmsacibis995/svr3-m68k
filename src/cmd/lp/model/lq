@@ -1,0 +1,54 @@
+# lq interface for quality printer
+#
+# SCCS @(#) lp 1.1
+
+# Construct lock file name
+
+exec 0<&1
+LOCKFILE=`tty` 
+LOCKFILE=`expr $LOCKFILE : '/dev/\(tty..\)'`
+LOCKFILE=/usr/tmp/LCK..$LOCKFILE
+
+# This trap will be executed when a print request is cancelled
+
+trap "echo '\n\n\n\nRequest Cancelled'; \
+      echo '\014\c'; \
+      sleep 30; \
+      rm -f $LOCKFILE >/dev/null 2>&1; \
+      exit 0" 15
+
+# wait for printer if in use by Q-ONE
+
+if test -x /usr/bin/Qplock  
+then
+   /usr/bin/Qplock get "" "" "" "" $LOCKFILE >/dev/null 2>&1
+   sleep 20
+fi
+
+# set tty to some reasonable modes -- AFTER exclusive use of printer
+# established via lock file.
+
+stty 1200 cs7 evenp -icanon opost onlcr ixon cstopb tab3 <&1
+
+copies=$4
+shift; shift; shift; shift; shift
+files="$*"
+i=1
+while [ $i -le $copies ]
+do
+	for file in $files
+	do
+		cat "$file" 2>&1
+		echo "\014\c"
+	done
+	i=`expr $i + 1`
+done
+
+# Remove the lock so others can use the Q-ONE printer
+
+if test -x /usr/bin/Qplock
+then
+   sleep 20
+   /usr/bin/Qplock release "" "" "" ""  $LOCKFILE >/dev/null 2>&1
+fi
+exit 0

@@ -1,0 +1,11 @@
+/* @(#)ld.vmeboot	8.2	 */
+MEMORY {
+	valid : org = 0xf0000, len = 0x100000
+}
+SECTIONS {
+	.text	: { }
+	GROUP	ALIGN(4) : {
+		.data : { }
+		.bss : { }
+	}
+}

@@ -1,0 +1,10 @@
+#ident	"@(#)sadmin:admin/menu/diskmgmt/hdsetup/DESC	1.4"
+#menu# hard disk setup
+
+#help#  This procedure allows you to format a hard disk (40 or 70 Mb Winchester,
+#help#	337 Mb SMD, or 182 Mb ESDI), initialize disk-resident configuration
+#help#	parameters, and to install a new bootloader.
+#help#	
+#help#	Formatting always includes bad track initialization.
+
+#head#				HARD DISK SETUP

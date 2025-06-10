@@ -1,0 +1,8 @@
+#ident	"@(#)sadmin:admin/menu/rfssetup/DESC	2.3"
+#head#		REMOTE FILE SHARING INSTALLATION AND MANAGEMENT
+#menu#	Remote File Sharing and Transport Provider Menu
+#help#
+#help#	This menu provides subcommands for installation of remote file sharing
+#help#	and the accompanying transport provider.  The menu's provide an
+#help#	easy method of address generation and installation for primary
+#help#	and other systems in the network.

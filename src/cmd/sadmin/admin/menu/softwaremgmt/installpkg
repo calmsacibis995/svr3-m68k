@@ -1,0 +1,102 @@
+#ident	"@(#)sadmin:admin/menu/softwaremgmt/installpkg	2.6"
+#menu# install new software package onto built-in disk
+#help# 
+#help#	Installpkg copies files from removable media onto the built-in disk and
+#help#	performs additional work as necessary so you can run that software.
+#help#	From then on, you will have access to those commands.
+
+trap 'exit 0' 1 2  15
+
+INSDIR=/usr/tmp/igfdir
+INSTSCRIPT=${INSDIR}/INSTALL
+ME=$0
+question="
+Insert the removable medium for the package you want to install
+into the tape cartridge drive.
+Press <RETURN> when ready.  Type  q  to quit."
+
+echo "$question"
+read rep
+if [ x$rep = xq ]
+then
+	exit 0
+fi
+
+#
+# Get package description and name during this pass
+# Remember:
+#	$OUT in quotes, "", will have new-lines, and space
+#	searaters if not inclosed in qoutes.
+#
+OUT=`ixf -dp /dev/rmt/m350_0an`
+if [ $? -ne 0 ]
+then
+	admerr $ME 'Failed to read removalbe medium, exiting'
+	</dev/rmt/m350_0t
+	exit 1
+fi
+if [ `echo "$OUT" | wc -l` = 2 ]
+then
+	set $OUT
+	PACK_NAME=$1 ; shift
+	PACK_DESC="$*"
+else
+	PACK_DESC="$*"
+fi
+	
+echo  "\nInstalling \"$PACK_DESC\""
+
+echo "\nPress <RETURN> to continue, type q to quit."
+read rep
+if [ x$rep = xq ]
+then
+	exit 0
+fi
+
+Here=`pwd`
+mkdir -p $INSDIR 2>/dev/null
+ixf -s $INSDIR /dev/rmt/m350_0an
+
+if [ $? -ne 0 ]
+then
+	admerr $ME 'Failed to completely install package, exiting'
+	</dev/rmt/m350_0t
+	exit 1
+fi
+
+#
+# Make directory for install scripts and go there
+#
+
+cd $INSDIR 2>/dev/null
+if [ -f $INSTSCRIPT ]
+then
+	if [ ! -x $INSTSCRIPT ]
+	then
+		chmod 755 $INSTSCRIPT
+	fi
+
+	$INSTSCRIPT
+	Rtn=$?
+else
+	Rtn=0
+fi
+
+cd $Here
+rm -rf $INSDIR
+
+if [ ! -d /usr/options ]
+then
+	mkdir /usr/options
+fi
+
+if [ -z "$PACK_NAME" ]
+then PACK_NAME=Unknown
+fi
+
+if [ $Rtn = 0 ]
+then
+	ixf -pdVc /dev/rmt/m350_0an >/usr/options/$PACK_NAME
+	echo "\n\"$PACK_DESC\" is now installed"
+fi
+exit 0

@@ -1,0 +1,25 @@
+sysadm:
+	if $1 != softwaremgmt
+		echo $1 not supported
+		exit
+
+	menu_top:
+		print out menu
+		read choice (install, update or help)
+
+		if install
+			sh /etc/loadtools/hdsetup
+			sh /etc/loadtools/readtape
+			goto menu_top
+		
+		if update
+			install 0xF000 bootloader
+			cp user-system files to SAVE directory
+			sh /etc/loadtools/readtape
+			goto menu_top
+
+install:
+	prompt "Would you like to initil
+
+update:
+	1. change pre and post load commands

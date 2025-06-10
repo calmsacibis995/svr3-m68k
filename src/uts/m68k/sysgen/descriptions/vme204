@@ -1,0 +1,33 @@
+* vme204
+*
+Description File:	"vme204 Parity Memory Board"
+*
+* vme204
+*
+Device Description:	"VME204 Parity error log driver"
+Description Keyword:	"vme204"
+Device Name:	"vme204"
+Handler Prefix:	"m204"
+Interrupt Vectors Size:	0
+Major Block Device Number:	0
+Major Character Device Number:	0
+Maximum Bus Request Level:	0
+Maximum Devices Per Controller:	1
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Has an initialization handler.
+Device Type Information:
+Do not create a count field for this device.
+This is a required device.
+This is an interrupt driven device.
+Device Configuration Tables Declarations:
+*
+* vme204 #1
+*
+Board Description:	"VME204 device"
+Description Keyword:	"vme204 #1"
+Device Type:	"vme204"
+Bus Request Level:	0
+Address:	0
+Interrupt Vector Location:	0
+Default Number Of Devices:	1

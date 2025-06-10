@@ -1,0 +1,6 @@
+#	@(#)README	7.1
+The files in this directory are used by lint(1) and cflow(1).
+They are not used by the Software Generation System's C compiler
+family for the M68000 (cc, ccom, optim).  Their origin is the
+VAX C compiler's source (pcc).  We have been unable to determine
+corresponding source under pcc2 (68000 C compiler).

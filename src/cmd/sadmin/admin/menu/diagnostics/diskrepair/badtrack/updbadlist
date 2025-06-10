@@ -1,0 +1,261 @@
+#ident	"@(#)sadmin:admin/menu/diskmgmt/badtrack/updbadlist	2.3"
+#menu#  update the bad track file with the correct list
+#help# 
+#help#  It may be necessary to update the copy of the bad track list in 
+#help#  /etc/badtracks because of the current copy having been destroyed,
+#help#  having done track redirection from a bootable tape, or the list 
+#help#  not having been kept up to date.
+
+flags="-qq -k$$"
+trap 'exit 1' 1 2 15
+def_dev=1
+MANUF=2
+SIZE=2
+FMT=/etc/dinit
+sfmt=1
+pdef=2
+idef=2
+file_def=y
+fmtflag=
+CONV=/etc/xformtrk
+
+validdevs='
+	1.  m320_0
+	2.  m320_1
+	3.  m320_1d0 
+	4.  m320_1d1 
+	5.  m360_0 		
+	6.  m360_2 		
+	7.  m360_1d0
+	8.  m360_1d2
+	9.  m323_0
+	10. m323_1
+	11. m323_1d0
+	12. m323_1d1'
+
+getdevice() {
+	echo "\n	Valid Devices Are:\c"
+	echo "${validdevs}\n"
+	device=`checklist ${flags} -D"${def_dev}" -H "Valid Devices: ${validdevs}"\
+	-fe "enter the device (default: ${def_dev}) [q] :" 1 2 3 4 5 6 7 8 9 10 11 12`
+	case "${device}" in
+		'1') device=m320_0 
+		     def_dev=1 ;;
+		'2') device=m320_1 
+		     def_dev=2 ;;
+		'3') device=m320_1d0 
+		     def_dev=3 ;;
+		'4') device=m320_1d1 
+		     def_dev=4 ;;
+		'5') device=m360_0 
+		     def_dev=5 ;;
+		'6') device=m360_2 
+		     def_dev=6 ;;
+		'7') device=m360_1d0 
+		     def_dev=7 ;;
+		'8') device=m360_1d2 
+		     def_dev=8 ;;
+		'9') device=m323_0
+		     def_dev=9 ;;
+		'10') device=m323_1
+		     def_dev=10 ;;
+		'11') device=m323_1d0
+		     def_dev=11 ;;
+		'12') device=m323_1d1
+		     def_dev=12 ;;
+	esac
+	case $device in
+	    m320_[01] | m320_1d[01])
+		echo '
+	Valid Disk Sizes are:
+	1. 40 Megabyte
+	2. 70 Megabyte\n'
+		SIZE=`checklist ${flags} -D"${SIZE}" -ef "What size is your disk (default: ${SIZE})?" 1 2 `
+		case "${SIZE}" in
+			'1') Sz=40 
+			     pr_sz='40  Meg';;
+			'2') Sz=70 
+			     pr_sz='70  Meg';;
+		esac
+		DTYPE=m320${Sz}
+		echo '
+	Valid Manufacturers are:
+	1. Toshiba
+	2. Micropolis
+	3. Miniscribe
+	4. Priam\n'
+		MANUF=`checklist ${flags} -D"${MANUF}" -ef "Who Manufactures your Winchester (default: ${MANUF})?" 1 2 3 4`
+		case "${MANUF}" in
+			'1') Mfg=t 
+			     pr_man=Toshiba ;;
+			'2') Mfg=m 
+			     pr_man=Micropolis ;;
+			'3') Mfg=s 
+			     pr_man=Miniscribe ;;
+			'4') Mfg=p 
+			     pr_man=Priam ;;
+		esac
+		DTYPE=${DTYPE}${Mfg}
+		;;
+
+	    m360_[02] | m360_1d[02])
+		DTYPE=m360337
+		pr_man=NA
+	 	pr_sz=NA
+		;;
+
+	    m323_[01] | m323_1d[01])
+		DTYPE=m323182
+		pr_man=NA
+	 	pr_sz=NA
+		;;
+	    *)
+		    ;;
+	esac
+    FMTDEV=/dev/rdsk/${device}s7
+    TFILE=/etc/badtracks/${device}
+}
+
+getscanfmt() {
+	echo '
+	Valid options are:
+	1. Use existing disk bad track file
+	2. Scan entire disk\n'
+	sfmt=`checklist ${flags} -D"${sfmt}" -ef "How do you wish to retrieve the list (default: ${sfmt})? " 1 2`
+	case "${sfmt}" in
+		'1') prfmt='DISK FILE' 
+		     SCANFMT=-r ;;
+		'2') prfmt='SCAN DISK' 
+		     SCANFMT=-c ;;
+	esac
+}
+
+getinpfmt() {
+	echo '
+	Valid INPUT formats are:
+	1. <Track>
+	2. <Head> <Cylinder>
+	3. <Log Device> <Block>\n'
+	ifmt=`checklist ${flags} -H"
+You may enter track numbers in any of the valid forms.  The numbers will be
+converted, if necessary, to the format of the badtrack file before being
+entered.
+
+	Valid INPUT formats are:
+	1. <Track>
+	2. <Head> <Cylinder>
+	3. <Log Device> <Block>
+
+" -D"${idef}" -ef "In what format will you enter the data (default: ${idef})? " 1 2 3`
+	case "${ifmt}" in
+		'1') IFMT=t ;;
+		'2') IFMT=c ;;
+		'3') IFMT=d ;;
+	esac
+}
+
+getprfmt() {
+	echo '
+	Valid PRINT formats are:
+	1. <Track>
+	2. <Head> <Cylinder> \n'
+	pfmt=`checklist ${flags} -H"
+You may select at any time the first two formats for display but you may
+select the last, <dev><blk> format only if the file is already in that
+format.  
+
+The original file will NOT be changed if you, regardless of the format you
+choose.
+
+	Valid PRINT formats are:
+	1. <Track>
+	2. <Head> <Cylinder>
+
+" -D"${pdef}" -ef "Display file in which format (default: ${pdef})? " 1 2 `
+	case "${pfmt}" in
+		'1') PFMT=t ;;
+		'2') PFMT=c ;;
+		*  ) echo "ERROR" ;;
+	esac
+}
+
+echo '\nAnytime you want to quit, type "q".
+If you are not sure how to answer any prompt, type "?" for help,
+or see the Administrator\047s Guide.
+\nIf a default appears in the question, press <RETURN> for the default.
+'
+while true
+do
+	getdevice
+	getscanfmt
+	echo "\nThis is the information for the bad track update:\n
+	entered device:	${device}
+	manufacturer:	${pr_man}
+	disk size:    	${pr_sz}
+	device name:	${FMTDEV}
+	device type:	${DTYPE}
+	access type:	${prfmt}\n"
+	case `checklist ${flags} -fep 'Do you want to begin the update, or change this data [b, c, q]?' begin change ` in
+	begin )
+		list=`${FMT} ${SCANFMT} ${DTYPE} ${FMTDEV} 2>/dev/null` 
+		if [ $? != 0 ]
+		then
+			echo "\nCan't read disk bad track list."
+			exit 1
+		fi
+		if [ -n "${list}" ]
+		then
+			echo "${list}" > ${TFILE}
+		else
+			echo "\nThere are no bad tracks."
+		fi
+		echo "\nThe file '${TFILE}' has been updated.\n"
+		;;
+	change)
+		;;
+	esac
+
+    while true
+    do
+	case `checklist ${flags} -H"
+If you choose to add to the badtrack list, you will be able to enter the
+data in any format, regardless of the format of the file.  The data will
+be stored in the file's original <head> <cyl> format, but you can view 
+the file in any other format to check your entries.
+
+If you choose to view the file, you will be able to have it printed in
+the format of your choosing.
+
+If you wish to neither add nor view, just select 'continue'.
+
+" -fep 'Do you want to view the bad track list, add to the list 
+or quit [v, a, q]?' view add ` in
+	view )
+	    getprfmt
+	    if [ "${PFMT}" = 'c' ]
+	    then
+	    	/usr/lbin/prbadlist ${PFMT} < ${TFILE}
+	    else
+	    	${CONV} -I c -O ${PFMT} -t ${TFILE} ${DTYPE} ${device} 2>/dev/null
+	    	/usr/lbin/prbadlist ${PFMT} < /tmp/xf_${device} 
+	    	rm -f /tmp/xf_${device}
+	    fi
+	    ;;
+	add )
+	    getinpfmt
+	    ${CONV} -I ${IFMT} -O c ${DTYPE} ${device} 2>/dev/null
+	    if [ $? != 0 ]
+	    then
+		echo "\nUnable to get new input for the bad track file. "
+		echo "The file ${TFILE} remains unchanged.\n"
+	    	rm -f /tmp/xf_${device}
+	    else
+	    	cat /tmp/xf_${device} >> ${TFILE} 2>/dev/null
+	    	rm -f /tmp/xf_${device}
+  	    	echo "\n\tThe new bad tracks have been"
+	    	echo "\tappended to ${TFILE}.\n"
+	    fi
+	    ;;
+	esac
+    done
+done

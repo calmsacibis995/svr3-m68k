@@ -1,0 +1,24 @@
+#ident	"@(#)initpkg:init.d/strerrlog	1.0"
+
+case $1 in
+'start')
+	set `who -r`
+	if [ $9 = S ]
+	then
+		(trap "" 1; /bin/setpgrp /usr/bin/strerr) &
+		echo "kill -9 $!" >/usr/bin/strerrstop
+		chmod 755 /usr/bin/strerrstop
+		echo "Stream Error logging started."
+	fi
+	;;
+'stop')
+	if [ -f /usr/bin/strerrstop ]
+	then
+		/usr/bin/strerrstop
+		rm -f /usr/bin/strerrstop
+	fi
+	;;
+*)
+	echo "usage: /etc/init.d/strerrlog {start|stop}"
+	;;
+esac

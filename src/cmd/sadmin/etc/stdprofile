@@ -1,0 +1,37 @@
+PATH=${PATH}:/local/bin:
+# TERMCAP=
+# TERMINFO=		# set to private values, if necessary
+
+export PATH TERM TERMINFO TERMCAP CERASE CKILL CINTR CQUIT
+export LOGNAME MAIL
+
+# CERASE="^H"
+# CKILL="^U"
+# CINTR="^?"
+
+##############  Begin terminal setup section  ##############
+#
+# TERM=vt100	# change to be your own assumption if you want...
+
+# $L0 is the second word entered on the login-line when you login.
+# For example:
+#	login: user tm220
+# would login as "user" and $L0 would be "tm220".
+# If you enter nothing, then $L0 will be empty.
+
+TERM=${L0:-$TERM}	# use $L0 value, if any, as default TERM
+TERM=`TermIs`		# change to `TermIs ask` to ask for terminal
+TermSetup		# setup terminal
+. TermFuncs		# define function 'normal'...
+normal			#  and then invoke it
+
+#
+##############  End terminal setup section  ##############
+
+FLOP=/dev/dsk/m320_2s0
+OFLOP=/dev/dsk/m320_2s7
+export FLOP OFLOP
+
+# Local command aliases
+bye () { exit; }
+vis () { cat -v -t -e $*; }	# shows control characters as visible values

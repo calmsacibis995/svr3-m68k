@@ -1,0 +1,50 @@
+* vme320
+*
+Description File:	"MVME320 ST-506 Disk Controller Board"
+*
+* vme320
+*
+Device Description:	"MVME320 Disk Controller driver"
+Description Keyword:	"vme320"
+Device Name:	"vme320"
+Handler Prefix:	"m320"
+Interrupt Vectors Size:	4
+Major Block Device Number:	2
+Major Character Device Number:	21
+Maximum Bus Request Level:	5
+Maximum Devices Per Controller:	32
+Page Registers Size:	4
+Block Or Character Device Handler Lines:
+Has separate open/close routines for block/character devices.
+Has an initialization handler.
+Has an open handler.
+Has a close handler.
+Has a read handler.
+Has a write handler.
+Has an ioctl handler.
+Device Type Information:
+Create interrupt vector array for this device.
+Create interrupt level array for this device.
+This is a block device.
+This is a character device.
+Device Configuration Tables Declarations:
+*
+* vme320 #1
+*
+Board Description:	"MVME320 controller board #1"
+Description Keyword:	"vme320 #1"
+Device Type:	"vme320"
+Bus Request Level:	5
+Address:	0xffffb000
+Interrupt Vector Location:	0x3f4
+Default Number Of Devices:	0
+*
+* vme320 #2
+*
+Board Description:	"MVME320 controller board #2"
+Description Keyword:	"vme320 #2"
+Device Type:	"vme320"
+Bus Request Level:	5
+Address:	0xffffac00
+Interrupt Vector Location:	0x3f0
+Default Number Of Devices:	0

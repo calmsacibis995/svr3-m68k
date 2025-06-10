@@ -1,0 +1,55 @@
+Description File:	"Shared Memory Parameters"
+Device Description:	""
+Description Keyword:	"shm"
+Device Name:	"shm"
+Handler Prefix:	"shm"
+Interrupt Vectors Size:	0
+Major Block Device Number:	0
+Major Character Device Number:	0
+Maximum Bus Request Level:	0
+Maximum Devices Per Controller:	1
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Has an initialization handler.
+Device Type Information:
+Do not create a count field for this device.
+This is a required device.
+This is an interrupt driven device.
+Device Configuration Tables Declarations:
+Board Description:	""
+Description Keyword:	"shm #1"
+Device Type:	"shm"
+Bus Request Level:	0
+Address:	0
+Interrupt Vector Location:	0
+Default Number Of Devices:	1
+Parameter Description:	"Maximum Shared Memory Segment Size"
+Description Keyword:	"SHMMAX"
+Parameter Name:	"shmmax"
+Conf.c Name:	"SHMMAX"
+Default Value:	"(128*1024)"
+Parameter Description:	"Minimum Shared Memory Segment Size"
+Description Keyword:	"SHMMIN"
+Parameter Name:	"shmmin"
+Conf.c Name:	"SHMMIN"
+Default Value:	"1"
+Parameter Description:	"Max Nunber Of Shared Memory Identifiers"
+Description Keyword:	"SHMMNI"
+Parameter Name:	"shmmni"
+Conf.c Name:	"SHMMNI"
+Default Value:	"10"
+Parameter Description:	"# of Attached Shared Mem Seg Per Process"
+Description Keyword:	"SHMSEG"
+Parameter Name:	"shmseg"
+Conf.c Name:	"SHMSEG"
+Default Value:	"1"
+Parameter Description:	""
+Description Keyword:	"SHMBRK"
+Parameter Name:	"shmbrk"
+Conf.c Name:	"SHMBRK"
+Default Value:	"16"
+Parameter Description:	"Max # of In-Use Shared Memory Text Segs"
+Description Keyword:	"SHMALL"
+Parameter Name:	"shmall"
+Conf.c Name:	"SHMALL"
+Default Value:	"512"

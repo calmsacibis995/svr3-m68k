@@ -1,0 +1,15 @@
+# Sample ENP parameter file
+
+# You must set your Host name in the line that starts "Host".
+# You may optionally specify an Ethernet address on the "Host" line;
+# if none is specified, the Ethernet address on the ENP will be used.
+
+# You must specify the number of your ENP board, e.g. 10, 20, 30, etc.
+
+# It is recommended that in general operation you run with the 0x10 bit
+# of flags set.  This reduces load in the ENP somewhat by not attempting
+# to print messages on the ENP console.
+
+host "default"
+enp 10
+flags 0x10

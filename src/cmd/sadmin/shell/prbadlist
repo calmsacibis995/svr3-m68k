@@ -1,0 +1,163 @@
+PTYPE=${1:-c}
+# read in stuff to be printed, put in one long string
+STRING=
+while read VAL
+do
+	STRING="$STRING $VAL"
+done
+
+if [ -n "$STRING" ]
+then
+set $STRING
+if [ "$PTYPE" = 't' ]
+then
+	TCOUNT=`expr $# + 4`		
+	TCOUNT=`expr $TCOUNT / 5` # number of lines to expect
+fi
+if [ "$PTYPE" = 'c' -o "$PTYPE" = 'd' ]
+then
+	TCOUNT=`expr $# + 9`		
+	TCOUNT=`expr $TCOUNT / 10` # number of lines to expect
+fi
+echo "*** Working ***\n"
+# Create five variables, $COL1 through $COL5, each contains one vertical col.
+COUNT=0
+while [ $COUNT != $TCOUNT -a "x$1" != 'x' ]
+do
+	COL1="$COL1 $1"
+	if [ "$PTYPE" = 'c' -o "$PTYPE" = 'd' ]
+	then
+		shift
+		COL1="$COL1,$1"
+	fi
+	COUNT=`expr $COUNT + 1`
+	shift
+done
+if [ "x$1" != 'x' ]
+then
+	COUNT=0
+	while [ $COUNT != $TCOUNT -a "x$1" != 'x' ]
+	do
+		COL2="$COL2 $1"
+		if [ "$PTYPE" = 'c' -o "$PTYPE" = 'd' ]
+		then
+			shift
+			COL2="$COL2,$1"
+		fi
+		COUNT=`expr $COUNT + 1`
+		shift
+	done
+	if [ "x$1" != 'x' ]
+	then
+		COUNT=0
+		while [ $COUNT != $TCOUNT -a "x$1" != 'x' ]
+		do
+			COL3="$COL3 $1"
+			if [ "$PTYPE" = 'c' -o "$PTYPE" = 'd' ]
+			then
+				shift
+				COL3="$COL3,$1"
+			fi
+			COUNT=`expr $COUNT + 1`
+			shift
+		done
+		if [ "x$1" != 'x' ]
+		then
+			COUNT=0
+			while [ $COUNT != $TCOUNT -a "x$1" != 'x' ]
+			do
+				COL4="$COL4 $1"
+				if [ "$PTYPE" = 'c' -o "$PTYPE" = 'd' ]
+				then
+					shift
+					COL4="$COL4,$1"
+				fi
+				COUNT=`expr $COUNT + 1`
+				shift
+			done
+			if [ "x$1" != 'x' ]
+			then
+				if [ "$PTYPE" = 'c' -o "$PTYPE" = 'd' ]
+				then
+					COUNT=0
+					while [ $COUNT != $TCOUNT ]
+					do
+						if [ -z "$1" ]
+						then
+							break
+						fi
+						COL5="$COL5 $1"
+						shift
+						COL5="$COL5,$1"
+						COUNT=`expr $COUNT + 1`
+						shift
+					done
+				else
+					COL5="$*"
+				fi
+			fi
+		fi
+	fi
+fi
+
+if [ "$PTYPE" = 't' ]
+then
+	echo "\nTRACK           TRACK           TRACK           TRACK           TRACK"
+elif [ "$PTYPE" = 'c' ]
+then
+	echo "\nHD,CYL          HD,CYL          HD,CYL          HD,CYL          HD,CYL"
+else
+	echo "\nDEV,BLK         DEV,BLK         DEV,BLK         DEV,BLK         DEV,BLK"
+fi
+
+while : 			# print one value for each column
+do
+	if [ "x$COL1" = x ]
+	then
+		break
+	fi
+	set $COL1
+	echo "$1\t\t\c"
+	shift
+	COL1="$*"
+	if [ "x$COL2" = x ]
+	then
+		echo
+		continue
+	fi
+	set $COL2
+	echo "$1\t\t\c"
+	shift
+	COL2="$*"
+	if [ "x$COL3" = x ]
+	then
+		echo
+		continue
+	fi
+	set $COL3
+	echo "$1\t\t\c"
+	shift
+	COL3="$*"
+	if [ "x$COL4" = x ]
+	then
+		echo
+		continue
+	fi
+	set $COL4
+	echo "$1\t\t\c"
+	shift
+	COL4="$*"
+
+	if [ "x$COL5" != x ]
+	then
+		set $COL5
+		echo "$1\c"
+		shift
+		COL5="$*"
+	fi
+	echo
+done
+echo
+else
+	echo "\n\tThe file $TFILE is empty.\n"
+fi

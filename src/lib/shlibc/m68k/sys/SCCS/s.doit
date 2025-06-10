@@ -1,0 +1,21 @@
+h16168
+s 00010/00000/00000
+d D 1.1 86/07/31 12:32:41 fnf 1 0
+c Pick up version Matt did for 5.3 m68k library.
+e
+u
+U
+t
+T
+I 1
+for i in *.s
+do
+	mv $i $i.t
+	sed    's/^\.ident/#ident/' <$i.t >$i
+	if [ $? -eq 0 ]
+	then
+		rm $i.t
+	fi
+	echo done $i
+done
+E 1

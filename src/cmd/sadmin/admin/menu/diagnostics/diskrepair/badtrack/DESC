@@ -1,0 +1,15 @@
+#ident	"@(#)sadmin:admin/menu/diskmgmt/badtrack/DESC	1.4"
+#menu#  BAD TRACK HANDLING
+
+#help#
+#help#	The commands in this menu provide functions for redirecting one or
+#help#	more bad tracks on a disk, for checking the file system after a track
+#help#  redirection and for clearing fsck input files from /etc/badtracks.
+#help#  You will be asked for details about the disk you are using such as
+#help#	the size, the maker, and the device name.  It is strongly 
+#help#	recommended that you run the fixfsys option after the reformat so
+#help#  any file system damage can be repaired.  At that time, you, the 
+#help#  administrator, will be notified which files have been corrupted and
+#help#	should be restored from backup tapes.
+#help#
+#head#				BAD TRACK HANDLING

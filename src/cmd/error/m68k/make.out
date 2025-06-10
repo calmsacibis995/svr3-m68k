@@ -1,0 +1,2 @@
+	cc -O -c errpt.c
+	cc -s -o ./errpt errpt.o

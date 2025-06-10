@@ -1,0 +1,160 @@
+-O -- cflow can't process - file skipped
+1	bpp_open: int(), <bpp_driver.c 103>
+2		DEBUG2: <>
+3		init_cpu: undef(), <ci_init.c 521>
+4			build_ep: int(), <ci_init.c 316>
+5				get_memb: int(), <ci_init.c 293>
+6				panic: <>
+7			build_re: int(), <ci_init.c 473>
+8				get_sbuf: struct*(), <bppci.c 493>
+9					panic: 6
+10				panic: 6
+11			get_sepb: struct*(), <bppci.c 408>
+12			get_memb: 5
+13			panic: 6
+14			str_cpy: char*(), <ci_init.c 510>
+15			bpp_wait: uchar(), <bppci.c 211>
+16				timeout: <>
+17				bpp_time: int(), <bppci.c 187>
+18					wakeup: <>
+19				sleep: <>
+20			sendcmd: int(), <ci_init.c 269>
+21			send_adr: int(), <ci_init.c 221>
+22			pwrite: int(), <bppci.c 246>
+23				ci_trace: undef(), <trace.c 22>
+24				panic: 6
+25				get_bpe: struct*(), <bppci.c 351>
+26				sendcmd: 20
+27		bpp_kope: int(), <bpp_driver.c 812>
+28		bpp_rxin: int(), <bpp_driver.c 653>
+29			ci_trace: 23
+30			psignal: <>
+31			wakeup: 18
+32	bpp_clos: int(), <bpp_driver.c 163>
+33		bpp_kclo: int(), <bpp_driver.c 1213>
+34			get_sepb: 11
+35			registra: long(), <bppci.c 743>
+36				release_: undef(), <bppci.c 531>
+37					panic: 6
+38				ret_or_r: undef(), <bppci.c 835>
+39					uread: struct*(), <bppci.c 604>
+40						spl4: <>
+41						ci_trace: 23
+42						splx: <>
+43					release_: 36
+44					ret_to_s: undef(), <bppci.c 876>
+45						swap_id: int(), <bppci.c 932>
+46						dst_ok: uchar(), <bppci.c 712>
+47						uwrite: undef(), <bppci.c 562>
+48							ci_trace: 23
+49							spl4: 40
+50							splx: 42
+51						release_: 36
+52						get_sepb: 11
+53						add_retr: int(), <bppci.c 952>
+54							printf: <>
+55							release_: 36
+56						copy: int(), <bppci.c 977>
+57						pwrite: 22
+58				find_emp: uchar(), <bppci.c 679>
+59				uwrite: 47
+60			release_: 36
+61	bpp_read: int(), <bpp_driver.c 200>
+62		spl4: 40
+63		bpp_kpoi: int(), <bpp_driver.c 857>
+64			uread: 39
+65		sleep: 19
+66		splx: 42
+67		copyout: <>
+68		bpp_krel: int(), <bpp_driver.c 924>
+69			release_: 36
+70		ci_trace: 23
+71	bpp_writ: int(), <bpp_driver.c 345>
+72		copyin: <>
+73		get_sepb: 11
+74		copy: 56
+75		release_: 36
+76		get_sbuf: 8
+77		bpp_send: int(), <bpp_driver.c 1094>
+78			release_: 36
+79			registra: 35
+80			dst_ok: 46
+81			uwrite: 47
+82			pwrite: 22
+83	bpp_ioct: int(), <bpp_driver.c 509>
+84		ci_trace: 23
+85		bpp_knxt: int(), <bpp_driver.c 754>
+86		copyout: 67
+87		dst_ok: 46
+88		spl4: 40
+89		psignal: 30
+90		splx: 42
+91		init_cpu: 3
+92	bpp_kcnf: int(), <bpp_driver.c 712>
+93	bpp_kwri: int(), <bpp_driver.c 971>
+94		get_sepb: 11
+95		get_sbuf: 8
+96		release_: 36
+97		bpp_send: 77
+98	un_uread: undef(), <bppci.c 648>
+99	: <>
+100		v30_1_pr: int(), <vme330_1.c 65>
+101			bprobe: <>
+102		v30_1_ct: int(), <vme330_1.c 43>
+103		v30_1_da: int(), <vme330_1.c 47>
+104		v30_1_st: int(), <vme330_1.c 56>
+105		v30_1_in: int(), <vme330_1.c 52>
+106		v30_1_rs: int(), <vme330_1.c 60>
+107		v33_1_pr: int(), <vme333_1.c 44>
+108			sprobe: <>
+109		v33_1_ct: int(), <vme333_1.c 24>
+110		v33_1_da: int(), <vme333_1.c 28>
+111		v33_1_st: int(), <vme333_1.c 36>
+112		v33_1_in: int(), <vme333_1.c 32>
+113		v33_1_rs: int(), <vme333_1.c 40>
+114		v33_2_pr: int(), <vme333_2.c 44>
+115			sprobe: 108
+116		v33_2_ct: int(), <vme333_2.c 24>
+117		v33_2_da: int(), <vme333_2.c 28>
+118		v33_2_st: int(), <vme333_2.c 36>
+119		v33_2_in: int(), <vme333_2.c 32>
+120		v33_2_rs: int(), <vme333_2.c 40>
+121	bpp_init: int(), <ci_init.c 103>
+122		printf: 54
+123		alloc_me: int(), <bppci.c 99>
+124			mmualloc: <>
+125			alloc_me: 123
+126			mmufree: <>
+127			printf: 54
+128		build_bu: int(), <ci_init.c 400>
+129			get_memb: 5
+130			panic: 6
+131		build_ep: 4
+132	dump_sre: int(), <ci_init.c 712>
+133	bpp_intr: int(), <ci_init.c 749>
+134		pread: struct*(), <bppci.c 308>
+135			panic: 6
+136			release_: 36
+137			ci_trace: 23
+138		dst_ok: 46
+139		uwrite: 47
+140		bpp_sign: undef(), <bpp_driver.c 1275>
+141		get_buf_: undef(), <ci_buf_mgt.c 123>
+142			get_vme_: <>
+143			release_: 36
+144			get_sepb: 11
+145			copy_stp: <>
+146			panic: 6
+147			get_sbuf: 8
+148			swap_id: 45
+149			pwrite: 22
+150		ret_buf_: int(), <ci_buf_mgt.c 288>
+151			get_vme_: 142
+152			release_: 36
+153			get_sepb: 11
+154			copy_stp: 145
+155			panic: 6
+156			swap_id: 45
+157			pwrite: 22
+158		ret_to_s: 44
+159		release_: 36

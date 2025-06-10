@@ -1,0 +1,15 @@
+echo "                   IPRO Functional Call Interface"
+
+for FILE
+   in $*
+do
+   ed - $FILE  > /dev/null  2> /dev/null  <<%%
+1
+/^[A-Za-z_][0-9A-Za-z_][0-9A-Za-z_]*(/-2,/)$/w $0$$
+q!
+%%
+
+   cat $0$$
+
+   rm -f $0$$
+done

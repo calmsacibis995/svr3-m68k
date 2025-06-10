@@ -1,0 +1,33 @@
+#ident	"@(#)sadmin:admin/menu/diskmgmt/badtrack/delfsckfiles	2.3"
+#menu#  clear all fsck input files
+#help# 
+#help#	When the track reformat utility is used, files are written to
+#help#	/etc/badtracks which contain the affected file system block
+#help#  numbers.  Using fsck, with these files as input, will list the
+#help#  corrupted files.  When they are no longer needed for fsck, they
+#help#  can be removed.
+
+flags="-qq -k$$"
+trap 'exit 1' 1 2 15
+DEL=y
+
+fslist=`ls /etc/badtracks/F.* 2>/dev/null`
+if [ -n "${fslist}" ]
+then
+	echo "\nThese fsck input files exist:\n"
+	echo "${fslist} \n"
+else
+	echo "\nThere are no fsck input files to clear."
+	exit 0
+fi
+if checkyn ${flags} -D"${DEL}" \
+-ef "Delete them (default: ${DEL})? "
+then
+	rm -f /etc/badtracks/F.*
+	if [ $? != 0 ]
+	then
+		echo "\n Can't remove files; check file permissions."
+	else
+		echo "\n All fsck input files in /etc/badtracks have been cleared.\n"
+	fi
+fi

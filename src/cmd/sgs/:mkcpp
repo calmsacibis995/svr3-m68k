@@ -1,0 +1,3 @@
+	 cd cpp/m68k; make MAKE="make" SGS="" ARCH="AR32W" OWN="bin" GRP="bin"  DBO="FBO" ARFORMAT="PORTAR" FLEX="-DFLEXNAMES" LDLIBS="" CC="cc" FFLAG="" ENV="" ROOT=""  VERSION="" USRINC="/usr/include" PD_SYS=D_unix \
+		PD_MACH=D_newmach NEW_MACH="-DPD_MY_MACH=\\\"m68k\\\""
+

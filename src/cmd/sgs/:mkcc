@@ -1,0 +1,1 @@
+	cd cmd/m68k; make MAKE="make" SGS="" ARCH="AR32W" OWN="bin" GRP="bin"  DBO="FBO" ARFORMAT="PORTAR" FLEX="-DFLEXNAMES" LDLIBS="" CC="cc" FFLAG="" ENV="" ROOT=""  VERSION="" USRINC="NOUSRINC"

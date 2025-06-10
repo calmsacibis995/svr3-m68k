@@ -1,0 +1,21 @@
+#ident	"@(#)sadmin:admin/menu/diskmgmt/hdsetup/initialize	2.12"
+#menu#  initialize configuration params
+#help# 
+#help#	This procedure will initialize the disk-resident configuration
+#help#  parameters and initialize software/hardware bad track management
+#help#	for a 40 or 70 Mb Winchester, 337 Mb SMD, or 182 Mb ESDI.
+
+trap 'exit 0' 1 2  15
+
+echo "
+    				NOTE
+	This will cause any specified bad tracks on the disk to be
+ 	redirected elsewhere.  If new bad tracks have been added to
+	the bad track file since the last initialization, this may
+	cause a redirection of existing user data on the disk,
+	rendering it unreadable.  To add one or more new bad tracks,
+	use the 'redirect' sub-menu of 'sysadm badtrack'.
+"
+sleep 10 
+
+sh /usr/lbin/hdsetup i

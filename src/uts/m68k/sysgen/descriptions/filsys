@@ -1,0 +1,54 @@
+* filsys
+*
+Description File:	"File System Handlers (S5)"
+*
+* s5 #1
+*
+Board Description:	"S5: System V file system device info"
+Description Keyword:	"s5 #1"
+Device Type:	"s5"
+Bus Request Level:	0
+Address:	0
+Interrupt Vector Location:	0
+Default Number Of Devices:	10
+*
+* s5
+*
+Filesystem Handler Description:	"S5: System V file system switch"
+Description Keyword:	"s5"
+Filesystem Handler Name:	"s5"
+Handler Prefix:	"s5"
+Interrupt Vectors Size:	0
+Major Block Device Number:	0
+Major Character Device Number:	1
+Maximum Bus Request Level:	0
+Maximum Devices Per Controller:	32
+Page Registers Size:	0
+Filesystem Handler Device Handler Lines:
+Has an ioctl routine.
+Has a control routine.
+Has a notify routine.
+Has a set attr routine.
+Has a read map routine.
+Has a free map routine.
+Has a allocate map routine.
+Has a get dents routine.
+Has an access routine.
+Has a status routine.
+Has an update routine.
+Has a close inode routine.
+Has an open inode routine.
+Has a get inode routine.
+Has a umount routine.
+Has a mount routine.
+Has a namei routine.
+Has a status file routine.
+Has an inode trunc routine.
+Has an init routine.
+Has a write inode routine.
+Has a read inode routine.
+Has an update inode routine.
+Has an inode read routine.
+Has an inode put routine.
+Device Type Information:
+Device Configuration Tables Declarations:

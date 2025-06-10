@@ -1,0 +1,21 @@
+#ident	"@(#)sadmin:admin/menu/filemgmt/backup_restore	1.0"
+#menu# backup files to and restore files from removable media
+#help# 
+#help#	Backup saves copies of files from the built-in disk file systems to
+#help#	removable media.  There are two kinds of backups: COMPLETE
+#help#	(copies all files; useful in case of serious file system damage)
+#help#	and  INCREMENTAL (copies files changed since the last backup).
+#help#	The normal usage is to do a complete backup of each file system
+#help#	and then periodically do incremental backups.  We recommend keeping
+#help#	2 cycles (one set of complete backups and several incrementals to
+#help#	each cycle).
+#help#	Files backed up with "backup" are restored using "restore".
+#help# 
+#help#	Restore copies files from media made by "backup" and "store"
+#help#	back onto the file systems.  You can restore individual files,
+#help#	directories of files, or the entire contents of the media.
+#help#	You can restore from both "incremental" and "complete" media.
+#help#	You can also list the names of files stored on the media.
+
+cd ${MENUTOP:?}
+exec ./br

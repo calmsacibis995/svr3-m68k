@@ -1,0 +1,72 @@
+h43127
+s 00061/00000/00000
+d D 1.1 86/07/31 12:16:57 fnf 1 0
+c Initial copy from 5.2 Generic M68000 distribution.
+e
+u
+U
+t
+T
+I 1
+#	@(#)memccpy.s	6.1	
+#
+#	M68000 Memory(3C) Routine
+#
+#	(C) Copyright 1983 by Motorola Inc.
+#
+#	Written by: Steve Sheahan
+#
+# memccpy - copies characters from memory area s2 into s1, stopping after
+#	    the first occurrence of character c has been copied, or after
+#	    n characters have been copied, whichever comes first. It 
+#	    returns a pointer to the character after the copy of c in s1
+#	    or a NULL pointer if c was not found in the first n characters
+#	    of s2.
+
+	file	"memccpy.s"
+#
+# Input:	s1 - destination
+#		s2 - source
+#		 c - possible terminating character
+#		 n - maximum number of characters to copy
+#
+# Output:	pointer to the byte after 'c' or NULL if 'c' didn't exist
+#
+# Registers:	%a0 - pointer into s1
+#		%a1 - pointer into s2
+#		%d0 - c
+#		%d1 - n 
+
+					# char *
+					# memccpy(s1, s2, c, n)
+					# register char *s1, *s2;
+					# register int c, n;
+					# {
+	text
+	global	memccpy
+memccpy:
+	mov.l	4(%sp),%a0		# addr(s1)
+	mov.l	8(%sp),%a1		# addr(s2)
+	mov.b	15(%sp),%d0		# c
+	mov.l	16(%sp),%d1		# n
+					# while (--n >= 0) {
+	ble.b	L%3
+	bra.b	L%2
+L%0:
+	swap	%d1			# lower half = 2**16 - 1
+					# if ((*s1++ = *s2++) == c)
+L%1:
+	mov.b	(%a1),(%a0)+
+	cmp.b	%d0,(%a1)+		# compare with 'c'
+L%2:
+	dbeq	%d1,L%1
+	beq.b	L%4			# terminate if character matched
+	swap	%d1			# get upper half of counter
+	dbra	%d1,L%0
+					
+L%3:
+	sub.l	%a0,%a0			# return (0);
+L%4:
+	mov.l	%a0,%d0
+	rts
+E 1

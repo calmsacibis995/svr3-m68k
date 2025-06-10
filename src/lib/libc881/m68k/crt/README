@@ -1,0 +1,14 @@
+/*	@(#)README	6.1		*/
+
+	The following are some general observations which may provide
+enlightenment as to certain idiosyncracies found in this directory's
+source:
+
+	1.  These assembly language routines do not all provide the
+	    same level of error checking.  This is because the original
+	    routines in "libc/m68k/crt" ALSO did not provide the same
+	    level of error checking.  For example, compare "dbtol.s" and
+	    "ftol.s", which you would expect to be similar.  However, the
+	    original "dbtol" handles NaNs, while the original "ftol"
+	    does not.  Thus, "dbtol" is a longer routine than "ftol".
+

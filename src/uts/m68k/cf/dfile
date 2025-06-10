@@ -1,0 +1,72 @@
+*	dfile(4) based on configuration: standard.
+*
+cpmem       0         0         0   1
+s5          0         0         0   10
+m564con     110       fffb0040  2   2
+vme320      3f4       ffffb000  5   
+vme320      3f0       ffffac00  5   
+vme323      324       ffffa000  3   
+vme331      3bc       ffff6000  2   8
+vme331      3b8       ffff6100  2   8
+vme331      3b4       ffff6200  2   8
+vme331      3b0       ffff6300  2   8
+vme350      3cc       ffff5000  3   
+vme350      3c8       ffff5100  3   
+vme355      11c       ffff0800  5   
+vme360      3e4       ffff0c00  5   
+vme360      3dc       ffff0e00  5   
+msg         0         0         0   1
+ramd        0         0         0   
+sxt         0         0         0   6
+sem         0         0         0   1
+shm         0         0         0   1
+vme204      0         0         0   1
+root	vme320  0, vme320  10, vme320  20, vme320  30,
+	vme320  100, vme320  110, vme320  120, vme320  130,
+	vme360  0, vme360  20, vme360  -1, vme360  -1,
+	vme360  200, vme360  220, vme360  -1, vme360  -1,
+	ramd    0, ramd    -1, ramd    -1, ramd    -1,
+	ramd    0, ramd    -1, ramd    -1, ramd    -1,
+	ramd    0, ramd    -1, ramd    -1, ramd    -1,
+	ramd    0, ramd    -1, ramd    -1, ramd    -1,
+	vme323  0, vme323  20, vme323  40, vme323  60
+pipe	vme320  0, vme320  10, vme320  20, vme320  30,
+	vme320  100, vme320  110, vme320  120, vme320  130,
+	vme360  0, vme360  20, vme360  -1, vme360  -1,
+	vme360  200, vme360  220, vme360  -1, vme360  -1,
+	ramd    0, ramd    -1, ramd    -1, ramd    -1,
+	ramd    0, ramd    -1, ramd    -1, ramd    -1,
+	ramd    0, ramd    -1, ramd    -1, ramd    -1,
+	ramd    0, ramd    -1, ramd    -1, ramd    -1,
+	vme323  0, vme323  20, vme323  40, vme323  60
+dump	vme350  0, vme350  0, vme350  0, vme350  0,
+	vme350  0, vme350  0, vme350  0, vme350  0,
+	vme350  0, vme350  0, vme350  0, vme350  0,
+	vme350  0, vme350  0, vme350  0, vme350  0,
+	vme350  0, vme350  0, vme350  0, vme350  0,
+	vme350  0, vme350  0, vme350  0, vme350  0,
+	vme350  0, vme350  0, vme350  0, vme350  0,
+	vme350  0, vme350  0, vme350  0, vme350  0,
+	vme350  0, vme350  0, vme350  0, vme350  0
+swap	vme320  1 1 17279, vme320  11 1 17279, vme320  20 1245 19, vme320  30 1245 19,
+	vme320  101 1 17279, vme320  111 1 17279, vme320  120 1245 19, vme320  130 1245 19,
+	vme360  0 26880 16000, vme360  20 26880 16000, vme360  -1 26880 16000, vme360  -1 26880 16000,
+	vme360  200 26880 16000, vme360  220 26880 16000, vme360  -1 26880 16000, vme360  -1 26880 16000,
+	ramd    1 1 200, ramd    -1 1 1, ramd    -1 1 1, ramd    -1 1 1,
+	ramd    1 1 200, ramd    -1 1 1, ramd    -1 1 1, ramd    -1 1 1,
+	ramd    1 1 200, ramd    -1 1 1, ramd    -1 1 1, ramd    -1 1 1,
+	ramd    1 1 200, ramd    -1 1 1, ramd    -1 1 1, ramd    -1 1 1,
+	vme323  1 1 25199, vme323  21 1 25199, vme323  41 1 25199, vme323  61 1 25199
+probe fffc0000  f1
+alien 108       0         Xclock
+alien 8         0         Xprotflt
+alien 80        0         Xsyscall
+alien 10        0         instintr
+alien 100       0         swabintr
+alien 24        0         trceintr
+dup 4   108       Xclock
+dup 4   8         Xprotflt
+dup 4   80        Xsyscall
+dup 4   10        instintr
+dup 4   24        trceintr
+ram 2 0         f00000

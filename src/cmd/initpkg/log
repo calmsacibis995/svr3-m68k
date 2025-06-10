@@ -1,0 +1,109 @@
+Wed Jul 23 13:22:21 MST 1986 -- Make id=6
+	sh bcheckrc.sh 
+	cp bcheckrc /etc/bcheckrc
+cp: cannot create /etc/bcheckrc
+*** Error code 2
+
+Stop.
+Wed Jul 23 13:25:42 MST 1986 -- Make id=7
+	sh bcheckrc.sh /rl
+	cp bcheckrc /rl/etc/bcheckrc
+cp: cannot create /rl/etc/bcheckrc
+*** Error code 2
+
+Stop.
+Wed Jul 23 13:26:39 MST 1986 -- Make id=8
+	sh bcheckrc.sh /rl
+	cp bcheckrc /rl/etc/bcheckrc
+	chmod 744 /rl/etc/bcheckrc
+	chgrp sys /rl/etc/bcheckrc
+	/bin/touch 0101000070 /rl/etc/bcheckrc
+	chown root /rl/etc/bcheckrc
+	sh brc.sh /rl
+	cp brc /rl/etc/brc
+	chmod 744 /rl/etc/brc
+	chgrp sys /rl/etc/brc
+	/bin/touch 0101000070 /rl/etc/brc
+	chown root /rl/etc/brc
+	sh inittab.sh /rl
+	cp inittab /rl/etc/inittab
+	chmod 644 /rl/etc/inittab
+	chgrp sys /rl/etc/inittab
+	/bin/touch 0101000070 /rl/etc/inittab
+	chown root /rl/etc/inittab
+	sh fstab.sh  /rl
+	cp fstab /rl/etc/fstab
+	chmod 664 /rl/etc/fstab
+	chgrp sys /rl/etc/fstab
+	/bin/touch 0101000070 /rl/etc/fstab
+	chown root /rl/etc/fstab
+	sh rstab.sh  /rl
+	cp rstab /rl/etc/rstab
+	chmod 664 /rl/etc/rstab
+	chgrp sys /rl/etc/rstab
+	/bin/touch 0101000070 /rl/etc/rstab
+	chown root /rl/etc/rstab
+	sh mountall.sh /rl
+	cp mountall /rl/etc/mountall
+	chmod 744 /rl/etc/mountall
+	chgrp sys /rl/etc/mountall
+	/bin/touch 0101000070 /rl/etc/mountall
+	chown root /rl/etc/mountall
+	sh rc0.sh /rl
+	cp rc0 /rl/etc/rc0
+	chmod 744 /rl/etc/rc0
+	chgrp sys /rl/etc/rc0
+	/bin/touch 0101000070 /rl/etc/rc0
+	chown root /rl/etc/rc0
+	sh rc2.sh /rl
+	cp rc2 /rl/etc/rc2
+	chmod 744 /rl/etc/rc2
+	chgrp sys /rl/etc/rc2
+	/bin/touch 0101000070 /rl/etc/rc2
+	chown root /rl/etc/rc2
+	sh rc3.sh /rl
+	cp rc3 /rl/etc/rc3
+	chmod 744 /rl/etc/rc3
+	chgrp sys /rl/etc/rc3
+	/bin/touch 0101000070 /rl/etc/rc3
+	chown root /rl/etc/rc3
+	sh rmount.sh /rl
+	cp rmount /rl/etc/rmount
+	chmod 744 /rl/etc/rmount
+	chgrp sys /rl/etc/rmount
+	/bin/touch 0101000070 /rl/etc/rmount
+	chown root /rl/etc/rmount
+	sh rmountall.sh /rl
+	cp rmountall /rl/etc/rmountall
+	chmod 744 /rl/etc/rmountall
+	chgrp sys /rl/etc/rmountall
+	/bin/touch 0101000070 /rl/etc/rmountall
+	chown root /rl/etc/rmountall
+	sh rumountall.sh /rl
+	cp rumountall /rl/etc/rumountall
+	chmod 744 /rl/etc/rumountall
+	chgrp sys /rl/etc/rumountall
+	/bin/touch 0101000070 /rl/etc/rumountall
+	chown root /rl/etc/rumountall
+	sh shutdown.sh /rl
+	cp shutdown /rl/etc/shutdown
+	chmod 744 /rl/etc/shutdown
+	chgrp sys /rl/etc/shutdown
+	/bin/touch 0101000070 /rl/etc/shutdown
+	chown root /rl/etc/shutdown
+	sh umountall.sh /rl
+	cp umountall /rl/etc/umountall
+	chmod 744 /rl/etc/umountall
+	chgrp sys /rl/etc/umountall
+	/bin/touch 0101000070 /rl/etc/umountall
+	chown root /rl/etc/umountall
+	cd ./init.d; \
+	sh :mk.init.d.sh ROOT=/rl CH=
+	cd ./rc0.d; \
+	sh :mk.rc0.d.sh ROOT=/rl CH=
+	cd ./rc2.d; \
+	sh :mk.rc2.d.sh ROOT=/rl CH=
+	cd ./rc3.d; \
+	sh :mk.rc3.d.sh ROOT=/rl CH=
+	echo "**** initpkg.mk complete ****"
+**** initpkg.mk complete ****

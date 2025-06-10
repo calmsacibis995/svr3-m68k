@@ -1,0 +1,114 @@
+#ident	"@(#)sadmin:admin/menu/packagemgmt/rfs/tcpip/remoteaddr	1.00"
+#menu#	Install remote names, addresses and status into network
+#help#
+#help#	This subcommand allows the installation of a remote system
+#help#	in an rfs network.  Systems communicating via rfs MUST be on the
+#help#	same network id.  If adding new domains, the primary and all secondaries
+#help#	must be listed.
+
+#	definitions for file locations
+ETC=/etc
+TMP=/usr/tmp
+ENP=/tcpip/enp
+NSERVE=/usr/nserve
+
+#	local definitions
+true="TRUE"
+false="FALSE"
+primary=$false
+
+# flags for checkyn to implement [q] (quit)
+flags="-qq -k$$"
+
+trap 'exit 0' 1 2 15
+
+#	download if not currently running
+if [ ! -f $ENP/enp_param.S ]
+then
+	cd $ENP; cp default.S enp_param.S; cp default.desc enp_param.desc 
+fi
+
+(cd $ENP; /etc/enpload enp0 enp_param.S enpcode.S >/dev/null 2>&1)
+uname=`uname -n`
+eaddr=`netaddr | cut -f2 -d\ `
+iaddr=`netaddr | cut -f1 -d\ `
+domain=`netaddr | cut -f3 -d\ `
+netid=`netaddr | cut -f4 -d\ `
+
+#
+#	Setup network and domain
+	if [ ${domain} = 'Default' ]
+	then
+		dname -N tcpip
+		domain=`checkre ${flags} -fe "	What is the Domain name? [q]" \
+		'.' 'There must be a domain.' \
+		'^[0-9a-zA-Z_\-]\{1,\}$' 'Only letters, numbers, and \"_\" or \"-\" are permitted.' \
+		'^.\{1,14\}$' 'No more than 14 characters are permitted.'`
+		dname -D ${domain}
+	fi
+
+#
+#	Build rfmaster file for this system ... if required
+#	Ask if Primary, Secondary, or Other
+	if `checkyn ${flags} -f  -H '
+	Indicate if this machine is a primary domain nameserver.' \
+	"	Is this the Primary domain nameserver for \"${domain}\"?" ` 
+	then
+		primary=$true
+		if rfadmin >/dev/null 2>&1
+		then
+			echo "	Cannot change address while rfs is running"
+			exit 0
+		fi
+	fi
+#
+#	setup domain if primary
+	while `checkyn ${flags} -f -H '
+	Enter systems desired in the domain that this primary nameserver
+	serves.  Each system entered in the local domain will request a 
+	password.  NULL passwords are allowed.' \
+	"
+	Enter a host into network?"`
+	do
+		host=`checkre ${flags} -fe "What is the host name? [q]" \
+		'.' 'There must be a host.' \
+		'^[0-9a-zA-Z]\{1,\}$' 'Only letters and numbers are permitted.' \
+		'^.\{1,8\}$' 'No more than 8 characters are permitted.'`
+
+		if [ ${host} != ${uname} ]
+		then
+		host_iaddr=`checkre ${flags} -fe "What is the internet address of system \"${host}\"? [q]" \
+			'.' 'Internet address is required for Remote File Sharing.' \
+			'^[0-9\.]\{1,\}$' 'Only numbers and \".\" are permitted.' \
+			'^.\{1,15\}$' 'No more than 15 characters are permitted.'`
+		sed "/${host}/d" < $ETC/hosts >$TMP/hosts
+		echo "${host_iaddr}	${host}" | cat - $TMP/hosts > $ETC/hosts
+		sed "/${host}/d" < /.rhosts >$TMP/.rhosts
+		echo ${host} | cat - $TMP/.rhosts > /.rhosts
+		sed "/${host}/d" < $ETC/hosts.equiv > $TMP/hosts.equiv
+		echo ${host} | cat - $TMP/hosts.equiv > $ETC/hosts.equiv
+		if [ ${primary} = ${true} ]
+		then
+			sed "/\.${host}/d" < $NSERVE/rfmaster > $TMP/rfmaster
+			host_inet_hex=`netaddr -c ${host_iaddr} | cut -f5 -d\ `
+			station=`checkre ${flags} -fe "Is this a (P)rimary, (S)econdary, or (O)ther system? [P,S,O,q]" \
+			'.' 'Every system is one of the above.' \
+			'^[PSO]\{1,\}$' 'Only "P", "S", or "O" are permitted.' \
+			'^.\{1,1\}$' 'Only "P", "S", or "O" permitted.'`
+			if [ ${station} != "O" ]
+			then
+			alt_domain=`checkre ${flags} -fe "	What is the Domain name? [q]" \
+			'.' 'There must be a domain.' \
+			'^[0-9a-zA-Z_\-]\{1,\}$' 'Only letters, numbers, and \"_\" or \"-\" are permitted.' \
+			'^.\{1,14\}$' 'No more than 14 characters are permitted.'`
+			echo "${alt_domain} ${station} ${alt_domain}.${host}\n"\
+			     "${alt_domain}.${host} A \\x022b${host_inet_hex}" \
+		      		| cat - $TMP/rfmaster > $NSERVE/rfmaster
+			else
+				echo "${domain}.${host} A \\x022b${host_inet_hex}" \
+		      	     		| cat - $TMP/rfmaster > $NSERVE/rfmaster
+			fi
+		fi
+		rm -f $TMP/hosts.equiv $TMP/hosts $TMP/.rhosts $TMP/rfmaster
+		fi
+	done

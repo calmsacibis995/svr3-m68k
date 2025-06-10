@@ -1,0 +1,10 @@
+#ident	"@(#)sadmin:admin/menu/diskmgmt/hdsetup/bootloader	2.12"
+#menu#  install a new bootloader
+#help# 
+#help#	This procedure will install a new bootloader
+#help#	(/stand/m68k/boots/vmeboot, by default) onto a 40 or 70Mb
+#help#  Winchester,  337 Mb SMD or 182Mb ESDI.  
+
+
+trap 'exit 0' 1 2  15
+sh /usr/lbin/hdsetup b

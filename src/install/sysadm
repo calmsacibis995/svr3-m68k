@@ -1,0 +1,70 @@
+# sysadm:
+# 	if $1 != softwaremgmt
+# 		echo $1 not supported
+# 		exit
+# 
+# 	menu_top:
+# 		print out menu
+# 		read choice (install, update or help)
+# 
+# 		if install
+# 			sh /etc/loadtools/hdsetup
+# 			sh /etc/loadtools/readtape
+# 			goto menu_top
+# 		
+# 		if update
+# 			install 0xF000 bootloader
+# 			cp user-system files to SAVE directory
+# 			sh /etc/loadtools/readtape
+# 			goto menu_top
+# 
+
+if [ -z "$1" ]
+then
+	echo "sadmin: Usage: sysadm <menu_choice>"
+	exit 1
+elif [ "$1" != softwaremgmt ]
+then
+	echo "sysadm: \"$1\" Unsupported menu option"
+	exit 1
+fi
+
+#
+# Top and only level menu.
+#
+while echo "
+
+			SOFTWARE MANAGEMENT
+
+ 1 installpkg	install new software package onto built-in disk
+ 2 updatepkg	update software package on builtin disk
+
+ Enter a number, a name, the initial part of name, or
+ ? or <number>? for HELP, q to QUIT: \c"
+ do
+	read reply
+	case "$reply" in
+		1 | i* )
+			sh /etc/loadtools/hdsetup
+			sh /etc/loadtools/readtape install
+			continue ;;
+		2 | u* )
+			sh /etc/loadtools/readtape update
+			continue ;;
+		\? )
+			echo "general help" ;;
+		1\? )
+			echo "install help" ;;
+		2\? )
+			echo "update help" ;;
+		q )
+			echo "Quitting..."
+			break ;;
+		* )
+			echo "invalid response" ;;
+	esac
+done
+
+##==============================================================
+##		support functions			      ##
+##==============================================================

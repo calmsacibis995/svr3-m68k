@@ -1,0 +1,223 @@
+Thu Sep  4 15:36:25 MST 1986 -- Make id=53
+	cc -c -O -I /aq1/usr/include   rcmd.c
+"/aq1/usr/include/CMC/types.h", line 15: illegal type combination
+"rcmd.c", line 27: redeclaration of sprintf
+*** Error code 1
+
+Stop.
+Thu Sep  4 16:06:08 MST 1986 -- Make id=54
+	cc -c -O -I /aq1/usr/include   rcmd.c
+"rcmd.c", line 27: redeclaration of sprintf
+*** Error code 1
+
+Stop.
+Thu Sep  4 16:26:31 MST 1986 -- Make id=55
+	cc -c -O -I /aq1/usr/include   rcmd.c
+	ar rv libcmcnet.a rcmd.o
+ar: creating libcmcnet.a
+a - rcmd.o
+	rm -f rcmd.o
+	cc -c -O -I /aq1/usr/include   connect.c
+	ar rv libcmcnet.a connect.o
+a - connect.o
+	rm -f connect.o
+	cc -c -O -I /aq1/usr/include   gethostbyadd.c
+	ar rv libcmcnet.a gethostbyadd.o
+a - gethostbyadd.o
+	rm -f gethostbyadd.o
+	cc -c -O -I /aq1/usr/include   getnetbyaddr.c
+	ar rv libcmcnet.a getnetbyaddr.o
+a - getnetbyaddr.o
+	rm -f getnetbyaddr.o
+	cc -c -O -I /aq1/usr/include   getnetbyname.c
+	ar rv libcmcnet.a getnetbyname.o
+a - getnetbyname.o
+	rm -f getnetbyname.o
+	cc -c -O -I /aq1/usr/include   getnetent.c
+	ar rv libcmcnet.a getnetent.o
+a - getnetent.o
+	rm -f getnetent.o
+	cc -c -O -I /aq1/usr/include   getproto.c
+	ar rv libcmcnet.a getproto.o
+a - getproto.o
+	rm -f getproto.o
+	cc -c -O -I /aq1/usr/include   getprotoname.c
+	ar rv libcmcnet.a getprotoname.o
+a - getprotoname.o
+	rm -f getprotoname.o
+	cc -c -O -I /aq1/usr/include   getprotoent.c
+	ar rv libcmcnet.a getprotoent.o
+a - getprotoent.o
+	rm -f getprotoent.o
+	cc -c -O -I /aq1/usr/include   getservbynam.c
+	ar rv libcmcnet.a getservbynam.o
+a - getservbynam.o
+	rm -f getservbynam.o
+	cc -c -O -I /aq1/usr/include   getservbypor.c
+	ar rv libcmcnet.a getservbypor.o
+a - getservbypor.o
+	rm -f getservbypor.o
+	cc -c -O -I /aq1/usr/include   getservent.c
+	ar rv libcmcnet.a getservent.o
+a - getservent.o
+	rm -f getservent.o
+	cc -c -O -I /aq1/usr/include   inet_lnaof.c
+	ar rv libcmcnet.a inet_lnaof.o
+a - inet_lnaof.o
+	rm -f inet_lnaof.o
+	cc -c -O -I /aq1/usr/include   inet_makeadd.c
+Thu Sep  4 17:08:42 MST 1986 -- Make id=56
+	cc -c -O -I /aq1/usr/include   rcmd.c
+	ar rv libcmcnet.a rcmd.o
+ar: creating libcmcnet.a
+a - rcmd.o
+	rm -f rcmd.o
+	cc -c -O -I /aq1/usr/include   connect.c
+	ar rv libcmcnet.a connect.o
+a - connect.o
+	rm -f connect.o
+	cc -c -O -I /aq1/usr/include   gethostbyadd.c
+	ar rv libcmcnet.a gethostbyadd.o
+a - gethostbyadd.o
+	rm -f gethostbyadd.o
+	cc -c -O -I /aq1/usr/include   getnetbyaddr.c
+	ar rv libcmcnet.a getnetbyaddr.o
+a - getnetbyaddr.o
+	rm -f getnetbyaddr.o
+	cc -c -O -I /aq1/usr/include   getnetbyname.c
+	ar rv libcmcnet.a getnetbyname.o
+a - getnetbyname.o
+	rm -f getnetbyname.o
+	cc -c -O -I /aq1/usr/include   getnetent.c
+	ar rv libcmcnet.a getnetent.o
+a - getnetent.o
+	rm -f getnetent.o
+	cc -c -O -I /aq1/usr/include   getproto.c
+	ar rv libcmcnet.a getproto.o
+a - getproto.o
+	rm -f getproto.o
+	cc -c -O -I /aq1/usr/include   getprotoname.c
+	ar rv libcmcnet.a getprotoname.o
+a - getprotoname.o
+	rm -f getprotoname.o
+	cc -c -O -I /aq1/usr/include   getprotoent.c
+	ar rv libcmcnet.a getprotoent.o
+a - getprotoent.o
+	rm -f getprotoent.o
+	cc -c -O -I /aq1/usr/include   getservbynam.c
+	ar rv libcmcnet.a getservbynam.o
+a - getservbynam.o
+	rm -f getservbynam.o
+	cc -c -O -I /aq1/usr/include   getservbypor.c
+	ar rv libcmcnet.a getservbypor.o
+a - getservbypor.o
+	rm -f getservbypor.o
+	cc -c -O -I /aq1/usr/include   getservent.c
+	ar rv libcmcnet.a getservent.o
+a - getservent.o
+	rm -f getservent.o
+	cc -c -O -I /aq1/usr/include   inet_lnaof.c
+	ar rv libcmcnet.a inet_lnaof.o
+a - inet_lnaof.o
+	rm -f inet_lnaof.o
+	cc -c -O -I /aq1/usr/include   inet_makeadd.c
+	ar rv libcmcnet.a inet_makeadd.o
+a - inet_makeadd.o
+	rm -f inet_makeadd.o
+	cc -c -O -I /aq1/usr/include   inet_netof.c
+	ar rv libcmcnet.a inet_netof.o
+a - inet_netof.o
+	rm -f inet_netof.o
+	cc -c -O -I /aq1/usr/include   inet_network.c
+	ar rv libcmcnet.a inet_network.o
+a - inet_network.o
+	rm -f inet_network.o
+	cc -c -O -I /aq1/usr/include   inet_ntoa.c
+	ar rv libcmcnet.a inet_ntoa.o
+a - inet_ntoa.o
+	rm -f inet_ntoa.o
+	cc -c -O -I /aq1/usr/include   accept.c
+	ar rv libcmcnet.a accept.o
+a - accept.o
+	rm -f accept.o
+	cc -c -O -I /aq1/usr/include   getpeername.c
+	ar rv libcmcnet.a getpeername.o
+a - getpeername.o
+	rm -f getpeername.o
+	cc -c -O -I /aq1/usr/include   bind.c
+	ar rv libcmcnet.a bind.o
+a - bind.o
+	rm -f bind.o
+	cc -c -O -I /aq1/usr/include   gethostbynam.c
+	ar rv libcmcnet.a gethostbynam.o
+a - gethostbynam.o
+	rm -f gethostbynam.o
+	cc -c -O -I /aq1/usr/include   gethostent.c
+	ar rv libcmcnet.a gethostent.o
+a - gethostent.o
+	rm -f gethostent.o
+	cc -c -O -I /aq1/usr/include   inet_addr.c
+	ar rv libcmcnet.a inet_addr.o
+a - inet_addr.o
+	rm -f inet_addr.o
+	cc -c -O -I /aq1/usr/include   listen.c
+	ar rv libcmcnet.a listen.o
+a - listen.o
+	rm -f listen.o
+	cc -c -O -I /aq1/usr/include   sockopt.c
+	ar rv libcmcnet.a sockopt.o
+a - sockopt.o
+	rm -f sockopt.o
+	cc -c -O -I /aq1/usr/include   shutdown.c
+	ar rv libcmcnet.a shutdown.o
+a - shutdown.o
+	rm -f shutdown.o
+	cc -c -O -I /aq1/usr/include   socket.c
+	ar rv libcmcnet.a socket.o
+a - socket.o
+	rm -f socket.o
+	cc -c -O -I /aq1/usr/include   gethostname.c
+	ar rv libcmcnet.a gethostname.o
+a - gethostname.o
+	rm -f gethostname.o
+	cc -c -O -I /aq1/usr/include   opendir.c
+	ar rv libcmcnet.a opendir.o
+a - opendir.o
+	rm -f opendir.o
+	cc -c -O -I /aq1/usr/include   readdir.c
+	ar rv libcmcnet.a readdir.o
+a - readdir.o
+	rm -f readdir.o
+	cc -c -O -I /aq1/usr/include   ruserpass.c
+	ar rv libcmcnet.a ruserpass.o
+a - ruserpass.o
+	rm -f ruserpass.o
+	cc -c -O -I /aq1/usr/include   send.c
+	ar rv libcmcnet.a send.o
+a - send.o
+	rm -f send.o
+	cc -c -O -I /aq1/usr/include   recv.c
+	ar rv libcmcnet.a recv.o
+a - recv.o
+	rm -f recv.o
+	cc -c -O -I /aq1/usr/include   net_error.c
+	ar rv libcmcnet.a net_error.o
+a - net_error.o
+	rm -f net_error.o
+	cc -c -O -I /aq1/usr/include   perror.c
+	ar rv libcmcnet.a perror.o
+a - perror.o
+	rm -f perror.o
+	cc -c -O -I /aq1/usr/include   sendto.c
+	ar rv libcmcnet.a sendto.o
+a - sendto.o
+	rm -f sendto.o
+	cc -c -O -I /aq1/usr/include   recvfrom.c
+	ar rv libcmcnet.a recvfrom.o
+a - recvfrom.o
+	rm -f recvfrom.o
+Thu Sep  4 17:45:08 MST 1986 -- Make id=57
+	cc -c -O -I /aq1/usr/include   getcwd.c
+	ar rv libcmcnet.a getcwd.o
+a - getcwd.o
+	rm -f getcwd.o

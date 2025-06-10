@@ -1,0 +1,10 @@
+
+etc/diskdefs
+etc/diskalts/m32070m
+etc/diskalts/m32070t
+etc/diskalts/m360337
+etc/dinit
+etc/fsck
+etc/mount
+etc/umount
+bin/cpio

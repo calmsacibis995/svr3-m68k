@@ -1,0 +1,41 @@
+* vme355
+*
+Description File:	"MVME355 9-Track Tape Controller Board"
+*
+* vme355
+*
+Device Description:	"vme355 9-Track Tape Driver"
+Description Keyword:	"vme355"
+Device Name:	"vme355"
+Handler Prefix:	"m355"
+Interrupt Vectors Size:	4
+Major Block Device Number:	4
+Major Character Device Number:	16
+Maximum Bus Request Level:	5
+Maximum Devices Per Controller:	1
+Page Registers Size:	4
+Block Or Character Device Handler Lines:
+Has an initialization handler.
+Has an open handler.
+Has a close handler.
+Has a read handler.
+Has a write handler.
+Has an ioctl handler.
+Device Type Information:
+Create interrupt vector array for this device.
+Create character and/or block major device numbers for this device.
+Create interrupt level array for this device.
+This is a block device.
+This is a character device.
+Allow one vector definition with multiple addresses.
+Device Configuration Tables Declarations:
+*
+* vme355 #1
+*
+Board Description:	"vme355 9-Track Tape Controller #1"
+Description Keyword:	"vme355 #1"
+Device Type:	"vme355"
+Bus Request Level:	5
+Address:	0xffff0800
+Interrupt Vector Location:	0x11c
+Default Number Of Devices:	0

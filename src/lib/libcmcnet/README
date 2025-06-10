@@ -1,0 +1,50 @@
+
+	These files provide interfaces to the network device driver,
+to the several network data bases, and utilities to manipulate Internet
+addresses.
+
+	We normally collect these together into a library called
+"libcmcnet.a" and invoked by passing "-lcmcnet" to the linker "ld".
+Several of the Makefiles presume such an organization, but you could
+just as easily install all this into the normal C library.
+
+	Following is the ordering for libcmcnet.a, useful if you
+don't have ranlib(1) or if lorder(1) and tsort(1) don't work any
+better on your system than they do on ours.
+	rcmd.o
+	connect.o
+	gethostbyadd.o
+	getnetbyaddr.o
+	getnetbyname.o
+	getnetent.o
+	getproto.o
+	getprotoname.o
+	getprotoent.o
+	getservbynam.o
+	getservbypor.o
+	getservent.o
+	inet_lnaof.o
+	inet_makeadd.o
+	inet_netof.o
+	inet_network.o
+	inet_ntoa.o
+	accept.o
+	getpeername.o
+	bind.o
+	gethostbynam.o
+	gethostent.o
+	inet_addr.o
+	listen.o
+	sockopt.o
+	shutdown.o
+	socket.o
+	gethostname.o
+	opendir.o
+	readdir.o
+	ruserpass.o
+	send.o
+	recv.o
+	net_error.o
+	perror.o
+	sendto.o
+	recvfrom.o

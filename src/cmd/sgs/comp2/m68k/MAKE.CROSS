@@ -1,0 +1,242 @@
+#
+#	@(#)MAKE.CROSS	7.1	
+#
+# '***********************************************************************'
+# '*                                                                     *'
+# '*   Function :     MAKE.CROSS [<processor>][release][<make argument>] *'
+# '*                                                                     *'
+# '*,                 This shell script forces the compilation of pcc2   *'
+# '*                  in the "dovax" environment.                        *'
+# '*                                                                     *'
+# '*   Parameters :   processor:      specifies the target processor     *'
+# '*                  release:        if specified, a new release will   *'
+# '*                                  be installed.                      *'
+# '*                  make arguments: arguments list for make, possibly  *'
+# '*                                  null.                              *'
+# '*                                                                     *'
+# '*   Source file :  /port/port/src/work/pcc2/m68k/MAKE.CROSS           *'
+# '*                                                                     *'
+# '*   Imported key words:(set in user"s .profile)                       *'
+# '*                  $DEFPROC     Default target processor              *'
+# '*                               (m68000,m68010,or m68020)             *'
+# '*                   $ROOT00      root directory for m68000            *'
+# '*                   $ROOT10      root directory for m68010            *'
+# '*                   $ROOT20      root directory for m68020            *'
+# '*                                                                     *'
+# '*   Exported key words: none                                          *'
+# '*                                                                     *'
+# '*   Local key words :                                                 *'
+# '*                  SUFFIX       the last two digits of the processor"s*'
+# '*                               name (i.e. 00, 10, or 20). This string*'
+# '*                               is used to specify the directories    *'
+# '*                               where the object and executable files *'
+# '*                               are stored.                           *'
+# '*                  DESTINATION  this variables specifies the directory*'
+# '*                               in which the new version of as will be*'
+# '*                               stored.                               *'
+# '*                                                                     *'
+# '*   Shellscript/makefile called :                                     *'
+# '*                  make        call pcc2"s makefile                   *'
+# '*                  dovax       change to do vax environment           *'
+# '*                                                                     *'
+# '*   Shellscript/makefile which call this shell:                       *'
+# '*                                                                     *'
+# '*                  mk.cross    this shell controls the creation of a  *'
+# '*                              log file.                              *'
+# '*                                                                     *'
+# '*   Operation :    This shell script can be run by executing this     *'
+# '*                  source file or through the execution of command    *'
+# '*                  file "/port/port/src/work/pcc2/m68k/mk.cross".     *'
+# '*                                                                     *'
+# '*   Associated files : All the object files generated will be saved   *'
+# '*                  in the directory  :                                *'
+# '*                  /port/port/src/work/pcc2/m68k/crossXX, where XX is *'
+# '*                  either 00, 10, or 20 depending on target processor.*'
+# '*                                                                     *'
+# '*   Algorithm:     This shell accomplishes its described task through *'
+# '*                  the following steps:                               *'
+# '*                                                                     *'
+# '*                  1. Determine the target processor. This is accomp- *'
+# '*                     lished either by the first positional parameter *'
+# '*                     , by the user specifying it in interactive mode,*'
+# '*                     or by the export variable DEFPROC.              *'
+# '*                                                                     *'
+# '*                  2. Change to VAX environment.                      *'
+# '*                                                                     *'
+# '*                  3. Remove all object files.                        *'
+# '*                                                                     *'
+# '*                  4. Get a copy of the last version of c0, c1 and    *'
+# '*                     object files from the appropriate directory.    *'
+# '*                                                                     *'
+# '*                  5. Make a new version of c0 and c1.                *'
+# '*                                                                     *'
+# '*                  6. If the positional parameter release exists then *'
+# '*                     save an old copy of c0,c1, and install the new  *'
+# '*                     one.                                            *'
+# '*                                                                     *'
+# '*                  7. Move the new version of c0,c1 and its object    *'
+# '*                     files into the appropriate directory.           *'
+# '*                                                                     *'
+# '*   Errors:        The keyword parameters DEFPROC must be defined     *'
+# '*                  and exported in user"s .profile.                   *'
+# '*                                                                     *'
+# '***********************************************************************'
+#
+echo "************************* pcc2 MAKE.CROSS **********************"
+echo "\nStarting MAKE.CROSS for pcc2. `date` \n" 
+echo "command line: mk.cross $*\n"
+   
+#
+#	Scan the first positional parameter. If it is a processor specification
+#	then remember it and shift it off.
+#
+case $1 in
+   68000 | m68000 | M68000 | 00 |\
+   68010 | m68010 | M68010 | 10 |\
+   68020 | m68020 | M68020 | 20) 
+	    processor=$1
+	    shift;;
+   *) 	processor="";;
+esac
+
+#
+#     Start processing - change to the vax environment if not already there
+#
+
+env=`where`
+if [ "$env"  != "vax" ]
+then
+	 . dovax
+fi
+
+
+#	Verify that the user specified a processor.  If one was not specified
+#	then request that the user input a legal processor. If the job is not
+#	interactive, assign the default processor.
+#
+#	Once a processor has been determined, initialize SUFFIX.
+#
+#
+
+SUFFIX=""
+while [ "$SUFFIX" = "" ] 
+   do
+   case $processor in
+	68000 | m68000 | M68000 | 00)
+				if [ "$ROOT00" = "" ]
+			           then
+			           echo "**** ERROR **** Please define and export ROOT00 in your .profile"
+			           exit 255
+			        else
+			           DESTINATION="$ROOT00"  
+			        fi
+	               		SUFFIX=00;
+				PROCESSOR=M68000;;
+	68010 | m68010 | M68010 | 10)
+			        if [ "$ROOT10" = "" ]
+			           then
+			           echo "**** ERROR **** Please define and export ROOT10 in your .profile"
+			           exit 255
+			        else
+			           DESTINATION="$ROOT10"  
+			        fi
+				SUFFIX=10;
+				PROCESSOR=M68010;;
+	68020 | m68020 | M68020 | 20)
+			        if [ "$ROOT20" = "" ]
+			           then
+			           echo "**** ERROR **** Please define and export ROOT20 in your .profile"
+			           exit 255
+			        else
+			           DESTINATION="$ROOT20"  
+			        fi
+	                	SUFFIX=20;
+				PROCESSOR=M68020;;
+
+#	The target processor has not been specified.  Depending on the
+#	means in which this shell was invoked (background or interactively)
+#	obtain the target processor's name.
+
+	*) if [ -t 0 ]
+		then
+		echo "\nDesignate the target processor: M68000,M68010,or M68020"
+		processor=`line`
+		echo	   
+	   else
+		case $DEFPROC in
+		   68000 | m68000 | M68000 | 00 | \
+		   68010 | m68010 | M68010 | 10 | \
+		   68020 | m68020 | M68020 | 20 ) processor="$DEFPROC";;
+		   *)
+			echo "**** ERROR **** Please define and export DEFPROC"
+			exit 255
+		esac
+	   fi;;
+	esac
+done
+export PROCESSOR
+   
+echo "Cross version for M680$SUFFIX environment \n"
+
+#
+#	Remove the local files (their environment characteristics are
+#	unknown), and retrieve old object and c0, c1 for the specified
+#	processor.
+#
+
+make clean                          # remove all object and executable
+rm -f c0 c1                         # files from current directory
+
+mv cross$SUFFIX/*.o .   # move previous saved executable
+			# and object files into current directory
+
+#
+#	Check for RELEASE flag
+#
+
+RELEASE=false
+if [ "$1" = "RELEASE" ] || [ "$1" = "release" ]
+   then 
+   shift
+   RELEASE=true
+fi
+
+#
+#	Make CCOM
+#
+
+echo "\nMake command line: make build PROCESSOR=$PROCESSOR $*\n"
+
+make build PROCESSOR=$PROCESSOR $*                               
+
+#
+#	Save and Install c0, c1 only if the first positional parameter
+#	is RELEASE and the preceding make was successful.
+#
+
+ERROR=$?
+if [ $ERROR = 0 ]
+   then
+   if $RELEASE
+	then
+	chmod 775  c0 c1
+	chown port c0 c1
+    
+	echo "\nCopying $DESTINATION/lib/c[01] to $DESTINATION/lib/c[01].back\n"
+	make ROOT=$DESTINATION save $*
+    
+	echo "\nInstalling new release of c[01] onto $DESTINATION/lib\n"
+	make ROOT=$DESTINATION install $*
+   else
+	echo "\nTest version of c[01] has been created - c[01] was NOT installed\n"
+   fi
+else
+   echo "\nmake did not return successfully.  return value = $ERROR\n"
+fi
+
+#
+#     Save all object files in obj directory depending on target
+#     processor.
+#
+mv c[01]  *.o cross$SUFFIX                 
+echo "\nExecutable and object files saved in `pwd`/cross$SUFFIX"

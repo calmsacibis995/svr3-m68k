@@ -1,0 +1,19 @@
+#ident	"@(#)initpkg:init.d/enp	1.3"
+
+#	enp board download
+
+set `who -r`
+if [ $9 = "S" ]		# comming from single-user mode
+then
+	cd /tcpip/enp
+	if [ -f enp_param.S ]
+	then
+		./download_enp >/dev/null
+		if [ $? -ne 0 ]
+		then
+			echo "Cannot download enp board."
+		else
+			echo "ENP board downloaded."
+		fi
+	fi
+fi

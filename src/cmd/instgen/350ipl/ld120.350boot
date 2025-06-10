@@ -1,0 +1,11 @@
+/*	%W%	*/
+MEMORY {
+	valid : org = 0x30000, len = 0x100000
+}
+SECTIONS {
+	.text	: { }
+	GROUP	ALIGN(4) : {
+		.data : { }
+		.bss : { }
+	}
+}

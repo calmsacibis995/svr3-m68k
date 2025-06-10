@@ -1,0 +1,10 @@
+for i in *.s
+do
+	mv $i $i.t
+	sed    's/^\.ident/#ident/' <$i.t >$i
+	if [ $? -eq 0 ]
+	then
+		rm $i.t
+	fi
+	echo done $i
+done

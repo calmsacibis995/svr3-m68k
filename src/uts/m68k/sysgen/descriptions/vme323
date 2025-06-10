@@ -1,0 +1,39 @@
+* vme323
+*
+Description File:	"MVME323 ESDI Disk Controller Board"
+*
+* vme323 #1
+*
+Board Description:	"ESDI Controller board #1"
+Description Keyword:	"vme323 #1"
+Device Type:	"vme323"
+Bus Request Level:	3
+Address:	0xffffa000
+Interrupt Vector Location:	0x324
+Default Number Of Devices:	0
+*
+* vme323
+*
+Device Description:	"Enhanced Small Disk Interface Driver"
+Description Keyword:	"vme323"
+Device Name:	"vme323"
+Handler Prefix:	"m323"
+Interrupt Vectors Size:	4
+Major Block Device Number:	7
+Major Character Device Number:	26
+Maximum Bus Request Level:	3
+Maximum Devices Per Controller:	4
+Page Registers Size:	14
+Block Or Character Device Handler Lines:
+Has an initialization handler.
+Has an open handler.
+Has a close handler.
+Has a read handler.
+Has a write handler.
+Has an ioctl handler.
+Device Type Information:
+Create interrupt vector array for this device.
+Create interrupt level array for this device.
+This is a block device.
+This is a character device.
+Device Configuration Tables Declarations:

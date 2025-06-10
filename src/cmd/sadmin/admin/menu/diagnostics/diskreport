@@ -1,0 +1,214 @@
+#ident	"@(#)sadmin:admin/menu/diagnostics/diskreport	2.3"
+#menu#	report on built-in disk errors
+#help#
+#help#	This subcommand shows you if the system has collected any information
+#help#	indicating that there have been errors while reading the built-in
+#help#	disks.  
+#help#	The summary report provides sufficient information about disk errors
+#help#	to determine if repair should be attempted.  
+#help#	If a number of errors are reported, there is damage and you should 
+#help#	call for service.
+#help#	NOTE:  Reports of disk errors most probably result in the loss of
+#help#	files and/or damage to data.  It will be necessary to restore the
+#help#	repaired disk from backup copies.
+
+flags="-qq -k$$"
+
+if [ ! -x /usr/bin/errpt ]
+then
+	echo '
+	This machine does not have the necessary command, /usr/bin/errpt, to
+	report disk errors.  Hence, this feature is not available.'
+	exit 0
+fi
+
+echo '
+	WARNING:  This report is provided to advise you if your machine
+	needs the built-in disks repaired.  Only qualified repair people
+	should attempt to do the repair.
+	NOTE:  If disk errors are reported it probably means that files
+	and/or data have been damaged.  It may be necessary to restore the
+	repaired disk from backup copies.
+'
+case `checklist -fe ${flags} -p -H"!sed -n '/^#help#/s///p' $0" \
+	'Select disk type "m320" or "m360"  [?, q]:' \
+	m320 m360` in
+m320 )
+	f=-m320
+	;;
+m360 )
+	f=-m360
+	;;
+'' )
+	exit 0
+	;;
+* )
+	admerr $0 'Bad answer from checklist'
+	exit 1
+esac
+
+timechanged=
+
+eval `date +'day=%a. dmon=%m dday=%d dyr=%y dhr=%H dmin=%M'`
+if checkyn ${flags} -H'
+	This procedure allows you to set the date and time that the error
+	report should start its report at.' \
+	-f 'Use a specific date and time?'
+then
+	while true
+	do
+		while	echo "Month	default ${dmon}	(1-12): \c"
+		do
+			read month
+			case "${month}" in
+			'' )
+				month=${dmon}
+				break
+				;;
+			q )
+				exit 0
+				;;
+			[0-9] | [0-9][0-9] )
+				if [ "${month}" -ge 1  -a  "${month}" -le 12 ]
+				then
+					break
+				fi
+				;;
+			[Jj][Aa][Nn]* )	month=1
+					break;;
+			[Ff][Ee][Bb]* )	month=2
+					break;;
+			[Mm][Aa][Rr]* )	month=3
+					break;;
+			[Aa][Pp][Rr]* )	month=4
+					break;;
+			[Mm][Aa][Yy]* )	month=5
+					break;;
+			[Jj][Uu][Nn]* )	month=6
+					break;;
+			[Jj][Uu][Ll]* )	month=7
+					break;;
+			[Aa][Uu][Gg]* )	month=8
+					break;;
+			[Ss][Ee][Pp]* )	month=9
+					break;;
+			[Oo][Cc][Tt]* )	month=10
+					break;;
+			[Nn][Ee][Vv]* )	month=11
+					break;;
+			[Dd][Ee][Cc]* )	month=12
+					break;;
+			esac
+			echo '	Invalid month:  use 1 through 12'
+		done
+		while	echo "Day	default ${dday}	(1-31): \c"
+		do
+			read day
+			case ${day} in
+			'' )
+				day=${dday}
+				break
+				;;
+			q )
+				exit 0
+				;;
+			[0-9] | [0-9][0-9] )
+				if [ "${day}" -ge 1  -a  "${day}" -le 31 ]
+				then
+					break
+				fi
+			esac
+			echo '	Invalid day:  use 1 through 31'
+		done
+		while	echo "Year	default ${dyr}	(70-99):\c"
+		do
+			read year
+			case ${year} in
+			'' )
+				year=${dyr}
+				break
+				;;
+			q )
+				exit 0
+				;;
+			[0-9][0-9] )
+				if [ "${year}" -ge 70  -a  "${year}" -le 99 ]
+				then
+					break
+				fi
+			esac
+			echo '	Invalid year:  use 70 through 99'
+		done
+		while	echo "Hour	default ${dhr}	(0-23): \c"
+		do
+			read hour
+			case ${hour} in
+			'' )
+				hour=${dhr}
+				break
+				;;
+			q )
+				exit 0
+				;;
+			[0-9] | [0-2][0-9] )
+				if [ "${hour}" -ge 0  -a  "${hour}" -le 23 ]
+				then
+					break
+				fi
+				;;
+			[0-9][aApP][mM] | 0[0-9][aApP][mM] | 1[0-1][aApP][mM] )
+				case ${hour} in
+				*[aA][mM] )
+					hour=`expr "${hour}" : '\([0-9]*\)'`
+					;;
+				* )
+					hour=`expr "${hour}" : '\([0-9]*\)' + 12`
+				esac
+				break
+				;;
+			noon )
+				hour=12
+				break
+				;;
+			midnight )
+				hour=0
+				break
+			esac
+			echo '	Invalid hour:  use 0 through 23'
+		done
+		while	echo "Minute	default ${dmin}	(0-59): \c"
+		do
+			read minute
+			case ${minute} in
+			'' )
+				minute=${dmin}
+				break
+				;;
+			q )
+				exit 0
+				;;
+			[0-9] | [0-9][0-9] )
+				if [ "${minute}" -ge 0  -a  "${minute}" -le 59 ]
+				then
+					break
+				fi
+			esac
+			echo '	Invalid minute:  use 0 through 59'
+		done
+		eval `echo "month=${month} day=${day} 
+			hour=${hour} minute=${minute} year=${year} "  |
+			sed '	s/=\([0-9]\) /=0\1 /g
+				s/=00*\([0-9][0-9]\) /=\1 /g'`
+		if  checkyn ${flags} -f "Date and time to start report at:  ${month}/${day}/${year} ${hour}:${minute}.  OK?"
+		then
+			timechanged=yes
+			break
+		fi
+	done
+fi
+if [ ${timechanged} ]
+then
+/usr/bin/errpt ${f} -s ${month}${day}${hour}${minute}${year} |pg -p "[<return> for more, q]"
+else
+/usr/bin/errpt ${f} | pg -p "[<return> for more, q]"
+fi

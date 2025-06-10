@@ -1,0 +1,35 @@
+Thu Sep 25 11:42:40 MST 1986 -- Make id=77
+Make:  Don't know how to make /usr/include/sys/fcntl.h.  Stop.
+Thu Sep 25 11:43:33 MST 1986 -- Make id=78
+	cc -c -O -I/aq1/usr/include  p2open.c
+	ar rv libcrypt.a p2open.o
+ar: creating libcrypt.a
+a - p2open.o
+	rm -f p2open.o
+	cc -c -O -I/aq1/usr/include  des_encrypt.c
+	ar rv libcrypt.a des_encrypt.o
+a - des_encrypt.o
+	rm -f des_encrypt.o
+	cc -c -O -I/aq1/usr/include  des_decrypt.c
+	ar rv libcrypt.a des_decrypt.o
+a - des_decrypt.o
+	rm -f des_decrypt.o
+	if [ -s des_decrypt.c ] ;\
+	then \
+		cc -c -O -I/aq1/usr/include  des_crypt.c ;\
+	else \
+		cc -c -O -I/aq1/usr/include  -DINTERNATIONAL des_crypt.c ;\
+	fi ;\
+	ar rv libcrypt.a des_crypt.o ;\
+	rm -f des_crypt.o
+a - des_crypt.o
+	cc -c -O -I/aq1/usr/include  cryptio.c
+"cryptio.c", line 74: warning: illegal pointer combination, op =
+"cryptio.c", line 100: warning: illegal pointer combination, op =
+	ar rv libcrypt.a cryptio.o
+a - cryptio.o
+	rm -f cryptio.o
+	cc -c -O -I/aq1/usr/include  crypt.c
+	ar rv libcrypt.a crypt.o
+a - crypt.o
+	rm -f crypt.o

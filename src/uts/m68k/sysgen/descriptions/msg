@@ -1,0 +1,60 @@
+Description File:	"Message Parameters"
+Device Description:	""
+Description Keyword:	"msg"
+Device Name:	"msg"
+Handler Prefix:	"msg"
+Interrupt Vectors Size:	0
+Major Block Device Number:	0
+Major Character Device Number:	0
+Maximum Bus Request Level:	0
+Maximum Devices Per Controller:	1
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Has an initialization handler.
+Device Type Information:
+Do not create a count field for this device.
+This is a required device.
+This is an interrupt driven device.
+Device Configuration Tables Declarations:
+Board Description:	""
+Description Keyword:	"msg #1"
+Device Type:	"msg"
+Bus Request Level:	0
+Address:	0
+Interrupt Vector Location:	0
+Default Number Of Devices:	1
+Parameter Description:	"Size Of The Message Segment Control Map"
+Description Keyword:	"MSGMAP"
+Parameter Name:	"msgmap"
+Conf.c Name:	"MSGMAP"
+Default Value:	"100"
+Parameter Description:	"Maximum Size Of A Message"
+Description Keyword:	"MSGMAX"
+Parameter Name:	"msgmax"
+Conf.c Name:	"MSGMAX"
+Default Value:	"2048"
+Parameter Description:	"Maximum Length Of A Message Queue"
+Description Keyword:	"MSGMNB"
+Parameter Name:	"msgmnb"
+Conf.c Name:	"MSGMNB"
+Default Value:	"4096"
+Parameter Description:	"Maximum Number Of Message Queues"
+Description Keyword:	"MSGMNI"
+Parameter Name:	"msgmni"
+Conf.c Name:	"MSGMNI"
+Default Value:	"50"
+Parameter Description:	"Size, In Bytes, Of A Message Segment"
+Description Keyword:	"MSGSSZ"
+Parameter Name:	"msgssz"
+Conf.c Name:	"MSGSSZ"
+Default Value:	"8"
+Parameter Description:	"Number of Message Headers In The System"
+Description Keyword:	"MSGTQL"
+Parameter Name:	"msgtql"
+Conf.c Name:	"MSGTQL"
+Default Value:	"40"
+Parameter Description:	"Number Of Message Segments In The System"
+Description Keyword:	"MSGSEG"
+Parameter Name:	"msgseg"
+Conf.c Name:	"MSGSEG"
+Default Value:	"1024"

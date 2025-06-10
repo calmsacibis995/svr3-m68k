@@ -1,0 +1,232 @@
+-O -- cflow can't process - file skipped
+1	DEBUG2: <>
+2		bpp_open : <>
+3	add_retr: int(), <bppci.c 952>
+4		ret_to_s : <>
+5	alloc_me: int(), <bppci.c 99>
+6		alloc_me : <>
+7		bpp_init : <>
+8	bpp_clos: int(), <bpp_driver.c 163>
+9	bpp_init: int(), <ci_init.c 103>
+10	bpp_intr: int(), <ci_init.c 749>
+11	bpp_ioct: int(), <bpp_driver.c 509>
+12	bpp_kclo: int(), <bpp_driver.c 1213>
+13		bpp_clos : <>
+14	bpp_kcnf: int(), <bpp_driver.c 712>
+15	bpp_knxt: int(), <bpp_driver.c 754>
+16		bpp_ioct : <>
+17	bpp_kope: int(), <bpp_driver.c 812>
+18		bpp_open : 2
+19	bpp_kpoi: int(), <bpp_driver.c 857>
+20		bpp_read : <>
+21	bpp_krel: int(), <bpp_driver.c 924>
+22		bpp_read : 20
+23	bpp_kwri: int(), <bpp_driver.c 971>
+24	bpp_open: int(), <bpp_driver.c 103>
+25	bpp_read: int(), <bpp_driver.c 200>
+26	bpp_rxin: int(), <bpp_driver.c 653>
+27		bpp_open : 2
+28	bpp_send: int(), <bpp_driver.c 1094>
+29		bpp_kwri : <>
+30		bpp_writ : <>
+31	bpp_sign: undef(), <bpp_driver.c 1275>
+32		bpp_intr : <>
+33	bpp_time: int(), <bppci.c 187>
+34		bpp_wait : <>
+35	bpp_wait: uchar(), <bppci.c 211>
+36		init_cpu : <>
+37	bpp_writ: int(), <bpp_driver.c 345>
+38	bprobe: <>
+39		v30_1_pr : <>
+40	build_bu: int(), <ci_init.c 400>
+41		bpp_init : 7
+42	build_ep: int(), <ci_init.c 316>
+43		bpp_init : 7
+44		init_cpu : 36
+45	build_re: int(), <ci_init.c 473>
+46		init_cpu : 36
+47	ci_trace: undef(), <trace.c 22>
+48		bpp_ioct : 16
+49		bpp_read : 20
+50		bpp_rxin : <>
+51		pread : <>
+52		pwrite : <>
+53		uread : <>
+54		uwrite : <>
+55	copy: int(), <bppci.c 977>
+56		bpp_writ : 30
+57		ret_to_s : 4
+58	copy_stp: <>
+59		get_buf_ : <>
+60		ret_buf_ : <>
+61	copyin: <>
+62		bpp_writ : 30
+63	copyout: <>
+64		bpp_ioct : 16
+65		bpp_read : 20
+66	dst_ok: uchar(), <bppci.c 712>
+67		bpp_intr : 32
+68		bpp_ioct : 16
+69		bpp_send : <>
+70		ret_to_s : 4
+71	dump_sre: int(), <ci_init.c 712>
+72	find_emp: uchar(), <bppci.c 679>
+73		registra : <>
+74	get_bpe: struct*(), <bppci.c 351>
+75		pwrite : 52
+76	get_buf_: undef(), <ci_buf_mgt.c 65>
+77		bpp_intr : 32
+78	get_memb: int(), <ci_init.c 293>
+79		build_bu : <>
+80		build_ep : <>
+81		init_cpu : 36
+82	get_sbuf: struct*(), <bppci.c 493>
+83		bpp_kwri : 29
+84		bpp_writ : 30
+85		build_re : <>
+86		get_buf_ : 59
+87	get_sepb: struct*(), <bppci.c 408>
+88		bpp_kclo : <>
+89		bpp_kwri : 29
+90		bpp_writ : 30
+91		get_buf_ : 59
+92		init_cpu : 36
+93		ret_buf_ : 60
+94		ret_to_s : 4
+95	get_vme_: <>
+96		get_buf_ : 59
+97		ret_buf_ : 60
+98	init_cpu: undef(), <ci_init.c 521>
+99		bpp_ioct : 16
+100		bpp_open : 2
+101	mmualloc: <>
+102		alloc_me : 6
+103	mmufree: <>
+104		alloc_me : 6
+105	panic: <>
+106		build_bu : 79
+107		build_ep : 80
+108		build_re : 85
+109		get_buf_ : 59
+110		get_sbuf : <>
+111		init_cpu : 36
+112		pread : 51
+113		pwrite : 52
+114		release_ : <>
+115		ret_buf_ : 60
+116	pread: struct*(), <bppci.c 308>
+117		bpp_intr : 32
+118	printf: <>
+119		add_retr : <>
+120		alloc_me : 6
+121		bpp_init : 7
+122	psignal: <>
+123		bpp_ioct : 16
+124		bpp_rxin : 50
+125	pwrite: int(), <bppci.c 246>
+126		bpp_send : 69
+127		get_buf_ : 59
+128		init_cpu : 36
+129		ret_buf_ : 60
+130		ret_to_s : 4
+131	registra: long(), <bppci.c 743>
+132		bpp_kclo : 88
+133		bpp_send : 69
+134	release_: undef(), <bppci.c 531>
+135		add_retr : 119
+136		bpp_intr : 32
+137		bpp_kclo : 88
+138		bpp_krel : <>
+139		bpp_kwri : 29
+140		bpp_send : 69
+141		bpp_writ : 30
+142		get_buf_ : 59
+143		pread : 51
+144		registra : 73
+145		ret_buf_ : 60
+146		ret_or_r : <>
+147		ret_to_s : 4
+148	ret_buf_: int(), <ci_buf_mgt.c 288>
+149		bpp_intr : 32
+150	ret_or_r: undef(), <bppci.c 835>
+151		registra : 73
+152	ret_to_s: undef(), <bppci.c 876>
+153		bpp_intr : 32
+154		ret_or_r : 146
+155	send_adr: int(), <ci_init.c 221>
+156		init_cpu : 36
+157	sendcmd: int(), <ci_init.c 269>
+158		init_cpu : 36
+159		pwrite : 52
+160	sleep: <>
+161		bpp_read : 20
+162		bpp_wait : 34
+163	spl4: <>
+164		bpp_ioct : 16
+165		bpp_read : 20
+166		uread : 53
+167		uwrite : 54
+168	splx: <>
+169		bpp_ioct : 16
+170		bpp_read : 20
+171		uread : 53
+172		uwrite : 54
+173	sprobe: <>
+174		v33_1_pr : <>
+175		v33_2_pr : <>
+176	str_cpy: char*(), <ci_init.c 510>
+177		init_cpu : 36
+178	swap_id: int(), <bppci.c 932>
+179		get_buf_ : 59
+180		ret_buf_ : 60
+181		ret_to_s : 4
+182	timeout: <>
+183		bpp_wait : 34
+184	un_uread: undef(), <bppci.c 648>
+185	uread: struct*(), <bppci.c 604>
+186		bpp_kpoi : <>
+187		ret_or_r : 146
+188	uwrite: undef(), <bppci.c 562>
+189		bpp_intr : 32
+190		bpp_send : 69
+191		registra : 73
+192		ret_to_s : 4
+193	v30_1_ct: int(), <vme330_1.c 43>
+194		: <>
+195	v30_1_da: int(), <vme330_1.c 47>
+196		: 194
+197	v30_1_in: int(), <vme330_1.c 52>
+198		: 194
+199	v30_1_pr: int(), <vme330_1.c 65>
+200		: 194
+201	v30_1_rs: int(), <vme330_1.c 60>
+202		: 194
+203	v30_1_st: int(), <vme330_1.c 56>
+204		: 194
+205	v33_1_ct: int(), <vme333_1.c 24>
+206		: 194
+207	v33_1_da: int(), <vme333_1.c 28>
+208		: 194
+209	v33_1_in: int(), <vme333_1.c 32>
+210		: 194
+211	v33_1_pr: int(), <vme333_1.c 44>
+212		: 194
+213	v33_1_rs: int(), <vme333_1.c 40>
+214		: 194
+215	v33_1_st: int(), <vme333_1.c 36>
+216		: 194
+217	v33_2_ct: int(), <vme333_2.c 24>
+218		: 194
+219	v33_2_da: int(), <vme333_2.c 28>
+220		: 194
+221	v33_2_in: int(), <vme333_2.c 32>
+222		: 194
+223	v33_2_pr: int(), <vme333_2.c 44>
+224		: 194
+225	v33_2_rs: int(), <vme333_2.c 40>
+226		: 194
+227	v33_2_st: int(), <vme333_2.c 36>
+228		: 194
+229	wakeup: <>
+230		bpp_rxin : 50
+231		bpp_time : <>

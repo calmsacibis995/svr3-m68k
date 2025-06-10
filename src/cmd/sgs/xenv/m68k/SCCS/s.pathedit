@@ -1,0 +1,95 @@
+h65160
+s 00010/00008/00034
+d D 1.2 86/11/19 12:03:42 fnf 2 1
+c First cut at pathedit integration for m68k (native only).
+e
+s 00042/00000/00000
+d D 1.1 86/07/29 14:43:50 fnf 1 0
+c Baseline code from 5.3 release for 3b2
+e
+u
+U
+t
+T
+I 1
+D 2
+#ident	"@(#)xenv:m32/pathedit	1.27"
+E 2
+I 2
+#ident	"@(#)xenv:m68k/pathedit	1.27"
+E 2
+#
+D 2
+#	Master Pathedit for WE-32000 SGS
+E 2
+I 2
+#	Master Pathedit for MOTOROLA M68K SGS
+E 2
+#
+#
+
+D 2
+chmod 0755 ../../optim/m32/makefile ../../inc/m32 ../../xenv/m32
+chmod 0755 ../../xenv/m32/pted.unx ../../xenv/m32/pted.native ../../xenv/m32/pted.nonx ../../xenv/m32/pted.shlink ../../xenv/m32/pted.integr
+E 2
+I 2
+chmod 0755 ../../optim/m68k/makefile ../../inc/m68k ../../xenv/m68k
+chmod 0755 ../../xenv/m68k/pted.unx ../../xenv/m68k/pted.native 
+chmod 0755 ../../xenv/m68k/pted.nonx ../../xenv/m68k/pted.shlink 
+chmod 0755 ../../xenv/m68k/pted.integr
+E 2
+cont="T"
+D 2
+echo "Enter target machine name (3b15, 3b5, 3b2 or nonunix):  \c"
+E 2
+I 2
+echo "Enter target machine name (m68k, 3b15, 3b5, 3b2 or nonunix):  \c"
+E 2
+while [ "$cont" = "T" ]
+do
+	mach=`line`
+D 2
+	if [ "$mach" = "3b2"  -o "$mach" = "3b5" -o "$mach" = "3b15" ]
+E 2
+I 2
+	if [ "$mach" = "m68k" -o "$mach" = "3b2"  -o "$mach" = "3b5" -o "$mach" = "3b15" ]
+E 2
+	then
+		cont="F"
+	elif [ "$mach" = "nonunix" ]
+	then
+		exec pted.nonx
+
+	else
+D 2
+		echo "Illegal target machine name. Enter 3b15, 3b5, 3b2 or nonunix: \c"
+E 2
+I 2
+		echo "Illegal target machine name. Enter m68k, 3b15, 3b5, 3b2 or nonunix: \c"
+E 2
+	fi
+done
+
+echo "Are you building native SGS (y or n):	\c"
+x=`line`
+if [ "$x" = "y" ]
+then
+D 2
+	exec pted.native $mach
+E 2
+I 2
+	 exec pted.native $mach
+E 2
+else
+	if [ -x pted.integr ]
+	then
+		pted.integr $mach
+		if [ 0 -ne $? ]
+		then
+			echo "header files not setup - cannot continue"
+			exit 1
+		fi
+	fi
+	exec pted.unx $mach
+fi
+E 1

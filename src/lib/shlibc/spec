@@ -1,0 +1,288 @@
+#ident 	"@(#)shlibc:spec	1.3"
+##
+## Libc_s specification file
+##
+#address .text 0x80040000
+#address .data 0x800e0000
+#target /shlib/libc_s
+#branch
+_doprnt 1
+_bufsync 2
+_MaXfLoA 3
+_cleanup 4
+_filbuf	5
+_findbuf 6
+_findiop 7
+_flsbuf	8
+dbcmp%% 9
+_ltostr	10
+dbneg%% 11
+dbmul%% 12
+dbadd%% 13
+dbdiv%% 14
+ltodb%% 15
+fltodb%% 16
+dbtol%% 17-37
+_wrtchk	38
+_xflsbuf 39
+abs	40
+access	41
+atof	42
+atoi	43
+atol	44
+brk	45
+calloc	46
+cfree	47
+chdir	48
+chmod	49
+close	50
+creat	51
+ecvt	52
+fclose	53
+fcntl	54
+fcvt	55
+fflush	56
+fgetc	57
+fgets	58
+fopen	59
+fprintf	60
+fputc	61
+fputs	62
+fread	63
+free	64
+freopen	65
+frexp	66
+fseek	67
+fstat	68
+fwrite	69
+gcvt	70
+getchar	71
+getenv	72
+getopt	73
+getpid	74
+gets	75
+getw	76
+ioctl	77
+isatty	78-79
+kill	80
+ldexp	81
+lseek	82
+malloc	83
+memccpy	84
+memchr	85
+memcmp	86
+memcpy	87
+memset	88
+mktemp	89
+open	90
+printf	91
+putchar	92
+puts	93
+putw	94
+read	95
+realloc	96
+sbrk	97
+setbuf	98-104
+sprintf	105
+stat	106
+strcat	107
+strchr	108
+strcmp	109
+strcpy	110
+strlen	111
+strncat	112
+strncmp	113
+strncpy	114
+strrchr	115
+time	116
+tolower	117
+toupper	118
+ungetc	119
+unlink	120
+utime	121
+write	122-150
+#objects
+##
+##
+##
+##	 Imported symbols definition files
+##
+port/gen/ctype_def.o
+port/gen/mall_def.o
+port/stdio/stdio_def.o
+m68k/gen/gen_def.o
+##	 Read/Write Global data
+port/gen/opt_data.o
+
+##	 REST of *.o
+
+##	Some frequently used functions, called randomly
+
+m68k/gen/abs.o
+port/gen/tolower.o
+port/stdio/ungetc.o
+m68k/gen/strcmp.o
+
+##	malloc family
+
+port/gen/calloc.o
+port/gen/malloc.o
+
+##	infrequently used, page glue
+
+port/gen/strncat.o
+
+##	frequently used, randomly called
+
+port/gen/memccpy.o
+m68k/gen/memcpy.o
+port/gen/memset.o
+port/gen/strcat.o
+m68k/gen/strcpy.o
+m68k/gen/strlen.o
+
+##	stdio group
+
+port/stdio/filbuf.o
+port/stdio/fread.o
+
+##	stdio group
+
+port/stdio/fgetc.o
+port/stdio/fgets.o
+port/stdio/gets.o
+port/stdio/getchar.o
+port/stdio/getw.o
+
+##	stdio group
+
+port/stdio/fputs.o
+port/stdio/putw.o
+port/stdio/fputc.o
+port/stdio/putchar.o
+
+##	infrequently called, page glue
+
+port/gen/toupper.o
+
+##	stdio group
+
+port/stdio/fwrite.o
+port/stdio/flsbuf.o
+port/stdio/fseek.o
+
+##	infrequently called, page glue
+
+port/gen/strncpy.o
+
+##	stdio group
+
+port/gen/isatty.o
+port/stdio/fopen.o
+port/stdio/findiop.o
+
+##	stdio group (remainder)
+
+port/stdio/puts.o
+
+##	printf family
+
+port/print/fprintf.o
+port/print/printf.o
+port/print/sprintf.o
+
+##	floating point stuff, called from _dtop, _ptod and ecvt
+##		fills out page
+
+m68k/gen/frexp.o
+m68k/gen/ltostr.o
+
+##	page glue
+
+port/gen/memcmp.o
+
+##	printf internals
+
+port/print/doprnt.o
+
+##	process startup functions
+
+port/gen/mktemp.o
+port/gen/getenv.o
+port/gen/getopt.o
+port/stdio/setbuf.o
+m68k/sys/signal.o
+
+##	printf internals, floating pt
+
+m68k/gen/ecvt.o
+port/gen/gcvt.o
+m68k/crt/dbcmp.o
+m68k/crt/dbneg.o
+m68k/crt/dbmul.o
+m68k/crt/dbadd.o
+m68k/crt/dbdiv.o
+m68k/crt/ltodb.o
+m68k/crt/fltodb.o
+m68k/crt/dbtol.o
+m68k/crt/table.o
+m68k/crt/fpdata.o
+
+##	misc. stuff, infrequently, randomly called
+##		glue to cross page boundary
+
+port/gen/atol.o
+port/gen/atoi.o
+port/gen/memchr.o
+port/gen/strchr.o
+port/gen/strncmp.o
+port/gen/strrchr.o
+
+##	system calls
+
+m68k/crt/cerror.o
+m68k/sys/close.o
+m68k/sys/access.o
+m68k/sys/chdir.o
+m68k/sys/chmod.o
+m68k/sys/creat.o
+m68k/sys/fcntl.o
+m68k/sys/fstat.o
+m68k/sys/getpid.o
+m68k/sys/ioctl.o
+m68k/sys/kill.o
+m68k/sys/lseek.o
+m68k/sys/open.o
+m68k/sys/read.o
+m68k/sys/sbrk.o
+m68k/sys/stat.o
+m68k/sys/time.o
+m68k/sys/unlink.o
+m68k/sys/utime.o
+m68k/sys/write.o
+
+##	fp masks, misc
+
+port/gen/atof.o
+m68k/gen/ldexp.o
+
+#init ctype_def.o
+_libc__ctype		_ctype
+
+#init gen_def.o
+_libc__cleanup		_cleanup
+_libc_end		end
+_libc_environ		environ
+
+#init mall_def.o
+_libc_malloc		malloc
+_libc_free		free
+_libc_realloc		realloc
+	
+#init stdio_def.o
+_libc__sibuf		_sibuf
+_libc__sobuf		_sobuf
+_libc__smbuf		_smbuf
+_libc__iob		_iob
+_libc__lastbuf		_lastbuf
+_libc__bufendtab	_bufendtab

@@ -1,0 +1,3798 @@
+======== libc
+	if m68k ; then make -e -f libc.mk specific MACHINE=m68k PROF=; fi
+	#
+	# compile portable library modules
+	cd port; make -e CC=cc
+	cd gen; make -e  prof NONPROF=@#
+	cd print; make -e  prof NONPROF=@#
+	cd stdio; make -e  prof NONPROF=@#
+	cd sys; make -e  prof NONPROF=@#
+	cd gen; make -e  nonprof PROF=@#
+	cd print; make -e  nonprof PROF=@#
+	cd stdio; make -e  nonprof PROF=@#
+	cd sys; make -e  nonprof PROF=@#
+	#
+	# compile machine-dependent library modules
+	cd m68k; make -e CC=cc
+	cd crt ; make -e  nonprof PROF=@#
+	cd crt ; make -e  prof NONPROF=@#
+	make -e  prof NONPROF=@#
+	make -e  nonprof PROF=@#
+	#
+	# place portable modules in "object" directory, then overlay
+	# 	the machine-dependent modules.
+	rm -rf object
+	mkdir object
+	cp port/*/*.o object
+	cp port/*/*.p object
+	cp m68k/*/*.o object
+	cp m68k/*/*.p object
+	#
+	if [ -d m32mau ]; then \
+		cd m32mau; \
+		make -e CC=cc; \
+		cd .. ;\
+		cp m32mau/*/*.o object; \
+		cp m32mau/*/*.p object ;\
+	fi
+	#
+	# delete temporary libraries
+	rm -f lib.libc
+	rm -f libp.libc
+	#
+	# set aside run-time modules, which don't go in library archive!
+	cd object; for i in *crt?.o; do mv $i ..; done
+	#
+	# build archive out of the remaining modules.
+	cd object; make -e -f ../m68k/makefile archive \
+		AR=ar  LORDER=lorder  PROF=
+	#
+	# Note that "archive" is invoked with libc/object as current directory.
+	#
+	# figure out the correct ordering for all the archive modules except
+	#	cuexit and fakcu, which must go at end of archive.
+	mv cuexit.o cuexit.x
+	mv fakcu.o fakcu.x
+	lorder *.o | tsort >objlist
+UX tsort: INFORM: cycle in data
+	sigcall.o
+	sigcode.o
+	_sysm68k.o
+	mv cuexit.x cuexit.o
+	mv fakcu.x fakcu.o
+	#
+	# build the archive with the modules in correct order.
+	ar q ../lib.libc `cat objlist` fakcu.o cuexit.o
+ar: creating ../lib.libc
+	#
+	# build the profiled library archive, first renaming the
+	#	.p (profiled object) modules to .o
+	for i in *.p ; do mv $i `basename $i .p`.o ; done
+	if [ "" != "@#" ]; \
+	then \
+	ar q ../libp.libc `cat objlist` fakcu.o cuexit.o ; \
+	fi
+ar: creating ../libp.libc
+	rm -rf object
+	#
+	if pdp11 ; then make -e -f libc.mk specific MACHINE=pdp11 ; fi
+	if vax ;   then make -e -f libc.mk specific MACHINE=vax ; fi
+	if u3b ;   then make -e -f libc.mk specific MACHINE=u3b ; fi
+	if u3b15 || u3b5 || u3b2 ;  then make -e -f libc.mk DEFLIST=-DM32 \
+				specific MACHINE=m32 ; fi
+	if u370 ;  then make -e -f libc.mk specific MACHINE=u370 ; fi
+	#
+	# move the library or libraries into the correct directory
+	for i in *crt?.o; do cp $i /lib/$i ; rm -f $i ; done
+	cp lib.libc /lib/libc.a ; rm -f lib.libc
+	if [ ! -d /usr/lib/libp ]; then \
+		mkdir /usr/lib/libp; \
+	fi
+	cp libp.libc /usr/lib/libp/libc.a ; rm -f libp.libc
+	#
+	# remove intermediate files
+	rm -rf *.o lib*.libc lib*.contents obj*
+	cd port ;  make clobber
+	rm -f */*.o
+	rm -f */*.p
+	if m68k ; then cd m68k ; make clobber ; fi
+	rm -f *.o
+	rm -f *.p
+	rm -f *.s
+	rm -f */*.o
+	rm -f */*.p
+	if pdp11 ; then cd pdp11 ; make clobber ; fi
+	if vax ;   then cd vax ;   make clobber ; fi
+	if u3b ;   then cd u3b ;   make clobber ; fi
+	if u3b15 || u3b5 || u3b2;   then cd m32 ;   make clobber ; fi
+	if [ -d m32mau ]; then \
+		cd m32mau; \
+		make clobber; \
+		cd .. ;\
+	fi
+	if u370 ;  then cd u370 ;  make clobber ; fi
+======== libc881
+	if m68k ; then make -e -f  libc881.mk specific MACHINE=m68k ; fi
+	# PROCESSOR = M68020
+	# DBLALIGN  = NO
+	# FP        = m68881		
+	#
+	# compile portable library modules
+	cd ../libc/port; make -e CC=cc FP=m68881		 DBLALIGN=NO 
+	cd gen; make -e  prof NONPROF=@#
+a64l.c:
+	cc  -I../../inc -O -c -p a64l.c   && mv a64l.o a64l.p
+abort.c:
+	cc  -I../../inc -O -c -p abort.c   && mv abort.o abort.p
+"abort.c", line 25: warning: illegal pointer combination, op =
+"abort.c", line 25: warning: illegal pointer combination, op !=
+abs.c:
+	cc  -I../../inc -O -c -p abs.c   && mv abs.o abs.p
+assert.c:
+	cc  -I../../inc -O -c -p assert.c   && mv assert.o assert.p
+atof.c:
+	cc  -I../../inc -O -c -p atof.c   && mv atof.o atof.p
+atoi.c:
+	cc  -I../../inc -O -c -p atoi.c   && mv atoi.o atoi.p
+atol.c:
+	cc  -I../../inc -O -c -p atol.c   && mv atol.o atol.p
+bsearch.c:
+	cc  -I../../inc -O -c -p bsearch.c   && mv bsearch.o bsearch.p
+calloc.c:
+	cc  -I../../inc -O -c -p calloc.c   && mv calloc.o calloc.p
+clock.c:
+	cc  -I../../inc -O -c -p clock.c   && mv clock.o clock.p
+closedir.c:
+	cc  -I../../inc -O -c -p closedir.c   && mv closedir.o closedir.p
+crypt.c:
+	cc  -I../../inc -O -c -p crypt.c   && mv crypt.o crypt.p
+ctime.c:
+	cc  -I../../inc -O -c -p ctime.c   && mv ctime.o ctime.p
+ctype.c:
+	cc  -I../../inc -O -c -p ctype.c   && mv ctype.o ctype.p
+dial.c:
+	cc  -I../../inc -O -c -p dial.c   && mv dial.o dial.p
+"dial.c", line 150: warning: illegal pointer combination, op =
+"dial.c", line 151: warning: illegal pointer combination, op =
+drand48.c:
+	cc  -I../../inc -O -c -p drand48.c   && mv drand48.o drand48.p
+dup2.c:
+	cc  -I../../inc -O -c -p dup2.c   && mv dup2.o dup2.p
+errlst.c:
+	cc  -I../../inc -O -c -p errlst.c   && mv errlst.o errlst.p
+ecvt.c:
+	cc  -I../../inc -O -c -p ecvt.c   && mv ecvt.o ecvt.p
+execvp.c:
+	cc  -I../../inc -O -c -p execvp.c   && mv execvp.o execvp.p
+fakcu.c:
+	cc  -I../../inc -O -c -p fakcu.c   && mv fakcu.o fakcu.p
+frexp.c:
+	cc  -I../../inc -O -c -p frexp.c   && mv frexp.o frexp.p
+ftok.c:
+	cc  -I../../inc -O -c -p ftok.c   && mv ftok.o ftok.p
+ftw.c:
+	cc  -I../../inc -O -c -p ftw.c   && mv ftw.o ftw.p
+gcvt.c:
+	cc  -I../../inc -O -c -p gcvt.c   && mv gcvt.o gcvt.p
+getcwd.c:
+	cc  -I../../inc -O -c -p getcwd.c   && mv getcwd.o getcwd.p
+getenv.c:
+	cc  -I../../inc -O -c -p getenv.c   && mv getenv.o getenv.p
+getgrent.c:
+	cc  -I../../inc -O -c -p getgrent.c   && mv getgrent.o getgrent.p
+getgrgid.c:
+	cc  -I../../inc -O -c -p getgrgid.c   && mv getgrgid.o getgrgid.p
+getgrnam.c:
+	cc  -I../../inc -O -c -p getgrnam.c   && mv getgrnam.o getgrnam.p
+getlogin.c:
+	cc  -I../../inc -O -c -p getlogin.c   && mv getlogin.o getlogin.p
+getopt.c:
+	cc  -I../../inc -O -c -p getopt.c   && mv getopt.o getopt.p
+getpw.c:
+	cc  -I../../inc -O -c -p getpw.c   && mv getpw.o getpw.p
+getpwent.c:
+	cc  -I../../inc -O -c -p getpwent.c   && mv getpwent.o getpwent.p
+getpwnam.c:
+	cc  -I../../inc -O -c -p getpwnam.c   && mv getpwnam.o getpwnam.p
+getpwuid.c:
+	cc  -I../../inc -O -c -p getpwuid.c   && mv getpwuid.o getpwuid.p
+getut.c:
+	cc  -I../../inc -O -c -p getut.c   && mv getut.o getut.p
+hsearch.c:
+	cc  -I../../inc -O -c -p hsearch.c   && mv hsearch.o hsearch.p
+"hsearch.c", line 258: warning: enumeration type clash, operator ==
+isatty.c:
+	cc  -I../../inc -O -c -p isatty.c   && mv isatty.o isatty.p
+l3.c:
+	cc  -I../../inc -O -c -p l3.c   && mv l3.o l3.p
+l64a.c:
+	cc  -I../../inc -O -c -p l64a.c   && mv l64a.o l64a.p
+ldexp.c:
+	cc  -I../../inc -O -c -p ldexp.c   && mv ldexp.o ldexp.p
+lfind.c:
+	cc  -I../../inc -O -c -p lfind.c   && mv lfind.o lfind.p
+lsearch.c:
+	cc  -I../../inc -O -c -p lsearch.c   && mv lsearch.o lsearch.p
+malloc.c:
+	cc  -I../../inc -O -c -p malloc.c   && mv malloc.o malloc.p
+memccpy.c:
+	cc  -I../../inc -O -c -p memccpy.c   && mv memccpy.o memccpy.p
+memchr.c:
+	cc  -I../../inc -O -c -p memchr.c   && mv memchr.o memchr.p
+memcmp.c:
+	cc  -I../../inc -O -c -p memcmp.c   && mv memcmp.o memcmp.p
+memcpy.c:
+	cc  -I../../inc -O -c -p memcpy.c   && mv memcpy.o memcpy.p
+memset.c:
+	cc  -I../../inc -O -c -p memset.c   && mv memset.o memset.p
+mktemp.c:
+	cc  -I../../inc -O -c -p mktemp.c   && mv mktemp.o mktemp.p
+modf.c:
+	cc  -I../../inc -O -c -p modf.c   && mv modf.o modf.p
+mon.c:
+	cc  -I../../inc -O -c -p mon.c   && mv mon.o mon.p
+nlist.c:
+	cc  -I../../inc -O -c -p nlist.c   && mv nlist.o nlist.p
+opendir.c:
+	cc  -I../../inc -O -c -p opendir.c   && mv opendir.o opendir.p
+perror.c:
+	cc  -I../../inc -O -c -p perror.c   && mv perror.o perror.p
+putenv.c:
+	cc  -I../../inc -O -c -p putenv.c   && mv putenv.o putenv.p
+putpwent.c:
+	cc  -I../../inc -O -c -p putpwent.c   && mv putpwent.o putpwent.p
+qsort.c:
+	cc  -I../../inc -O -c -p qsort.c   && mv qsort.o qsort.p
+rand.c:
+	cc  -I../../inc -O -c -p rand.c   && mv rand.o rand.p
+readdir.c:
+	cc  -I../../inc -O -c -p readdir.c   && mv readdir.o readdir.p
+seekdir.c:
+	cc  -I../../inc -O -c -p seekdir.c   && mv seekdir.o seekdir.p
+sleep.c:
+	cc  -I../../inc -O -c -p sleep.c   && mv sleep.o sleep.p
+ssignal.c:
+	cc  -I../../inc -O -c -p ssignal.c   && mv ssignal.o ssignal.p
+"ssignal.c", line 38: warning: illegal pointer combination, op =
+"ssignal.c", line 50: warning: illegal pointer combination, op ==
+"ssignal.c", line 52: warning: illegal pointer combination, op ==
+"ssignal.c", line 55: warning: illegal pointer combination, op =
+strcat.c:
+	cc  -I../../inc -O -c -p strcat.c   && mv strcat.o strcat.p
+strchr.c:
+	cc  -I../../inc -O -c -p strchr.c   && mv strchr.o strchr.p
+strcmp.c:
+	cc  -I../../inc -O -c -p strcmp.c   && mv strcmp.o strcmp.p
+strcpy.c:
+	cc  -I../../inc -O -c -p strcpy.c   && mv strcpy.o strcpy.p
+strcspn.c:
+	cc  -I../../inc -O -c -p strcspn.c   && mv strcspn.o strcspn.p
+strdup.c:
+	cc  -I../../inc -O -c -p strdup.c   && mv strdup.o strdup.p
+strlen.c:
+	cc  -I../../inc -O -c -p strlen.c   && mv strlen.o strlen.p
+strncat.c:
+	cc  -I../../inc -O -c -p strncat.c   && mv strncat.o strncat.p
+strncmp.c:
+	cc  -I../../inc -O -c -p strncmp.c   && mv strncmp.o strncmp.p
+strncpy.c:
+	cc  -I../../inc -O -c -p strncpy.c   && mv strncpy.o strncpy.p
+strpbrk.c:
+	cc  -I../../inc -O -c -p strpbrk.c   && mv strpbrk.o strpbrk.p
+strrchr.c:
+	cc  -I../../inc -O -c -p strrchr.c   && mv strrchr.o strrchr.p
+strspn.c:
+	cc  -I../../inc -O -c -p strspn.c   && mv strspn.o strspn.p
+strtod.c:
+	cc  -I../../inc -O -c -p strtod.c   && mv strtod.o strtod.p
+strtok.c:
+	cc  -I../../inc -O -c -p strtok.c   && mv strtok.o strtok.p
+strtol.c:
+	cc  -I../../inc -O -c -p strtol.c   && mv strtol.o strtol.p
+swab.c:
+	cc  -I../../inc -O -c -p swab.c   && mv swab.o swab.p
+tell.c:
+	cc  -I../../inc -O -c -p tell.c   && mv tell.o tell.p
+telldir.c:
+	cc  -I../../inc -O -c -p telldir.c   && mv telldir.o telldir.p
+tfind.c:
+	cc  -I../../inc -O -c -p tfind.c   && mv tfind.o tfind.p
+tolower.c:
+	cc  -I../../inc -O -c -p tolower.c   && mv tolower.o tolower.p
+toupper.c:
+	cc  -I../../inc -O -c -p toupper.c   && mv toupper.o toupper.p
+tsearch.c:
+	cc  -I../../inc -O -c -p tsearch.c   && mv tsearch.o tsearch.p
+ttyname.c:
+	cc  -I../../inc -O -c -p ttyname.c   && mv ttyname.o ttyname.p
+ttyslot.c:
+	cc  -I../../inc -O -c -p ttyslot.c   && mv ttyslot.o ttyslot.p
+	cd print; make -e  prof NONPROF=@#
+doprnt.c:
+	cc  -I../../inc -O -c -p doprnt.c && mv doprnt.o doprnt.p
+fprintf.c:
+	cc  -I../../inc -O -c -p fprintf.c && mv fprintf.o fprintf.p
+printf.c:
+	cc  -I../../inc -O -c -p printf.c && mv printf.o printf.p
+sprintf.c:
+	cc  -I../../inc -O -c -p sprintf.c && mv sprintf.o sprintf.p
+vfprintf.c:
+	cc  -I../../inc -O -c -p vfprintf.c && mv vfprintf.o vfprintf.p
+vprintf.c:
+	cc  -I../../inc -O -c -p vprintf.c && mv vprintf.o vprintf.p
+vsprintf.c:
+	cc  -I../../inc -O -c -p vsprintf.c && mv vsprintf.o vsprintf.p
+	cd stdio; make -e  prof NONPROF=@#
+clrerr.c:
+	cc  -I../../inc -O  -c -p clrerr.c && mv clrerr.o clrerr.p
+ctermid.c:
+	cc  -I../../inc -O  -c -p ctermid.c && mv ctermid.o ctermid.p
+cuserid.c:
+	cc  -I../../inc -O  -c -p cuserid.c && mv cuserid.o cuserid.p
+data.c:
+	cc  -I../../inc -O  -c -p data.c && mv data.o data.p
+doscan.c:
+	cc  -I../../inc -O  -c -p doscan.c && mv doscan.o doscan.p
+fdopen.c:
+	cc  -I../../inc -O  -c -p fdopen.c && mv fdopen.o fdopen.p
+fgetc.c:
+	cc  -I../../inc -O  -c -p fgetc.c && mv fgetc.o fgetc.p
+fgets.c:
+	cc  -I../../inc -O  -c -p fgets.c && mv fgets.o fgets.p
+filbuf.c:
+	cc  -I../../inc -O  -c -p filbuf.c && mv filbuf.o filbuf.p
+findiop.c:
+	cc  -I../../inc -O  -c -p findiop.c && mv findiop.o findiop.p
+flsbuf.c:
+	cc  -I../../inc -O  -c -p flsbuf.c && mv flsbuf.o flsbuf.p
+fopen.c:
+	cc  -I../../inc -O  -c -p fopen.c && mv fopen.o fopen.p
+fputc.c:
+	cc  -I../../inc -O  -c -p fputc.c && mv fputc.o fputc.p
+fputs.c:
+	cc  -I../../inc -O  -c -p fputs.c && mv fputs.o fputs.p
+fread.c:
+	cc  -I../../inc -O  -c -p fread.c && mv fread.o fread.p
+fseek.c:
+	cc  -I../../inc -O  -c -p fseek.c && mv fseek.o fseek.p
+ftell.c:
+	cc  -I../../inc -O  -c -p ftell.c && mv ftell.o ftell.p
+fwrite.c:
+	cc  -I../../inc -O  -c -p fwrite.c && mv fwrite.o fwrite.p
+getchar.c:
+	cc  -I../../inc -O  -c -p getchar.c && mv getchar.o getchar.p
+getpass.c:
+	cc  -I../../inc -O  -c -p getpass.c && mv getpass.o getpass.p
+"getpass.c", line 41: warning: illegal pointer combination, op =
+gets.c:
+	cc  -I../../inc -O  -c -p gets.c && mv gets.o gets.p
+getw.c:
+	cc  -I../../inc -O  -c -p getw.c && mv getw.o getw.p
+popen.c:
+	cc  -I../../inc -O  -c -p popen.c && mv popen.o popen.p
+"popen.c", line 72: warning: illegal pointer combination, op =
+"popen.c", line 73: warning: illegal pointer combination, op =
+"popen.c", line 74: warning: illegal pointer combination, op =
+putchar.c:
+	cc  -I../../inc -O  -c -p putchar.c && mv putchar.o putchar.p
+puts.c:
+	cc  -I../../inc -O  -c -p puts.c && mv puts.o puts.p
+putw.c:
+	cc  -I../../inc -O  -c -p putw.c && mv putw.o putw.p
+rew.c:
+	cc  -I../../inc -O  -c -p rew.c && mv rew.o rew.p
+scanf.c:
+	cc  -I../../inc -O  -c -p scanf.c && mv scanf.o scanf.p
+setbuf.c:
+	cc  -I../../inc -O  -c -p setbuf.c && mv setbuf.o setbuf.p
+setvbuf.c:
+	cc  -I../../inc -O  -c -p setvbuf.c && mv setvbuf.o setvbuf.p
+system.c:
+	cc  -I../../inc -O  -c -p system.c && mv system.o system.p
+"system.c", line 30: warning: illegal pointer combination, op =
+"system.c", line 31: warning: illegal pointer combination, op =
+tempnam.c:
+	cc  -I../../inc -O  -c -p tempnam.c && mv tempnam.o tempnam.p
+tmpfile.c:
+	cc  -I../../inc -O  -c -p tmpfile.c && mv tmpfile.o tmpfile.p
+tmpnam.c:
+	cc  -I../../inc -O  -c -p tmpnam.c && mv tmpnam.o tmpnam.p
+ungetc.c:
+	cc  -I../../inc -O  -c -p ungetc.c && mv ungetc.o ungetc.p
+	cd sys; make -e  prof NONPROF=@#
+execl.c:
+	cc  -I../../inc -O -c -p execl.c  && mv execl.o execl.p
+execle.c:
+	cc  -I../../inc -O -c -p execle.c  && mv execle.o execle.p
+execv.c:
+	cc  -I../../inc -O -c -p execv.c  && mv execv.o execv.p
+lockf.c:
+	cc  -I../../inc -O -c -p lockf.c  && mv lockf.o lockf.p
+msgsys.c:
+	cc  -I../../inc -O -c -p msgsys.c  && mv msgsys.o msgsys.p
+semsys.c:
+	cc  -I../../inc -O -c -p semsys.c  && mv semsys.o semsys.p
+shmsys.c:
+	cc  -I../../inc -O -c -p shmsys.c  && mv shmsys.o shmsys.p
+sigcall.c:
+	cc  -I../../inc -O -c -p sigcall.c  && mv sigcall.o sigcall.p
+"sigcall.c", line 67: warning: illegal pointer combination, op =
+"sigcall.c", line 98: warning: illegal pointer combination, op ==
+	cd gen; make -e  nonprof PROF=@#
+a64l.c:
+	cc   -I../../inc -O -c a64l.c
+abort.c:
+	cc   -I../../inc -O -c abort.c
+"abort.c", line 25: warning: illegal pointer combination, op =
+"abort.c", line 25: warning: illegal pointer combination, op !=
+abs.c:
+	cc   -I../../inc -O -c abs.c
+assert.c:
+	cc   -I../../inc -O -c assert.c
+atof.c:
+	cc   -I../../inc -O -c atof.c
+atoi.c:
+	cc   -I../../inc -O -c atoi.c
+atol.c:
+	cc   -I../../inc -O -c atol.c
+bsearch.c:
+	cc   -I../../inc -O -c bsearch.c
+calloc.c:
+	cc   -I../../inc -O -c calloc.c
+clock.c:
+	cc   -I../../inc -O -c clock.c
+closedir.c:
+	cc   -I../../inc -O -c closedir.c
+crypt.c:
+	cc   -I../../inc -O -c crypt.c
+ctime.c:
+	cc   -I../../inc -O -c ctime.c
+ctype.c:
+	cc   -I../../inc -O -c ctype.c
+ctype_def.c:
+	cc   -I../../inc -O -c ctype_def.c
+dial.c:
+	cc   -I../../inc -O -c dial.c
+"dial.c", line 150: warning: illegal pointer combination, op =
+"dial.c", line 151: warning: illegal pointer combination, op =
+drand48.c:
+	cc   -I../../inc -O -c drand48.c
+dup2.c:
+	cc   -I../../inc -O -c dup2.c
+ecvt.c:
+	cc   -I../../inc -O -c ecvt.c
+errlst.c:
+	cc   -I../../inc -O -c errlst.c
+err_def.c:
+	cc   -I../../inc -O -c err_def.c
+execvp.c:
+	cc   -I../../inc -O -c execvp.c
+fakcu.c:
+	cc   -I../../inc -O -c fakcu.c
+frexp.c:
+	cc   -I../../inc -O -c frexp.c
+ftok.c:
+	cc   -I../../inc -O -c ftok.c
+ftw.c:
+	cc   -I../../inc -O -c ftw.c
+gcvt.c:
+	cc   -I../../inc -O -c gcvt.c
+getcwd.c:
+	cc   -I../../inc -O -c getcwd.c
+getenv.c:
+	cc   -I../../inc -O -c getenv.c
+getgrent.c:
+	cc   -I../../inc -O -c getgrent.c
+getgrgid.c:
+	cc   -I../../inc -O -c getgrgid.c
+getgrnam.c:
+	cc   -I../../inc -O -c getgrnam.c
+getlogin.c:
+	cc   -I../../inc -O -c getlogin.c
+getopt.c:
+	cc   -I../../inc -O -c getopt.c
+getpw.c:
+	cc   -I../../inc -O -c getpw.c
+getpwent.c:
+	cc   -I../../inc -O -c getpwent.c
+getpwnam.c:
+	cc   -I../../inc -O -c getpwnam.c
+getpwuid.c:
+	cc   -I../../inc -O -c getpwuid.c
+getut.c:
+	cc   -I../../inc -O -c getut.c
+grent_def.c:
+	cc   -I../../inc -O -c grent_def.c
+hsearch.c:
+	cc   -I../../inc -O -c hsearch.c
+"hsearch.c", line 258: warning: enumeration type clash, operator ==
+isatty.c:
+	cc   -I../../inc -O -c isatty.c
+l3.c:
+	cc   -I../../inc -O -c l3.c
+l64a.c:
+	cc   -I../../inc -O -c l64a.c
+ldexp.c:
+	cc   -I../../inc -O -c ldexp.c
+lfind.c:
+	cc   -I../../inc -O -c lfind.c
+lsearch.c:
+	cc   -I../../inc -O -c lsearch.c
+malloc.c:
+	cc   -I../../inc -O -c malloc.c
+mall_def.c:
+	cc   -I../../inc -O -c mall_def.c
+memccpy.c:
+	cc   -I../../inc -O -c memccpy.c
+memchr.c:
+	cc   -I../../inc -O -c memchr.c
+memcmp.c:
+	cc   -I../../inc -O -c memcmp.c
+memcpy.c:
+	cc   -I../../inc -O -c memcpy.c
+memset.c:
+	cc   -I../../inc -O -c memset.c
+mktemp.c:
+	cc   -I../../inc -O -c mktemp.c
+modf.c:
+	cc   -I../../inc -O -c modf.c
+mon.c:
+	cc   -I../../inc -O -c mon.c
+nlist.c:
+	cc   -I../../inc -O -c nlist.c
+opendir.c:
+	cc   -I../../inc -O -c opendir.c
+opt_data.c:
+	cc   -I../../inc -O -c opt_data.c
+perror.c:
+	cc   -I../../inc -O -c perror.c
+putenv.c:
+	cc   -I../../inc -O -c putenv.c
+putpwent.c:
+	cc   -I../../inc -O -c putpwent.c
+pwent_def.c:
+	cc   -I../../inc -O -c pwent_def.c
+qsort.c:
+	cc   -I../../inc -O -c qsort.c
+rand.c:
+	cc   -I../../inc -O -c rand.c
+readdir.c:
+	cc   -I../../inc -O -c readdir.c
+seekdir.c:
+	cc   -I../../inc -O -c seekdir.c
+sleep.c:
+	cc   -I../../inc -O -c sleep.c
+ssignal.c:
+	cc   -I../../inc -O -c ssignal.c
+"ssignal.c", line 38: warning: illegal pointer combination, op =
+"ssignal.c", line 50: warning: illegal pointer combination, op ==
+"ssignal.c", line 52: warning: illegal pointer combination, op ==
+"ssignal.c", line 55: warning: illegal pointer combination, op =
+strcat.c:
+	cc   -I../../inc -O -c strcat.c
+strchr.c:
+	cc   -I../../inc -O -c strchr.c
+strcmp.c:
+	cc   -I../../inc -O -c strcmp.c
+strcpy.c:
+	cc   -I../../inc -O -c strcpy.c
+strcspn.c:
+	cc   -I../../inc -O -c strcspn.c
+strdup.c:
+	cc   -I../../inc -O -c strdup.c
+strlen.c:
+	cc   -I../../inc -O -c strlen.c
+strncat.c:
+	cc   -I../../inc -O -c strncat.c
+strncmp.c:
+	cc   -I../../inc -O -c strncmp.c
+strncpy.c:
+	cc   -I../../inc -O -c strncpy.c
+strpbrk.c:
+	cc   -I../../inc -O -c strpbrk.c
+strrchr.c:
+	cc   -I../../inc -O -c strrchr.c
+strspn.c:
+	cc   -I../../inc -O -c strspn.c
+strtod.c:
+	cc   -I../../inc -O -c strtod.c
+strtok.c:
+	cc   -I../../inc -O -c strtok.c
+strtol.c:
+	cc   -I../../inc -O -c strtol.c
+swab.c:
+	cc   -I../../inc -O -c swab.c
+tell.c:
+	cc   -I../../inc -O -c tell.c
+telldir.c:
+	cc   -I../../inc -O -c telldir.c
+tfind.c:
+	cc   -I../../inc -O -c tfind.c
+tolower.c:
+	cc   -I../../inc -O -c tolower.c
+toupper.c:
+	cc   -I../../inc -O -c toupper.c
+tsearch.c:
+	cc   -I../../inc -O -c tsearch.c
+ttyname.c:
+	cc   -I../../inc -O -c ttyname.c
+ttyslot.c:
+	cc   -I../../inc -O -c ttyslot.c
+	cd print; make -e  nonprof PROF=@#
+doprnt.c:
+	cc   -I../../inc -O -c doprnt.c
+fprintf.c:
+	cc   -I../../inc -O -c fprintf.c
+printf.c:
+	cc   -I../../inc -O -c printf.c
+sprintf.c:
+	cc   -I../../inc -O -c sprintf.c
+vfprintf.c:
+	cc   -I../../inc -O -c vfprintf.c
+vprintf.c:
+	cc   -I../../inc -O -c vprintf.c
+vsprintf.c:
+	cc   -I../../inc -O -c vsprintf.c
+	cd stdio; make -e  nonprof PROF=@#
+clrerr.c:
+	cc   -I../../inc -O  -c clrerr.c
+ctermid.c:
+	cc   -I../../inc -O  -c ctermid.c
+cuserid.c:
+	cc   -I../../inc -O  -c cuserid.c
+data.c:
+	cc   -I../../inc -O  -c data.c
+doscan.c:
+	cc   -I../../inc -O  -c doscan.c
+fdopen.c:
+	cc   -I../../inc -O  -c fdopen.c
+fgetc.c:
+	cc   -I../../inc -O  -c fgetc.c
+fgets.c:
+	cc   -I../../inc -O  -c fgets.c
+filbuf.c:
+	cc   -I../../inc -O  -c filbuf.c
+findiop.c:
+	cc   -I../../inc -O  -c findiop.c
+flsbuf.c:
+	cc   -I../../inc -O  -c flsbuf.c
+fopen.c:
+	cc   -I../../inc -O  -c fopen.c
+fputc.c:
+	cc   -I../../inc -O  -c fputc.c
+fputs.c:
+	cc   -I../../inc -O  -c fputs.c
+fread.c:
+	cc   -I../../inc -O  -c fread.c
+fseek.c:
+	cc   -I../../inc -O  -c fseek.c
+ftell.c:
+	cc   -I../../inc -O  -c ftell.c
+fwrite.c:
+	cc   -I../../inc -O  -c fwrite.c
+getchar.c:
+	cc   -I../../inc -O  -c getchar.c
+getpass.c:
+	cc   -I../../inc -O  -c getpass.c
+"getpass.c", line 41: warning: illegal pointer combination, op =
+gets.c:
+	cc   -I../../inc -O  -c gets.c
+getw.c:
+	cc   -I../../inc -O  -c getw.c
+popen.c:
+	cc   -I../../inc -O  -c popen.c
+"popen.c", line 72: warning: illegal pointer combination, op =
+"popen.c", line 73: warning: illegal pointer combination, op =
+"popen.c", line 74: warning: illegal pointer combination, op =
+putchar.c:
+	cc   -I../../inc -O  -c putchar.c
+puts.c:
+	cc   -I../../inc -O  -c puts.c
+putw.c:
+	cc   -I../../inc -O  -c putw.c
+rew.c:
+	cc   -I../../inc -O  -c rew.c
+scanf.c:
+	cc   -I../../inc -O  -c scanf.c
+setbuf.c:
+	cc   -I../../inc -O  -c setbuf.c
+setvbuf.c:
+	cc   -I../../inc -O  -c setvbuf.c
+stdio_def.c:
+	cc   -I../../inc -O  -c stdio_def.c
+system.c:
+	cc   -I../../inc -O  -c system.c
+"system.c", line 30: warning: illegal pointer combination, op =
+"system.c", line 31: warning: illegal pointer combination, op =
+tempnam.c:
+	cc   -I../../inc -O  -c tempnam.c
+tmpfile.c:
+	cc   -I../../inc -O  -c tmpfile.c
+tmpnam.c:
+	cc   -I../../inc -O  -c tmpnam.c
+ungetc.c:
+	cc   -I../../inc -O  -c ungetc.c
+	cd sys; make -e  nonprof PROF=@#
+execl.c:
+	cc   -I../../inc -O -c execl.c
+execle.c:
+	cc   -I../../inc -O -c execle.c
+execv.c:
+	cc   -I../../inc -O -c execv.c
+lockf.c:
+	cc   -I../../inc -O -c lockf.c
+msgsys.c:
+	cc   -I../../inc -O -c msgsys.c
+semsys.c:
+	cc   -I../../inc -O -c semsys.c
+shmsys.c:
+	cc   -I../../inc -O -c shmsys.c
+sigcall.c:
+	cc   -I../../inc -O -c sigcall.c
+"sigcall.c", line 67: warning: illegal pointer combination, op =
+"sigcall.c", line 98: warning: illegal pointer combination, op ==
+	#
+	# compile machine-dependent library modules
+	cd ../libc/m68k; make -e all CC=cc FP=m68881		 DBLALIGN=NO 
+	cd crt ; make -e  nonprof PROF=@#
+addmag.c:
+	cc -O -S addmag.c
+	sed -f massage.sed <addmag.s >temp
+	mv temp addmag.s
+	cc -O -c addmag.s
+	rm addmag.s
+fladd.c:
+	cc -O -S fladd.c
+	sed -f massage.sed <fladd.s >temp
+	mv temp fladd.s
+	cc -O -c fladd.s
+	rm fladd.s
+flcmp.c:
+	cc -O -S flcmp.c
+	sed -f massage.sed <flcmp.s >temp
+	mv temp flcmp.s
+	cc -O -c flcmp.s
+	rm flcmp.s
+fldiv.c:
+	cc -O -S fldiv.c
+	sed -f massage.sed <fldiv.s >temp
+	mv temp fldiv.s
+	cc -O -c fldiv.s
+	rm fldiv.s
+flmul.c:
+	cc -O -S flmul.c
+	sed -f massage.sed <flmul.s >temp
+	mv temp flmul.s
+	cc -O -c flmul.s
+	rm flmul.s
+flneg.c:
+	cc -O -S flneg.c
+	sed -f massage.sed <flneg.s >temp
+	mv temp flneg.s
+	cc -O -c flneg.s
+	rm flneg.s
+flsub.c:
+	cc -O -S flsub.c
+	sed -f massage.sed <flsub.s >temp
+	mv temp flsub.s
+	cc -O -c flsub.s
+	rm flsub.s
+fltst.c:
+	cc -O -S fltst.c
+	sed -f massage.sed <fltst.s >temp
+	mv temp fltst.s
+	cc -O -c fltst.s
+	rm fltst.s
+ftol.c:
+	cc -O -S ftol.c
+	sed -f massage.sed <ftol.s >temp
+	mv temp ftol.s
+	cc -O -c ftol.s
+	rm ftol.s
+itof.c:
+	cc -O -S itof.c
+	sed -f massage.sed <itof.s >temp
+	mv temp itof.s
+	cc -O -c itof.s
+	rm itof.s
+ltof.c:
+	cc -O -S ltof.c
+	sed -f massage.sed <ltof.s >temp
+	mv temp ltof.s
+	cc -O -c ltof.s
+	rm ltof.s
+submag.c:
+	cc -O -S submag.c
+	sed -f massage.sed <submag.s >temp
+	mv temp submag.s
+	cc -O -c submag.s
+	rm submag.s
+uitof.c:
+	cc -O -S uitof.c
+	sed -f massage.sed <uitof.s >temp
+	mv temp uitof.s
+	cc -O -c uitof.s
+	rm uitof.s
+ultof.c:
+	cc -O -S ultof.c
+	sed -f massage.sed <ultof.s >temp
+	mv temp ultof.s
+	cc -O -c ultof.s
+	rm ultof.s
+dbadd.s:
+	m4 ../m4.def -DMCOUNT=#  dbadd.s   > temp.s   && \
+	cc -O -c temp.s && mv temp.o dbadd.o
+dbcmp.s:
+	m4 ../m4.def -DMCOUNT=#  dbcmp.s   > temp.s   && \
+	cc -O -c temp.s && mv temp.o dbcmp.o
+dbdiv.s:
+	m4 ../m4.def -DMCOUNT=#  dbdiv.s   > temp.s   && \
+	cc -O -c temp.s && mv temp.o dbdiv.o
+dbmul.s:
+	m4 ../m4.def -DMCOUNT=#  dbmul.s   > temp.s   && \
+	cc -O -c temp.s && mv temp.o dbmul.o
+dbneg.s:
+	m4 ../m4.def -DMCOUNT=#  dbneg.s   > temp.s   && \
+	cc -O -c temp.s && mv temp.o dbneg.o
+dbtofl.s:
+	m4 ../m4.def -DMCOUNT=#  dbtofl.s   > temp.s   && \
+	cc -O -c temp.s && mv temp.o dbtofl.o
+dbtol.s:
+	m4 ../m4.def -DMCOUNT=#  dbtol.s   > temp.s   && \
+	cc -O -c temp.s && mv temp.o dbtol.o
+dbtst.s:
+	m4 ../m4.def -DMCOUNT=#  dbtst.s   > temp.s   && \
+	cc -O -c temp.s && mv temp.o dbtst.o
+fltodb.s:
+	m4 ../m4.def -DMCOUNT=#  fltodb.s   > temp.s   && \
+	cc -O -c temp.s && mv temp.o fltodb.o
+ltodb.s:
+	m4 ../m4.def -DMCOUNT=#  ltodb.s   > temp.s   && \
+	cc -O -c temp.s && mv temp.o ltodb.o
+fpdata.s:
+	m4 ../m4.def -DMCOUNT=#  fpdata.s   > temp.s   && \
+	cc -O -c temp.s && mv temp.o fpdata.o
+table.s:
+	m4 ../m4.def -DMCOUNT=#  table.s   > temp.s   && \
+	cc -O -c temp.s && mv temp.o table.o
+chrtab.c:
+	cc -O -S chrtab.c
+	sed -f massage.sed <chrtab.s >temp
+	mv temp chrtab.s
+	cc -O -c chrtab.s
+	rm chrtab.s
+ldiv.s:
+	m4 ../m4.def -DMCOUNT=#  ldiv.s   > temp.s   && \
+	cc -O -c temp.s && mv temp.o ldiv.o
+lmul.s:
+	m4 ../m4.def -DMCOUNT=#  lmul.s   > temp.s   && \
+	cc -O -c temp.s && mv temp.o lmul.o
+cerror.s:
+	m4 ../m4.def -DMCOUNT=#  cerror.s   > temp.s   && \
+	cc -O -c temp.s && mv temp.o cerror.o
+sigcode.s:
+	m4 ../m4.def -DMCOUNT=#  sigcode.s   > temp.s   && \
+	cc -O -c temp.s && mv temp.o sigcode.o
+spgrow.s:
+	m4 ../m4.def -DMCOUNT=#  spgrow.s   > temp.s   && \
+	cc -O -c temp.s && mv temp.o spgrow.o
+mcount.s:
+	m4 ../m4.def -DMCOUNT=#  mcount.s   > temp.s   && \
+	cc -O -c temp.s && mv temp.o mcount.o
+	cd crt ; make -e  prof NONPROF=@#
+addmag.c:
+	if test -f addmag.o ; then mv addmag.o tmp.o ; fi ; \
+		cc -p -O -S addmag.c
+	sed -f massage.sed <addmag.s >temp
+	mv temp addmag.s
+	cc -p -O -c addmag.s && mv addmag.o addmag.p ; \
+		if test -f tmp.o ; then mv tmp.o addmag.o ; fi
+	rm addmag.s
+fladd.c:
+	if test -f fladd.o ; then mv fladd.o tmp.o ; fi ; \
+		cc -p -O -S fladd.c
+	sed -f massage.sed <fladd.s >temp
+	mv temp fladd.s
+	cc -p -O -c fladd.s && mv fladd.o fladd.p ; \
+		if test -f tmp.o ; then mv tmp.o fladd.o ; fi
+	rm fladd.s
+flcmp.c:
+	if test -f flcmp.o ; then mv flcmp.o tmp.o ; fi ; \
+		cc -p -O -S flcmp.c
+	sed -f massage.sed <flcmp.s >temp
+	mv temp flcmp.s
+	cc -p -O -c flcmp.s && mv flcmp.o flcmp.p ; \
+		if test -f tmp.o ; then mv tmp.o flcmp.o ; fi
+	rm flcmp.s
+fldiv.c:
+	if test -f fldiv.o ; then mv fldiv.o tmp.o ; fi ; \
+		cc -p -O -S fldiv.c
+	sed -f massage.sed <fldiv.s >temp
+	mv temp fldiv.s
+	cc -p -O -c fldiv.s && mv fldiv.o fldiv.p ; \
+		if test -f tmp.o ; then mv tmp.o fldiv.o ; fi
+	rm fldiv.s
+flmul.c:
+	if test -f flmul.o ; then mv flmul.o tmp.o ; fi ; \
+		cc -p -O -S flmul.c
+	sed -f massage.sed <flmul.s >temp
+	mv temp flmul.s
+	cc -p -O -c flmul.s && mv flmul.o flmul.p ; \
+		if test -f tmp.o ; then mv tmp.o flmul.o ; fi
+	rm flmul.s
+flneg.c:
+	if test -f flneg.o ; then mv flneg.o tmp.o ; fi ; \
+		cc -p -O -S flneg.c
+	sed -f massage.sed <flneg.s >temp
+	mv temp flneg.s
+	cc -p -O -c flneg.s && mv flneg.o flneg.p ; \
+		if test -f tmp.o ; then mv tmp.o flneg.o ; fi
+	rm flneg.s
+flsub.c:
+	if test -f flsub.o ; then mv flsub.o tmp.o ; fi ; \
+		cc -p -O -S flsub.c
+	sed -f massage.sed <flsub.s >temp
+	mv temp flsub.s
+	cc -p -O -c flsub.s && mv flsub.o flsub.p ; \
+		if test -f tmp.o ; then mv tmp.o flsub.o ; fi
+	rm flsub.s
+fltst.c:
+	if test -f fltst.o ; then mv fltst.o tmp.o ; fi ; \
+		cc -p -O -S fltst.c
+	sed -f massage.sed <fltst.s >temp
+	mv temp fltst.s
+	cc -p -O -c fltst.s && mv fltst.o fltst.p ; \
+		if test -f tmp.o ; then mv tmp.o fltst.o ; fi
+	rm fltst.s
+ftol.c:
+	if test -f ftol.o ; then mv ftol.o tmp.o ; fi ; \
+		cc -p -O -S ftol.c
+	sed -f massage.sed <ftol.s >temp
+	mv temp ftol.s
+	cc -p -O -c ftol.s && mv ftol.o ftol.p ; \
+		if test -f tmp.o ; then mv tmp.o ftol.o ; fi
+	rm ftol.s
+itof.c:
+	if test -f itof.o ; then mv itof.o tmp.o ; fi ; \
+		cc -p -O -S itof.c
+	sed -f massage.sed <itof.s >temp
+	mv temp itof.s
+	cc -p -O -c itof.s && mv itof.o itof.p ; \
+		if test -f tmp.o ; then mv tmp.o itof.o ; fi
+	rm itof.s
+ltof.c:
+	if test -f ltof.o ; then mv ltof.o tmp.o ; fi ; \
+		cc -p -O -S ltof.c
+	sed -f massage.sed <ltof.s >temp
+	mv temp ltof.s
+	cc -p -O -c ltof.s && mv ltof.o ltof.p ; \
+		if test -f tmp.o ; then mv tmp.o ltof.o ; fi
+	rm ltof.s
+submag.c:
+	if test -f submag.o ; then mv submag.o tmp.o ; fi ; \
+		cc -p -O -S submag.c
+	sed -f massage.sed <submag.s >temp
+	mv temp submag.s
+	cc -p -O -c submag.s && mv submag.o submag.p ; \
+		if test -f tmp.o ; then mv tmp.o submag.o ; fi
+	rm submag.s
+uitof.c:
+	if test -f uitof.o ; then mv uitof.o tmp.o ; fi ; \
+		cc -p -O -S uitof.c
+	sed -f massage.sed <uitof.s >temp
+	mv temp uitof.s
+	cc -p -O -c uitof.s && mv uitof.o uitof.p ; \
+		if test -f tmp.o ; then mv tmp.o uitof.o ; fi
+	rm uitof.s
+ultof.c:
+	if test -f ultof.o ; then mv ultof.o tmp.o ; fi ; \
+		cc -p -O -S ultof.c
+	sed -f massage.sed <ultof.s >temp
+	mv temp ultof.s
+	cc -p -O -c ultof.s && mv ultof.o ultof.p ; \
+		if test -f tmp.o ; then mv tmp.o ultof.o ; fi
+	rm ultof.s
+chrtab.c:
+	if test -f chrtab.o ; then mv chrtab.o tmp.o ; fi ; \
+		cc -p -O -S chrtab.c
+	sed -f massage.sed <chrtab.s >temp
+	mv temp chrtab.s
+	cc -p -O -c chrtab.s && mv chrtab.o chrtab.p ; \
+		if test -f tmp.o ; then mv tmp.o chrtab.o ; fi
+	rm chrtab.s
+	make -e  prof NONPROF=@#
+csu/crt0.s:
+	m4 m4.def mcount.def  csu/crt0.s   > crt0.s 
+	cc  -O -c -p crt0.s  && mv crt0.o csu/crt0.p
+	rm crt0.s
+csu/mcrt0.s:
+	m4 m4.def mcount.def  csu/mcrt0.s   > mcrt0.s 
+	cc  -O -c -p mcrt0.s  && mv mcrt0.o csu/mcrt0.p
+	rm mcrt0.s
+csu/initfpu.s:
+	m4 m4.def mcount.def  csu/initfpu.s   > initfpu.s 
+	cc  -O -c -p initfpu.s  && mv initfpu.o csu/initfpu.p
+	rm initfpu.s
+gen/abs.s:
+	m4 m4.def mcount.def  gen/abs.s   > abs.s 
+	cc  -O -c -p abs.s  && mv abs.o gen/abs.p
+	rm abs.s
+gen/cuexit.s:
+	m4 m4.def mcount.def  gen/cuexit.s   > cuexit.s 
+	cc  -O -c -p cuexit.s  && mv cuexit.o gen/cuexit.p
+	rm cuexit.s
+gen/ecvt.c:
+	cc  -I../inc -O -c -p gen/ecvt.c  && mv ecvt.o gen/ecvt.p
+gen/frexp.c:
+	cc  -I../inc -O -c -p gen/frexp.c  && mv frexp.o gen/frexp.p
+gen/ltostr.c:
+	cc  -I../inc -O -c -p gen/ltostr.c  && mv ltostr.o gen/ltostr.p
+gen/memcpy.s:
+	m4 m4.def mcount.def  gen/memcpy.s   > memcpy.s 
+	cc  -O -c -p memcpy.s  && mv memcpy.o gen/memcpy.p
+	rm memcpy.s
+gen/setjmp.s:
+	m4 m4.def mcount.def  gen/setjmp.s   > setjmp.s 
+	cc  -O -c -p setjmp.s  && mv setjmp.o gen/setjmp.p
+	rm setjmp.s
+gen/strcpy.s:
+	m4 m4.def mcount.def  gen/strcpy.s   > strcpy.s 
+	cc  -O -c -p strcpy.s  && mv strcpy.o gen/strcpy.p
+	rm strcpy.s
+gen/strcmp.s:
+	m4 m4.def mcount.def  gen/strcmp.s   > strcmp.s 
+	cc  -O -c -p strcmp.s  && mv strcmp.o gen/strcmp.p
+	rm strcmp.s
+gen/strlen.s:
+	m4 m4.def mcount.def  gen/strlen.s   > strlen.s 
+	cc  -O -c -p strlen.s  && mv strlen.o gen/strlen.p
+	rm strlen.s
+gen/sysm68k.c:
+	cc  -I../inc -O -c -p gen/sysm68k.c  && mv sysm68k.o gen/sysm68k.p
+sys/access.s:
+	m4 m4.def mcount.def  sys/access.s   > access.s 
+	cc  -O -c -p access.s  && mv access.o sys/access.p
+	rm access.s
+sys/acct.s:
+	m4 m4.def mcount.def  sys/acct.s   > acct.s 
+	cc  -O -c -p acct.s  && mv acct.o sys/acct.p
+	rm acct.s
+sys/alarm.s:
+	m4 m4.def mcount.def  sys/alarm.s   > alarm.s 
+	cc  -O -c -p alarm.s  && mv alarm.o sys/alarm.p
+	rm alarm.s
+sys/chdir.s:
+	m4 m4.def mcount.def  sys/chdir.s   > chdir.s 
+	cc  -O -c -p chdir.s  && mv chdir.o sys/chdir.p
+	rm chdir.s
+sys/chmod.s:
+	m4 m4.def mcount.def  sys/chmod.s   > chmod.s 
+	cc  -O -c -p chmod.s  && mv chmod.o sys/chmod.p
+	rm chmod.s
+sys/chown.s:
+	m4 m4.def mcount.def  sys/chown.s   > chown.s 
+	cc  -O -c -p chown.s  && mv chown.o sys/chown.p
+	rm chown.s
+sys/chroot.s:
+	m4 m4.def mcount.def  sys/chroot.s   > chroot.s 
+	cc  -O -c -p chroot.s  && mv chroot.o sys/chroot.p
+	rm chroot.s
+sys/close.s:
+	m4 m4.def mcount.def  sys/close.s   > close.s 
+	cc  -O -c -p close.s  && mv close.o sys/close.p
+	rm close.s
+sys/creat.s:
+	m4 m4.def mcount.def  sys/creat.s   > creat.s 
+	cc  -O -c -p creat.s  && mv creat.o sys/creat.p
+	rm creat.s
+sys/dup.s:
+	m4 m4.def mcount.def  sys/dup.s   > dup.s 
+	cc  -O -c -p dup.s  && mv dup.o sys/dup.p
+	rm dup.s
+sys/execve.s:
+	m4 m4.def mcount.def  sys/execve.s   > execve.s 
+	cc  -O -c -p execve.s  && mv execve.o sys/execve.p
+	rm execve.s
+sys/exit.s:
+	m4 m4.def mcount.def  sys/exit.s   > exit.s 
+	cc  -O -c -p exit.s  && mv exit.o sys/exit.p
+	rm exit.s
+sys/fcntl.s:
+	m4 m4.def mcount.def  sys/fcntl.s   > fcntl.s 
+	cc  -O -c -p fcntl.s  && mv fcntl.o sys/fcntl.p
+	rm fcntl.s
+sys/fork.s:
+	m4 m4.def mcount.def  sys/fork.s   > fork.s 
+	cc  -O -c -p fork.s  && mv fork.o sys/fork.p
+	rm fork.s
+sys/fstat.s:
+	m4 m4.def mcount.def  sys/fstat.s   > fstat.s 
+	cc  -O -c -p fstat.s  && mv fstat.o sys/fstat.p
+	rm fstat.s
+sys/getegid.s:
+	m4 m4.def mcount.def  sys/getegid.s   > getegid.s 
+	cc  -O -c -p getegid.s  && mv getegid.o sys/getegid.p
+	rm getegid.s
+sys/geteuid.s:
+	m4 m4.def mcount.def  sys/geteuid.s   > geteuid.s 
+	cc  -O -c -p geteuid.s  && mv geteuid.o sys/geteuid.p
+	rm geteuid.s
+sys/getgid.s:
+	m4 m4.def mcount.def  sys/getgid.s   > getgid.s 
+	cc  -O -c -p getgid.s  && mv getgid.o sys/getgid.p
+	rm getgid.s
+sys/getpid.s:
+	m4 m4.def mcount.def  sys/getpid.s   > getpid.s 
+	cc  -O -c -p getpid.s  && mv getpid.o sys/getpid.p
+	rm getpid.s
+sys/getppid.s:
+	m4 m4.def mcount.def  sys/getppid.s   > getppid.s 
+	cc  -O -c -p getppid.s  && mv getppid.o sys/getppid.p
+	rm getppid.s
+sys/getuid.s:
+	m4 m4.def mcount.def  sys/getuid.s   > getuid.s 
+	cc  -O -c -p getuid.s  && mv getuid.o sys/getuid.p
+	rm getuid.s
+sys/gtty.s:
+	m4 m4.def mcount.def  sys/gtty.s   > gtty.s 
+	cc  -O -c -p gtty.s  && mv gtty.o sys/gtty.p
+	rm gtty.s
+sys/ioctl.s:
+	m4 m4.def mcount.def  sys/ioctl.s   > ioctl.s 
+	cc  -O -c -p ioctl.s  && mv ioctl.o sys/ioctl.p
+	rm ioctl.s
+sys/kill.s:
+	m4 m4.def mcount.def  sys/kill.s   > kill.s 
+	cc  -O -c -p kill.s  && mv kill.o sys/kill.p
+	rm kill.s
+sys/link.s:
+	m4 m4.def mcount.def  sys/link.s   > link.s 
+	cc  -O -c -p link.s  && mv link.o sys/link.p
+	rm link.s
+sys/lseek.s:
+	m4 m4.def mcount.def  sys/lseek.s   > lseek.s 
+	cc  -O -c -p lseek.s  && mv lseek.o sys/lseek.p
+	rm lseek.s
+sys/mknod.s:
+	m4 m4.def mcount.def  sys/mknod.s   > mknod.s 
+	cc  -O -c -p mknod.s  && mv mknod.o sys/mknod.p
+	rm mknod.s
+sys/mount.s:
+	m4 m4.def mcount.def  sys/mount.s   > mount.s 
+	cc  -O -c -p mount.s  && mv mount.o sys/mount.p
+	rm mount.s
+sys/msgsys.c:
+	cc  -I../inc -O -c -p sys/msgsys.c  && mv msgsys.o sys/msgsys.p
+sys/nice.s:
+	m4 m4.def mcount.def  sys/nice.s   > nice.s 
+	cc  -O -c -p nice.s  && mv nice.o sys/nice.p
+	rm nice.s
+sys/open.s:
+	m4 m4.def mcount.def  sys/open.s   > open.s 
+	cc  -O -c -p open.s  && mv open.o sys/open.p
+	rm open.s
+sys/pause.s:
+	m4 m4.def mcount.def  sys/pause.s   > pause.s 
+	cc  -O -c -p pause.s  && mv pause.o sys/pause.p
+	rm pause.s
+sys/pipe.s:
+	m4 m4.def mcount.def  sys/pipe.s   > pipe.s 
+	cc  -O -c -p pipe.s  && mv pipe.o sys/pipe.p
+	rm pipe.s
+sys/profil.s:
+	m4 m4.def mcount.def  sys/profil.s   > profil.s 
+	cc  -O -c -p profil.s  && mv profil.o sys/profil.p
+	rm profil.s
+sys/plock.s:
+	m4 m4.def mcount.def  sys/plock.s   > plock.s 
+	cc  -O -c -p plock.s  && mv plock.o sys/plock.p
+	rm plock.s
+sys/ptrace.s:
+	m4 m4.def mcount.def  sys/ptrace.s   > ptrace.s 
+	cc  -O -c -p ptrace.s  && mv ptrace.o sys/ptrace.p
+	rm ptrace.s
+sys/read.s:
+	m4 m4.def mcount.def  sys/read.s   > read.s 
+	cc  -O -c -p read.s  && mv read.o sys/read.p
+	rm read.s
+sys/sbrk.s:
+	m4 m4.def mcount.def  sys/sbrk.s   > sbrk.s 
+	cc  -O -c -p sbrk.s  && mv sbrk.o sys/sbrk.p
+	rm sbrk.s
+sys/semsys.c:
+	cc  -I../inc -O -c -p sys/semsys.c  && mv semsys.o sys/semsys.p
+sys/putmsg.s:
+	m4 m4.def mcount.def  sys/putmsg.s   > putmsg.s 
+	cc  -O -c -p putmsg.s  && mv putmsg.o sys/putmsg.p
+	rm putmsg.s
+sys/getmsg.s:
+	m4 m4.def mcount.def  sys/getmsg.s   > getmsg.s 
+	cc  -O -c -p getmsg.s  && mv getmsg.o sys/getmsg.p
+	rm getmsg.s
+sys/poll.s:
+	m4 m4.def mcount.def  sys/poll.s   > poll.s 
+	cc  -O -c -p poll.s  && mv poll.o sys/poll.p
+	rm poll.s
+sys/setgid.s:
+	m4 m4.def mcount.def  sys/setgid.s   > setgid.s 
+	cc  -O -c -p setgid.s  && mv setgid.o sys/setgid.p
+	rm setgid.s
+sys/setpgrp.s:
+	m4 m4.def mcount.def  sys/setpgrp.s   > setpgrp.s 
+	cc  -O -c -p setpgrp.s  && mv setpgrp.o sys/setpgrp.p
+	rm setpgrp.s
+sys/setuid.s:
+	m4 m4.def mcount.def  sys/setuid.s   > setuid.s 
+	cc  -O -c -p setuid.s  && mv setuid.o sys/setuid.p
+	rm setuid.s
+sys/shmsys.c:
+	cc  -I../inc -O -c -p sys/shmsys.c  && mv shmsys.o sys/shmsys.p
+sys/signal.s:
+	m4 m4.def mcount.def  sys/signal.s   > signal.s 
+	cc  -O -c -p signal.s  && mv signal.o sys/signal.p
+	rm signal.s
+sys/stat.s:
+	m4 m4.def mcount.def  sys/stat.s   > stat.s 
+	cc  -O -c -p stat.s  && mv stat.o sys/stat.p
+	rm stat.s
+sys/stime.s:
+	m4 m4.def mcount.def  sys/stime.s   > stime.s 
+	cc  -O -c -p stime.s  && mv stime.o sys/stime.p
+	rm stime.s
+sys/stty.s:
+	m4 m4.def mcount.def  sys/stty.s   > stty.s 
+	cc  -O -c -p stty.s  && mv stty.o sys/stty.p
+	rm stty.s
+sys/sync.s:
+	m4 m4.def mcount.def  sys/sync.s   > sync.s 
+	cc  -O -c -p sync.s  && mv sync.o sys/sync.p
+	rm sync.s
+sys/_sysm68k.s:
+	m4 m4.def mcount.def  sys/_sysm68k.s   > _sysm68k.s 
+	cc  -O -c -p _sysm68k.s  && mv _sysm68k.o sys/_sysm68k.p
+	rm _sysm68k.s
+sys/syscall.s:
+	m4 m4.def mcount.def  sys/syscall.s   > syscall.s 
+	cc  -O -c -p syscall.s  && mv syscall.o sys/syscall.p
+	rm syscall.s
+sys/time.s:
+	m4 m4.def mcount.def  sys/time.s   > time.s 
+	cc  -O -c -p time.s  && mv time.o sys/time.p
+	rm time.s
+sys/times.s:
+	m4 m4.def mcount.def  sys/times.s   > times.s 
+	cc  -O -c -p times.s  && mv times.o sys/times.p
+	rm times.s
+sys/ulimit.s:
+	m4 m4.def mcount.def  sys/ulimit.s   > ulimit.s 
+	cc  -O -c -p ulimit.s  && mv ulimit.o sys/ulimit.p
+	rm ulimit.s
+sys/umask.s:
+	m4 m4.def mcount.def  sys/umask.s   > umask.s 
+	cc  -O -c -p umask.s  && mv umask.o sys/umask.p
+	rm umask.s
+sys/umount.s:
+	m4 m4.def mcount.def  sys/umount.s   > umount.s 
+	cc  -O -c -p umount.s  && mv umount.o sys/umount.p
+	rm umount.s
+sys/uname.s:
+	m4 m4.def mcount.def  sys/uname.s   > uname.s 
+	cc  -O -c -p uname.s  && mv uname.o sys/uname.p
+	rm uname.s
+sys/unlink.s:
+	m4 m4.def mcount.def  sys/unlink.s   > unlink.s 
+	cc  -O -c -p unlink.s  && mv unlink.o sys/unlink.p
+	rm unlink.s
+sys/ustat.s:
+	m4 m4.def mcount.def  sys/ustat.s   > ustat.s 
+	cc  -O -c -p ustat.s  && mv ustat.o sys/ustat.p
+	rm ustat.s
+sys/utime.s:
+	m4 m4.def mcount.def  sys/utime.s   > utime.s 
+	cc  -O -c -p utime.s  && mv utime.o sys/utime.p
+	rm utime.s
+sys/advfs.s:
+	m4 m4.def mcount.def  sys/advfs.s   > advfs.s 
+	cc  -O -c -p advfs.s  && mv advfs.o sys/advfs.p
+	rm advfs.s
+sys/rdebug.s:
+	m4 m4.def mcount.def  sys/rdebug.s   > rdebug.s 
+	cc  -O -c -p rdebug.s  && mv rdebug.o sys/rdebug.p
+	rm rdebug.s
+sys/rfstart.s:
+	m4 m4.def mcount.def  sys/rfstart.s   > rfstart.s 
+	cc  -O -c -p rfstart.s  && mv rfstart.o sys/rfstart.p
+	rm rfstart.s
+sys/rfstop.s:
+	m4 m4.def mcount.def  sys/rfstop.s   > rfstop.s 
+	cc  -O -c -p rfstop.s  && mv rfstop.o sys/rfstop.p
+	rm rfstop.s
+sys/rmount.s:
+	m4 m4.def mcount.def  sys/rmount.s   > rmount.s 
+	cc  -O -c -p rmount.s  && mv rmount.o sys/rmount.p
+	rm rmount.s
+sys/rumount.s:
+	m4 m4.def mcount.def  sys/rumount.s   > rumount.s 
+	cc  -O -c -p rumount.s  && mv rumount.o sys/rumount.p
+	rm rumount.s
+sys/rfsys.s:
+	m4 m4.def mcount.def  sys/rfsys.s   > rfsys.s 
+	cc  -O -c -p rfsys.s  && mv rfsys.o sys/rfsys.p
+	rm rfsys.s
+sys/unadvfs.s:
+	m4 m4.def mcount.def  sys/unadvfs.s   > unadvfs.s 
+	cc  -O -c -p unadvfs.s  && mv unadvfs.o sys/unadvfs.p
+	rm unadvfs.s
+sys/fstatfs.s:
+	m4 m4.def mcount.def  sys/fstatfs.s   > fstatfs.s 
+	cc  -O -c -p fstatfs.s  && mv fstatfs.o sys/fstatfs.p
+	rm fstatfs.s
+sys/getdents.s:
+	m4 m4.def mcount.def  sys/getdents.s   > getdents.s 
+	cc  -O -c -p getdents.s  && mv getdents.o sys/getdents.p
+	rm getdents.s
+sys/mkdir.s:
+	m4 m4.def mcount.def  sys/mkdir.s   > mkdir.s 
+	cc  -O -c -p mkdir.s  && mv mkdir.o sys/mkdir.p
+	rm mkdir.s
+sys/rmdir.s:
+	m4 m4.def mcount.def  sys/rmdir.s   > rmdir.s 
+	cc  -O -c -p rmdir.s  && mv rmdir.o sys/rmdir.p
+	rm rmdir.s
+sys/statfs.s:
+	m4 m4.def mcount.def  sys/statfs.s   > statfs.s 
+	cc  -O -c -p statfs.s  && mv statfs.o sys/statfs.p
+	rm statfs.s
+sys/sysfs.s:
+	m4 m4.def mcount.def  sys/sysfs.s   > sysfs.s 
+	cc  -O -c -p sysfs.s  && mv sysfs.o sys/sysfs.p
+	rm sysfs.s
+sys/wait.s:
+	m4 m4.def mcount.def  sys/wait.s   > wait.s 
+	cc  -O -c -p wait.s  && mv wait.o sys/wait.p
+	rm wait.s
+sys/write.s:
+	m4 m4.def mcount.def  sys/write.s   > write.s 
+	cc  -O -c -p write.s  && mv write.o sys/write.p
+	rm write.s
+sys/uadmin.s:
+	m4 m4.def mcount.def  sys/uadmin.s   > uadmin.s 
+	cc  -O -c -p uadmin.s  && mv uadmin.o sys/uadmin.p
+	rm uadmin.s
+	make -e  nonprof PROF=@#
+csu/crt0.s:
+	m4 m4.def  -DMCOUNT=#  csu/crt0.s   > crt0.s   
+	cc  -O -c crt0.s && mv crt0.o csu/crt0.o
+	rm crt0.s
+csu/mcrt0.s:
+	m4 m4.def  -DMCOUNT=#  csu/mcrt0.s   > mcrt0.s   
+	cc  -O -c mcrt0.s && mv mcrt0.o csu/mcrt0.o
+	rm mcrt0.s
+csu/initfpu.s:
+	m4 m4.def  -DMCOUNT=#  csu/initfpu.s   > initfpu.s   
+	cc  -O -c initfpu.s && mv initfpu.o csu/initfpu.o
+	rm initfpu.s
+gen/abs.s:
+	m4 m4.def  -DMCOUNT=#  gen/abs.s   > abs.s   
+	cc  -O -c abs.s && mv abs.o gen/abs.o
+	rm abs.s
+gen/cuexit.s:
+	m4 m4.def  -DMCOUNT=#  gen/cuexit.s   > cuexit.s   
+	cc  -O -c cuexit.s && mv cuexit.o gen/cuexit.o
+	rm cuexit.s
+gen/ecvt.c:
+	cc   -I../inc -O  -c gen/ecvt.c
+	mv ecvt.o gen/ecvt.o
+gen/frexp.c:
+	cc   -I../inc -O  -c gen/frexp.c
+	mv frexp.o gen/frexp.o
+gen/gen_def.c:
+	cc   -I../inc -O  -c gen/gen_def.c
+	mv gen_def.o gen/gen_def.o
+gen/ltostr.c:
+	cc   -I../inc -O  -c gen/ltostr.c
+	mv ltostr.o gen/ltostr.o
+gen/memcpy.s:
+	m4 m4.def  -DMCOUNT=#  gen/memcpy.s   > memcpy.s   
+	cc  -O -c memcpy.s && mv memcpy.o gen/memcpy.o
+	rm memcpy.s
+gen/setjmp.s:
+	m4 m4.def  -DMCOUNT=#  gen/setjmp.s   > setjmp.s   
+	cc  -O -c setjmp.s && mv setjmp.o gen/setjmp.o
+	rm setjmp.s
+gen/strcpy.s:
+	m4 m4.def  -DMCOUNT=#  gen/strcpy.s   > strcpy.s   
+	cc  -O -c strcpy.s && mv strcpy.o gen/strcpy.o
+	rm strcpy.s
+gen/strcmp.s:
+	m4 m4.def  -DMCOUNT=#  gen/strcmp.s   > strcmp.s   
+	cc  -O -c strcmp.s && mv strcmp.o gen/strcmp.o
+	rm strcmp.s
+gen/sysm68k.c:
+	cc   -I../inc -O  -c gen/sysm68k.c
+	mv sysm68k.o gen/sysm68k.o
+gen/strlen.s:
+	m4 m4.def  -DMCOUNT=#  gen/strlen.s   > strlen.s   
+	cc  -O -c strlen.s && mv strlen.o gen/strlen.o
+	rm strlen.s
+sys/access.s:
+	m4 m4.def  -DMCOUNT=#  sys/access.s   > access.s   
+	cc  -O -c access.s && mv access.o sys/access.o
+	rm access.s
+sys/acct.s:
+	m4 m4.def  -DMCOUNT=#  sys/acct.s   > acct.s   
+	cc  -O -c acct.s && mv acct.o sys/acct.o
+	rm acct.s
+sys/alarm.s:
+	m4 m4.def  -DMCOUNT=#  sys/alarm.s   > alarm.s   
+	cc  -O -c alarm.s && mv alarm.o sys/alarm.o
+	rm alarm.s
+sys/chdir.s:
+	m4 m4.def  -DMCOUNT=#  sys/chdir.s   > chdir.s   
+	cc  -O -c chdir.s && mv chdir.o sys/chdir.o
+	rm chdir.s
+sys/chmod.s:
+	m4 m4.def  -DMCOUNT=#  sys/chmod.s   > chmod.s   
+	cc  -O -c chmod.s && mv chmod.o sys/chmod.o
+	rm chmod.s
+sys/chown.s:
+	m4 m4.def  -DMCOUNT=#  sys/chown.s   > chown.s   
+	cc  -O -c chown.s && mv chown.o sys/chown.o
+	rm chown.s
+sys/chroot.s:
+	m4 m4.def  -DMCOUNT=#  sys/chroot.s   > chroot.s   
+	cc  -O -c chroot.s && mv chroot.o sys/chroot.o
+	rm chroot.s
+sys/close.s:
+	m4 m4.def  -DMCOUNT=#  sys/close.s   > close.s   
+	cc  -O -c close.s && mv close.o sys/close.o
+	rm close.s
+sys/creat.s:
+	m4 m4.def  -DMCOUNT=#  sys/creat.s   > creat.s   
+	cc  -O -c creat.s && mv creat.o sys/creat.o
+	rm creat.s
+sys/dup.s:
+	m4 m4.def  -DMCOUNT=#  sys/dup.s   > dup.s   
+	cc  -O -c dup.s && mv dup.o sys/dup.o
+	rm dup.s
+sys/execve.s:
+	m4 m4.def  -DMCOUNT=#  sys/execve.s   > execve.s   
+	cc  -O -c execve.s && mv execve.o sys/execve.o
+	rm execve.s
+sys/exit.s:
+	m4 m4.def  -DMCOUNT=#  sys/exit.s   > exit.s   
+	cc  -O -c exit.s && mv exit.o sys/exit.o
+	rm exit.s
+sys/fcntl.s:
+	m4 m4.def  -DMCOUNT=#  sys/fcntl.s   > fcntl.s   
+	cc  -O -c fcntl.s && mv fcntl.o sys/fcntl.o
+	rm fcntl.s
+sys/fork.s:
+	m4 m4.def  -DMCOUNT=#  sys/fork.s   > fork.s   
+	cc  -O -c fork.s && mv fork.o sys/fork.o
+	rm fork.s
+sys/fstat.s:
+	m4 m4.def  -DMCOUNT=#  sys/fstat.s   > fstat.s   
+	cc  -O -c fstat.s && mv fstat.o sys/fstat.o
+	rm fstat.s
+sys/getegid.s:
+	m4 m4.def  -DMCOUNT=#  sys/getegid.s   > getegid.s   
+	cc  -O -c getegid.s && mv getegid.o sys/getegid.o
+	rm getegid.s
+sys/geteuid.s:
+	m4 m4.def  -DMCOUNT=#  sys/geteuid.s   > geteuid.s   
+	cc  -O -c geteuid.s && mv geteuid.o sys/geteuid.o
+	rm geteuid.s
+sys/getgid.s:
+	m4 m4.def  -DMCOUNT=#  sys/getgid.s   > getgid.s   
+	cc  -O -c getgid.s && mv getgid.o sys/getgid.o
+	rm getgid.s
+sys/getpid.s:
+	m4 m4.def  -DMCOUNT=#  sys/getpid.s   > getpid.s   
+	cc  -O -c getpid.s && mv getpid.o sys/getpid.o
+	rm getpid.s
+sys/getppid.s:
+	m4 m4.def  -DMCOUNT=#  sys/getppid.s   > getppid.s   
+	cc  -O -c getppid.s && mv getppid.o sys/getppid.o
+	rm getppid.s
+sys/getuid.s:
+	m4 m4.def  -DMCOUNT=#  sys/getuid.s   > getuid.s   
+	cc  -O -c getuid.s && mv getuid.o sys/getuid.o
+	rm getuid.s
+sys/gtty.s:
+	m4 m4.def  -DMCOUNT=#  sys/gtty.s   > gtty.s   
+	cc  -O -c gtty.s && mv gtty.o sys/gtty.o
+	rm gtty.s
+sys/ioctl.s:
+	m4 m4.def  -DMCOUNT=#  sys/ioctl.s   > ioctl.s   
+	cc  -O -c ioctl.s && mv ioctl.o sys/ioctl.o
+	rm ioctl.s
+sys/kill.s:
+	m4 m4.def  -DMCOUNT=#  sys/kill.s   > kill.s   
+	cc  -O -c kill.s && mv kill.o sys/kill.o
+	rm kill.s
+sys/link.s:
+	m4 m4.def  -DMCOUNT=#  sys/link.s   > link.s   
+	cc  -O -c link.s && mv link.o sys/link.o
+	rm link.s
+sys/lseek.s:
+	m4 m4.def  -DMCOUNT=#  sys/lseek.s   > lseek.s   
+	cc  -O -c lseek.s && mv lseek.o sys/lseek.o
+	rm lseek.s
+sys/locking.s:
+	m4 m4.def  -DMCOUNT=#  sys/locking.s   > locking.s   
+	cc  -O -c locking.s && mv locking.o sys/locking.o
+	rm locking.s
+sys/mknod.s:
+	m4 m4.def  -DMCOUNT=#  sys/mknod.s   > mknod.s   
+	cc  -O -c mknod.s && mv mknod.o sys/mknod.o
+	rm mknod.s
+sys/mount.s:
+	m4 m4.def  -DMCOUNT=#  sys/mount.s   > mount.s   
+	cc  -O -c mount.s && mv mount.o sys/mount.o
+	rm mount.s
+sys/msgsys.c:
+	cc   -I../inc -O  -c sys/msgsys.c
+	mv msgsys.o sys/msgsys.o
+sys/nice.s:
+	m4 m4.def  -DMCOUNT=#  sys/nice.s   > nice.s   
+	cc  -O -c nice.s && mv nice.o sys/nice.o
+	rm nice.s
+sys/open.s:
+	m4 m4.def  -DMCOUNT=#  sys/open.s   > open.s   
+	cc  -O -c open.s && mv open.o sys/open.o
+	rm open.s
+sys/pause.s:
+	m4 m4.def  -DMCOUNT=#  sys/pause.s   > pause.s   
+	cc  -O -c pause.s && mv pause.o sys/pause.o
+	rm pause.s
+sys/pipe.s:
+	m4 m4.def  -DMCOUNT=#  sys/pipe.s   > pipe.s   
+	cc  -O -c pipe.s && mv pipe.o sys/pipe.o
+	rm pipe.s
+sys/profil.s:
+	m4 m4.def  -DMCOUNT=#  sys/profil.s   > profil.s   
+	cc  -O -c profil.s && mv profil.o sys/profil.o
+	rm profil.s
+sys/plock.s:
+	m4 m4.def  -DMCOUNT=#  sys/plock.s   > plock.s   
+	cc  -O -c plock.s && mv plock.o sys/plock.o
+	rm plock.s
+sys/uadmin.s:
+	m4 m4.def  -DMCOUNT=#  sys/uadmin.s   > uadmin.s   
+	cc  -O -c uadmin.s && mv uadmin.o sys/uadmin.o
+	rm uadmin.s
+sys/ptrace.s:
+	m4 m4.def  -DMCOUNT=#  sys/ptrace.s   > ptrace.s   
+	cc  -O -c ptrace.s && mv ptrace.o sys/ptrace.o
+	rm ptrace.s
+sys/read.s:
+	m4 m4.def  -DMCOUNT=#  sys/read.s   > read.s   
+	cc  -O -c read.s && mv read.o sys/read.o
+	rm read.s
+sys/sbrk.s:
+	m4 m4.def  -DMCOUNT=#  sys/sbrk.s   > sbrk.s   
+	cc  -O -c sbrk.s && mv sbrk.o sys/sbrk.o
+	rm sbrk.s
+sys/semsys.c:
+	cc   -I../inc -O  -c sys/semsys.c
+	mv semsys.o sys/semsys.o
+sys/putmsg.s:
+	m4 m4.def  -DMCOUNT=#  sys/putmsg.s   > putmsg.s   
+	cc  -O -c putmsg.s && mv putmsg.o sys/putmsg.o
+	rm putmsg.s
+sys/getmsg.s:
+	m4 m4.def  -DMCOUNT=#  sys/getmsg.s   > getmsg.s   
+	cc  -O -c getmsg.s && mv getmsg.o sys/getmsg.o
+	rm getmsg.s
+sys/poll.s:
+	m4 m4.def  -DMCOUNT=#  sys/poll.s   > poll.s   
+	cc  -O -c poll.s && mv poll.o sys/poll.o
+	rm poll.s
+sys/setgid.s:
+	m4 m4.def  -DMCOUNT=#  sys/setgid.s   > setgid.s   
+	cc  -O -c setgid.s && mv setgid.o sys/setgid.o
+	rm setgid.s
+sys/setpgrp.s:
+	m4 m4.def  -DMCOUNT=#  sys/setpgrp.s   > setpgrp.s   
+	cc  -O -c setpgrp.s && mv setpgrp.o sys/setpgrp.o
+	rm setpgrp.s
+sys/setuid.s:
+	m4 m4.def  -DMCOUNT=#  sys/setuid.s   > setuid.s   
+	cc  -O -c setuid.s && mv setuid.o sys/setuid.o
+	rm setuid.s
+sys/shmsys.c:
+	cc   -I../inc -O  -c sys/shmsys.c
+	mv shmsys.o sys/shmsys.o
+sys/signal.s:
+	m4 m4.def  -DMCOUNT=#  sys/signal.s   > signal.s   
+	cc  -O -c signal.s && mv signal.o sys/signal.o
+	rm signal.s
+sys/stat.s:
+	m4 m4.def  -DMCOUNT=#  sys/stat.s   > stat.s   
+	cc  -O -c stat.s && mv stat.o sys/stat.o
+	rm stat.s
+sys/stime.s:
+	m4 m4.def  -DMCOUNT=#  sys/stime.s   > stime.s   
+	cc  -O -c stime.s && mv stime.o sys/stime.o
+	rm stime.s
+sys/stty.s:
+	m4 m4.def  -DMCOUNT=#  sys/stty.s   > stty.s   
+	cc  -O -c stty.s && mv stty.o sys/stty.o
+	rm stty.s
+sys/sync.s:
+	m4 m4.def  -DMCOUNT=#  sys/sync.s   > sync.s   
+	cc  -O -c sync.s && mv sync.o sys/sync.o
+	rm sync.s
+sys/_sysm68k.s:
+	m4 m4.def  -DMCOUNT=#  sys/_sysm68k.s   > _sysm68k.s   
+	cc  -O -c _sysm68k.s && mv _sysm68k.o sys/_sysm68k.o
+	rm _sysm68k.s
+sys/syscall.s:
+	m4 m4.def  -DMCOUNT=#  sys/syscall.s   > syscall.s   
+	cc  -O -c syscall.s && mv syscall.o sys/syscall.o
+	rm syscall.s
+sys/time.s:
+	m4 m4.def  -DMCOUNT=#  sys/time.s   > time.s   
+	cc  -O -c time.s && mv time.o sys/time.o
+	rm time.s
+sys/times.s:
+	m4 m4.def  -DMCOUNT=#  sys/times.s   > times.s   
+	cc  -O -c times.s && mv times.o sys/times.o
+	rm times.s
+sys/ulimit.s:
+	m4 m4.def  -DMCOUNT=#  sys/ulimit.s   > ulimit.s   
+	cc  -O -c ulimit.s && mv ulimit.o sys/ulimit.o
+	rm ulimit.s
+sys/umask.s:
+	m4 m4.def  -DMCOUNT=#  sys/umask.s   > umask.s   
+	cc  -O -c umask.s && mv umask.o sys/umask.o
+	rm umask.s
+sys/umount.s:
+	m4 m4.def  -DMCOUNT=#  sys/umount.s   > umount.s   
+	cc  -O -c umount.s && mv umount.o sys/umount.o
+	rm umount.s
+sys/uname.s:
+	m4 m4.def  -DMCOUNT=#  sys/uname.s   > uname.s   
+	cc  -O -c uname.s && mv uname.o sys/uname.o
+	rm uname.s
+sys/unlink.s:
+	m4 m4.def  -DMCOUNT=#  sys/unlink.s   > unlink.s   
+	cc  -O -c unlink.s && mv unlink.o sys/unlink.o
+	rm unlink.s
+sys/ustat.s:
+	m4 m4.def  -DMCOUNT=#  sys/ustat.s   > ustat.s   
+	cc  -O -c ustat.s && mv ustat.o sys/ustat.o
+	rm ustat.s
+sys/utime.s:
+	m4 m4.def  -DMCOUNT=#  sys/utime.s   > utime.s   
+	cc  -O -c utime.s && mv utime.o sys/utime.o
+	rm utime.s
+sys/wait.s:
+	m4 m4.def  -DMCOUNT=#  sys/wait.s   > wait.s   
+	cc  -O -c wait.s && mv wait.o sys/wait.o
+	rm wait.s
+sys/write.s:
+	m4 m4.def  -DMCOUNT=#  sys/write.s   > write.s   
+	cc  -O -c write.s && mv write.o sys/write.o
+	rm write.s
+sys/advfs.s:
+	m4 m4.def  -DMCOUNT=#  sys/advfs.s   > advfs.s   
+	cc  -O -c advfs.s && mv advfs.o sys/advfs.o
+	rm advfs.s
+sys/rdebug.s:
+	m4 m4.def  -DMCOUNT=#  sys/rdebug.s   > rdebug.s   
+	cc  -O -c rdebug.s && mv rdebug.o sys/rdebug.o
+	rm rdebug.s
+sys/rfstart.s:
+	m4 m4.def  -DMCOUNT=#  sys/rfstart.s   > rfstart.s   
+	cc  -O -c rfstart.s && mv rfstart.o sys/rfstart.o
+	rm rfstart.s
+sys/rfstop.s:
+	m4 m4.def  -DMCOUNT=#  sys/rfstop.s   > rfstop.s   
+	cc  -O -c rfstop.s && mv rfstop.o sys/rfstop.o
+	rm rfstop.s
+sys/rfsys.s:
+	m4 m4.def  -DMCOUNT=#  sys/rfsys.s   > rfsys.s   
+	cc  -O -c rfsys.s && mv rfsys.o sys/rfsys.o
+	rm rfsys.s
+sys/rmount.s:
+	m4 m4.def  -DMCOUNT=#  sys/rmount.s   > rmount.s   
+	cc  -O -c rmount.s && mv rmount.o sys/rmount.o
+	rm rmount.s
+sys/rumount.s:
+	m4 m4.def  -DMCOUNT=#  sys/rumount.s   > rumount.s   
+	cc  -O -c rumount.s && mv rumount.o sys/rumount.o
+	rm rumount.s
+sys/unadvfs.s:
+	m4 m4.def  -DMCOUNT=#  sys/unadvfs.s   > unadvfs.s   
+	cc  -O -c unadvfs.s && mv unadvfs.o sys/unadvfs.o
+	rm unadvfs.s
+sys/fstatfs.s:
+	m4 m4.def  -DMCOUNT=#  sys/fstatfs.s   > fstatfs.s   
+	cc  -O -c fstatfs.s && mv fstatfs.o sys/fstatfs.o
+	rm fstatfs.s
+sys/getdents.s:
+	m4 m4.def  -DMCOUNT=#  sys/getdents.s   > getdents.s   
+	cc  -O -c getdents.s && mv getdents.o sys/getdents.o
+	rm getdents.s
+sys/mkdir.s:
+	m4 m4.def  -DMCOUNT=#  sys/mkdir.s   > mkdir.s   
+	cc  -O -c mkdir.s && mv mkdir.o sys/mkdir.o
+	rm mkdir.s
+sys/rmdir.s:
+	m4 m4.def  -DMCOUNT=#  sys/rmdir.s   > rmdir.s   
+	cc  -O -c rmdir.s && mv rmdir.o sys/rmdir.o
+	rm rmdir.s
+sys/statfs.s:
+	m4 m4.def  -DMCOUNT=#  sys/statfs.s   > statfs.s   
+	cc  -O -c statfs.s && mv statfs.o sys/statfs.o
+	rm statfs.s
+sys/sysfs.s:
+	m4 m4.def  -DMCOUNT=#  sys/sysfs.s   > sysfs.s   
+	cc  -O -c sysfs.s && mv sysfs.o sys/sysfs.o
+	rm sysfs.s
+	# compile MC68881-dependent library modules
+	cd m68k; make -e all CC=cc FP=m68881		 DBLALIGN=NO   
+	# PROCESSOR = M68020
+	# DBLALIGN  = NO
+	# FP        = m68881
+	cd crt ; make -e  nonprof
+	cd crt ; make -e  prof NONPROF=@#
+	make -e  nonprof
+	make -e  prof NONPROF=@#
+gen/atof.c:
+	cc -p -O -DM68881 -c gen/atof.c  && mv atof.o gen/atof.p
+gen/ecvt.c:
+	cc -p -O -DM68881 -c gen/ecvt.c  && mv ecvt.o gen/ecvt.p
+gen/sysm68k.c:
+	M68000= STACKCHECK=OFF cc -p -O -DM68881 -c gen/sysm68k.c  && mv sysm68k.o gen/sysm68k.p
+	#
+	# place portable modules in "object" directory, then overlay
+	# 	the machine-dependent modules.
+	#
+	# The following two commands had to be changed as the command lines
+	# became to long.  The replacement command lines follow, uncommented.
+	# cp ../libc/port/*/*.[op] object
+	# cp ../libc/m68k/*/*.[op] object
+	#
+	rm -rf object
+	mkdir object
+	cp ../libc/port/[a-p]*/*.o object
+	cp ../libc/port/[q-z]*/*.o object
+	 cp ../libc/port/[a-p]*/*.p object
+	 cp ../libc/port/[q-z]*/*.p object
+	cp ../libc/m68k/*/*.o object
+	 cp ../libc/m68k/*/*.p object
+	#
+	# Remove a few files made obsolete by the inclusion of MC68881-
+	# specific routines.
+	#
+	(cd object; rm -f table.o addmag.o submag.o flsub.o ltof.o ultof.o)
+	#
+	# Copy MC68881-specific routines over previous versions of these
+	# files.
+	#
+	cp m68k/*/*.[op] object
+	#
+	# delete temporary libraries
+	rm -f lib.libc
+	rm -f libp.libc
+	#
+	# set aside run-time modules, which don't go in library archive!
+	cd object; for i in *crt0.o ; do mv $i .. ; done
+	#
+	# build archive out of the remaining modules.
+	cd object; make -e -f ../m68k/makefile archive \
+		AR=ar STRIP=strip LORDER=lorder PROF=
+	#
+	# Note that "archive" is invoked with libc/object as current directory.
+	#
+	# figure out the correct ordering for all the archive modules except
+	#	cuexit and fakcu, which must go at end of archive.
+	chmod 664 *.o 
+	chgrp bin  *.o
+	chown bin  *.o
+	mv cuexit.o cuexit.x
+	mv fakcu.o fakcu.x
+	lorder *.o | tsort >objlist
+UX tsort: INFORM: cycle in data
+	sigcall.o
+	sigcode.o
+	_sysm68k.o
+	mv cuexit.x cuexit.o
+	mv fakcu.x fakcu.o
+	#
+	# build the archive with the modules in correct order.
+	ar q ../lib.libc `cat objlist` cuexit.o fakcu.o
+ar: creating ../lib.libc
+	ar t ../lib.libc >../lib.contents
+	rm -f *.o
+	#
+	# build the profiled library archive, first renaming the
+	#	.p (profiled object) modules to .o
+	for i in *.p ; do mv $i `basename $i .p`.o ; done
+	chmod 664 *.o
+	chgrp bin  *.o
+	chown bin  *.o
+	ar q ../libp.libc `cat objlist` cuexit.o fakcu.o
+ar: creating ../libp.libc
+ar: ctype_def.o cannot open
+ar: err_def.o cannot open
+ar: gen_def.o cannot open
+ar: grent_def.o cannot open
+ar: locking.o cannot open
+ar: mall_def.o cannot open
+ar: opt_data.o cannot open
+ar: pwent_def.o cannot open
+ar: stdio_def.o cannot open
+	strip -r ../libp.libc
+strip: Warning - symbol directory deleted from archive ../libp.libc
+	execute  `ar ts ../libp.libc` to restore symbol directory.
+	ar ts ../libp.libc >../libp.contents
+	rm -rf object
+	#
+	if test -f /lib/libc881.a ; \
+	then \
+		rm -f /lib/OLDlibc881.a ; \
+		cp /lib/libc881.a /lib/OLDlibc881.a ; \
+		chmod 664		 /lib/OLDlibc881.a ; \
+		chmod -x /lib/OLDlibc881.a ; \
+		chgrp bin		 /lib/OLDlibc881.a ; \
+		chown bin		 /lib/OLDlibc881.a ; \
+	fi
+	if test -f /lib/libp/libc881.a ; \
+	then \
+		rm -f /lib/libp/OLDlibc881.a ; \
+		cp /lib/libp/libc881.a /lib/libp/OLDlibc881.a ;\
+		chmod 664		 /lib/libp/OLDlibc881.a ; \
+		chmod -x /lib/libp/OLDlibc881.a ; \
+		chgrp bin		 /lib/libp/OLDlibc881.a ; \
+		chown bin		 /lib/libp/OLDlibc881.a ; \
+	fi
+	for i in *crt0.o ; \
+		do \
+		    if test -f /lib/$i ; \
+		    then \
+			    rm -f /lib/OLD$i ; \
+			    cp /lib/$i /lib/OLD$i ; \
+			    chmod 664		 /lib/OLD$i ; \
+			    chmod -x /lib/OLD$i ; \
+			    chgrp bin		 /lib/OLD$i ; \
+			    chown bin		 /lib/OLD$i ; \
+		    fi ; \
+		done
+	#
+	# move the library or libraries into the correct directory
+	for i in *crt0.o ; \
+		do rm -f /lib/$i ; \
+		cp $i /lib/$i ; \
+		chmod 664		 /lib/$i ; \
+		chmod -x /lib/$i ; \
+		chgrp bin		 /lib/$i ; \
+		chown bin		 /lib/$i ; \
+		rm -f $i ; \
+		done
+	rm -f /lib/libc881.a
+	cp lib.libc /lib/libc881.a
+	chmod 664		 /lib/libc881.a
+	chmod -x /lib/libc881.a	# not executable
+	chgrp bin		 /lib/libc881.a
+	chown bin		 /lib/libc881.a
+	if test -d /lib/libp ; \
+		then : ; else mkdir /lib/libp ; fi 
+	rm -f /lib/libp/libc881.a
+	cp libp.libc /lib/libp/libc881.a
+	chmod 664		 /lib/libp/libc881.a
+	chmod -x /lib/libp/libc881.a	# not executable
+	chgrp bin		 /lib/libp/libc881.a
+	chown bin		 /lib/libp/libc881.a
+	#
+	# remove intermediate files except object modules and temp library
+	rm -rf lib*.contents obj*
+	cd ../libc/port ;  make clean
+	if m68k ; then cd ../libc/m68k ; make clean ; fi
+	rm -f *.o
+	rm -f *.p
+	rm -f *.s
+	if m68k ; then cd m68k ; make clean ; fi
+	rm -f *.[ops]
+	if pdp11 ; then cd pdp11 ; make clean ; fi
+	if vax ;   then cd vax ;   make clean ; fi
+	if u3b ;   then cd u3b ;   make clean ; fi
+	if u370 ;  then cd u370 ;  make clean ; fi
+	#
+	# remove intermediate files
+	rm -rf *.o lib*.libc lib*.contents obj*
+	cd ../libc/port ;  make clobber
+	rm -f */*.o
+	rm -f */*.p
+	if m68k ; then cd ../libc/m68k ; make clobber ; fi
+	rm -f *.o
+	rm -f *.p
+	rm -f *.s
+	rm -f */*.o
+	rm -f */*.p
+	if m68k ; then cd m68k ; make clobber ; fi
+	rm -f *.[ops]
+	rm -f */*.[op] */temp.s
+	if pdp11 ; then cd pdp11 ; make clobber ; fi
+	if vax ;   then cd vax ;   make clobber ; fi
+	if u3b ;   then cd u3b ;   make clobber ; fi
+	if u370 ;  then cd u370 ;  make clobber ; fi
+======== libc881u
+	if m68k ; then make -e -f  libc881u.mk specific MACHINE=m68k ; fi
+	# PROCESSOR = M68020
+	# DBLALIGN  = NO
+	# FP        = m68881u		
+	#
+	# compile portable library modules
+	cd ../libc/port; make -e CC=cc FP=m68881u		 DBLALIGN=NO 
+	cd gen; make -e  prof NONPROF=@#
+a64l.c:
+	cc  -I../../inc -O -c -p a64l.c   && mv a64l.o a64l.p
+abort.c:
+	cc  -I../../inc -O -c -p abort.c   && mv abort.o abort.p
+"abort.c", line 25: warning: illegal pointer combination, op =
+"abort.c", line 25: warning: illegal pointer combination, op !=
+abs.c:
+	cc  -I../../inc -O -c -p abs.c   && mv abs.o abs.p
+assert.c:
+	cc  -I../../inc -O -c -p assert.c   && mv assert.o assert.p
+atof.c:
+	cc  -I../../inc -O -c -p atof.c   && mv atof.o atof.p
+atoi.c:
+	cc  -I../../inc -O -c -p atoi.c   && mv atoi.o atoi.p
+atol.c:
+	cc  -I../../inc -O -c -p atol.c   && mv atol.o atol.p
+bsearch.c:
+	cc  -I../../inc -O -c -p bsearch.c   && mv bsearch.o bsearch.p
+calloc.c:
+	cc  -I../../inc -O -c -p calloc.c   && mv calloc.o calloc.p
+clock.c:
+	cc  -I../../inc -O -c -p clock.c   && mv clock.o clock.p
+closedir.c:
+	cc  -I../../inc -O -c -p closedir.c   && mv closedir.o closedir.p
+crypt.c:
+	cc  -I../../inc -O -c -p crypt.c   && mv crypt.o crypt.p
+ctime.c:
+	cc  -I../../inc -O -c -p ctime.c   && mv ctime.o ctime.p
+ctype.c:
+	cc  -I../../inc -O -c -p ctype.c   && mv ctype.o ctype.p
+dial.c:
+	cc  -I../../inc -O -c -p dial.c   && mv dial.o dial.p
+"dial.c", line 150: warning: illegal pointer combination, op =
+"dial.c", line 151: warning: illegal pointer combination, op =
+drand48.c:
+	cc  -I../../inc -O -c -p drand48.c   && mv drand48.o drand48.p
+dup2.c:
+	cc  -I../../inc -O -c -p dup2.c   && mv dup2.o dup2.p
+errlst.c:
+	cc  -I../../inc -O -c -p errlst.c   && mv errlst.o errlst.p
+ecvt.c:
+	cc  -I../../inc -O -c -p ecvt.c   && mv ecvt.o ecvt.p
+execvp.c:
+	cc  -I../../inc -O -c -p execvp.c   && mv execvp.o execvp.p
+fakcu.c:
+	cc  -I../../inc -O -c -p fakcu.c   && mv fakcu.o fakcu.p
+frexp.c:
+	cc  -I../../inc -O -c -p frexp.c   && mv frexp.o frexp.p
+ftok.c:
+	cc  -I../../inc -O -c -p ftok.c   && mv ftok.o ftok.p
+ftw.c:
+	cc  -I../../inc -O -c -p ftw.c   && mv ftw.o ftw.p
+gcvt.c:
+	cc  -I../../inc -O -c -p gcvt.c   && mv gcvt.o gcvt.p
+getcwd.c:
+	cc  -I../../inc -O -c -p getcwd.c   && mv getcwd.o getcwd.p
+getenv.c:
+	cc  -I../../inc -O -c -p getenv.c   && mv getenv.o getenv.p
+getgrent.c:
+	cc  -I../../inc -O -c -p getgrent.c   && mv getgrent.o getgrent.p
+getgrgid.c:
+	cc  -I../../inc -O -c -p getgrgid.c   && mv getgrgid.o getgrgid.p
+getgrnam.c:
+	cc  -I../../inc -O -c -p getgrnam.c   && mv getgrnam.o getgrnam.p
+getlogin.c:
+	cc  -I../../inc -O -c -p getlogin.c   && mv getlogin.o getlogin.p
+getopt.c:
+	cc  -I../../inc -O -c -p getopt.c   && mv getopt.o getopt.p
+getpw.c:
+	cc  -I../../inc -O -c -p getpw.c   && mv getpw.o getpw.p
+getpwent.c:
+	cc  -I../../inc -O -c -p getpwent.c   && mv getpwent.o getpwent.p
+getpwnam.c:
+	cc  -I../../inc -O -c -p getpwnam.c   && mv getpwnam.o getpwnam.p
+getpwuid.c:
+	cc  -I../../inc -O -c -p getpwuid.c   && mv getpwuid.o getpwuid.p
+getut.c:
+	cc  -I../../inc -O -c -p getut.c   && mv getut.o getut.p
+hsearch.c:
+	cc  -I../../inc -O -c -p hsearch.c   && mv hsearch.o hsearch.p
+"hsearch.c", line 258: warning: enumeration type clash, operator ==
+isatty.c:
+	cc  -I../../inc -O -c -p isatty.c   && mv isatty.o isatty.p
+l3.c:
+	cc  -I../../inc -O -c -p l3.c   && mv l3.o l3.p
+l64a.c:
+	cc  -I../../inc -O -c -p l64a.c   && mv l64a.o l64a.p
+ldexp.c:
+	cc  -I../../inc -O -c -p ldexp.c   && mv ldexp.o ldexp.p
+lfind.c:
+	cc  -I../../inc -O -c -p lfind.c   && mv lfind.o lfind.p
+lsearch.c:
+	cc  -I../../inc -O -c -p lsearch.c   && mv lsearch.o lsearch.p
+malloc.c:
+	cc  -I../../inc -O -c -p malloc.c   && mv malloc.o malloc.p
+memccpy.c:
+	cc  -I../../inc -O -c -p memccpy.c   && mv memccpy.o memccpy.p
+memchr.c:
+	cc  -I../../inc -O -c -p memchr.c   && mv memchr.o memchr.p
+memcmp.c:
+	cc  -I../../inc -O -c -p memcmp.c   && mv memcmp.o memcmp.p
+memcpy.c:
+	cc  -I../../inc -O -c -p memcpy.c   && mv memcpy.o memcpy.p
+memset.c:
+	cc  -I../../inc -O -c -p memset.c   && mv memset.o memset.p
+mktemp.c:
+	cc  -I../../inc -O -c -p mktemp.c   && mv mktemp.o mktemp.p
+modf.c:
+	cc  -I../../inc -O -c -p modf.c   && mv modf.o modf.p
+mon.c:
+	cc  -I../../inc -O -c -p mon.c   && mv mon.o mon.p
+nlist.c:
+	cc  -I../../inc -O -c -p nlist.c   && mv nlist.o nlist.p
+opendir.c:
+	cc  -I../../inc -O -c -p opendir.c   && mv opendir.o opendir.p
+perror.c:
+	cc  -I../../inc -O -c -p perror.c   && mv perror.o perror.p
+putenv.c:
+	cc  -I../../inc -O -c -p putenv.c   && mv putenv.o putenv.p
+putpwent.c:
+	cc  -I../../inc -O -c -p putpwent.c   && mv putpwent.o putpwent.p
+qsort.c:
+	cc  -I../../inc -O -c -p qsort.c   && mv qsort.o qsort.p
+rand.c:
+	cc  -I../../inc -O -c -p rand.c   && mv rand.o rand.p
+readdir.c:
+	cc  -I../../inc -O -c -p readdir.c   && mv readdir.o readdir.p
+seekdir.c:
+	cc  -I../../inc -O -c -p seekdir.c   && mv seekdir.o seekdir.p
+sleep.c:
+	cc  -I../../inc -O -c -p sleep.c   && mv sleep.o sleep.p
+ssignal.c:
+	cc  -I../../inc -O -c -p ssignal.c   && mv ssignal.o ssignal.p
+"ssignal.c", line 38: warning: illegal pointer combination, op =
+"ssignal.c", line 50: warning: illegal pointer combination, op ==
+"ssignal.c", line 52: warning: illegal pointer combination, op ==
+"ssignal.c", line 55: warning: illegal pointer combination, op =
+strcat.c:
+	cc  -I../../inc -O -c -p strcat.c   && mv strcat.o strcat.p
+strchr.c:
+	cc  -I../../inc -O -c -p strchr.c   && mv strchr.o strchr.p
+strcmp.c:
+	cc  -I../../inc -O -c -p strcmp.c   && mv strcmp.o strcmp.p
+strcpy.c:
+	cc  -I../../inc -O -c -p strcpy.c   && mv strcpy.o strcpy.p
+strcspn.c:
+	cc  -I../../inc -O -c -p strcspn.c   && mv strcspn.o strcspn.p
+strdup.c:
+	cc  -I../../inc -O -c -p strdup.c   && mv strdup.o strdup.p
+strlen.c:
+	cc  -I../../inc -O -c -p strlen.c   && mv strlen.o strlen.p
+strncat.c:
+	cc  -I../../inc -O -c -p strncat.c   && mv strncat.o strncat.p
+strncmp.c:
+	cc  -I../../inc -O -c -p strncmp.c   && mv strncmp.o strncmp.p
+strncpy.c:
+	cc  -I../../inc -O -c -p strncpy.c   && mv strncpy.o strncpy.p
+strpbrk.c:
+	cc  -I../../inc -O -c -p strpbrk.c   && mv strpbrk.o strpbrk.p
+strrchr.c:
+	cc  -I../../inc -O -c -p strrchr.c   && mv strrchr.o strrchr.p
+strspn.c:
+	cc  -I../../inc -O -c -p strspn.c   && mv strspn.o strspn.p
+strtod.c:
+	cc  -I../../inc -O -c -p strtod.c   && mv strtod.o strtod.p
+strtok.c:
+	cc  -I../../inc -O -c -p strtok.c   && mv strtok.o strtok.p
+strtol.c:
+	cc  -I../../inc -O -c -p strtol.c   && mv strtol.o strtol.p
+swab.c:
+	cc  -I../../inc -O -c -p swab.c   && mv swab.o swab.p
+tell.c:
+	cc  -I../../inc -O -c -p tell.c   && mv tell.o tell.p
+telldir.c:
+	cc  -I../../inc -O -c -p telldir.c   && mv telldir.o telldir.p
+tfind.c:
+	cc  -I../../inc -O -c -p tfind.c   && mv tfind.o tfind.p
+tolower.c:
+	cc  -I../../inc -O -c -p tolower.c   && mv tolower.o tolower.p
+toupper.c:
+	cc  -I../../inc -O -c -p toupper.c   && mv toupper.o toupper.p
+tsearch.c:
+	cc  -I../../inc -O -c -p tsearch.c   && mv tsearch.o tsearch.p
+ttyname.c:
+	cc  -I../../inc -O -c -p ttyname.c   && mv ttyname.o ttyname.p
+ttyslot.c:
+	cc  -I../../inc -O -c -p ttyslot.c   && mv ttyslot.o ttyslot.p
+	cd print; make -e  prof NONPROF=@#
+doprnt.c:
+	cc  -I../../inc -O -c -p doprnt.c && mv doprnt.o doprnt.p
+fprintf.c:
+	cc  -I../../inc -O -c -p fprintf.c && mv fprintf.o fprintf.p
+printf.c:
+	cc  -I../../inc -O -c -p printf.c && mv printf.o printf.p
+sprintf.c:
+	cc  -I../../inc -O -c -p sprintf.c && mv sprintf.o sprintf.p
+vfprintf.c:
+	cc  -I../../inc -O -c -p vfprintf.c && mv vfprintf.o vfprintf.p
+vprintf.c:
+	cc  -I../../inc -O -c -p vprintf.c && mv vprintf.o vprintf.p
+vsprintf.c:
+	cc  -I../../inc -O -c -p vsprintf.c && mv vsprintf.o vsprintf.p
+	cd stdio; make -e  prof NONPROF=@#
+clrerr.c:
+	cc  -I../../inc -O  -c -p clrerr.c && mv clrerr.o clrerr.p
+ctermid.c:
+	cc  -I../../inc -O  -c -p ctermid.c && mv ctermid.o ctermid.p
+cuserid.c:
+	cc  -I../../inc -O  -c -p cuserid.c && mv cuserid.o cuserid.p
+data.c:
+	cc  -I../../inc -O  -c -p data.c && mv data.o data.p
+doscan.c:
+	cc  -I../../inc -O  -c -p doscan.c && mv doscan.o doscan.p
+fdopen.c:
+	cc  -I../../inc -O  -c -p fdopen.c && mv fdopen.o fdopen.p
+fgetc.c:
+	cc  -I../../inc -O  -c -p fgetc.c && mv fgetc.o fgetc.p
+fgets.c:
+	cc  -I../../inc -O  -c -p fgets.c && mv fgets.o fgets.p
+filbuf.c:
+	cc  -I../../inc -O  -c -p filbuf.c && mv filbuf.o filbuf.p
+findiop.c:
+	cc  -I../../inc -O  -c -p findiop.c && mv findiop.o findiop.p
+flsbuf.c:
+	cc  -I../../inc -O  -c -p flsbuf.c && mv flsbuf.o flsbuf.p
+fopen.c:
+	cc  -I../../inc -O  -c -p fopen.c && mv fopen.o fopen.p
+fputc.c:
+	cc  -I../../inc -O  -c -p fputc.c && mv fputc.o fputc.p
+fputs.c:
+	cc  -I../../inc -O  -c -p fputs.c && mv fputs.o fputs.p
+fread.c:
+	cc  -I../../inc -O  -c -p fread.c && mv fread.o fread.p
+fseek.c:
+	cc  -I../../inc -O  -c -p fseek.c && mv fseek.o fseek.p
+ftell.c:
+	cc  -I../../inc -O  -c -p ftell.c && mv ftell.o ftell.p
+fwrite.c:
+	cc  -I../../inc -O  -c -p fwrite.c && mv fwrite.o fwrite.p
+getchar.c:
+	cc  -I../../inc -O  -c -p getchar.c && mv getchar.o getchar.p
+getpass.c:
+	cc  -I../../inc -O  -c -p getpass.c && mv getpass.o getpass.p
+"getpass.c", line 41: warning: illegal pointer combination, op =
+gets.c:
+	cc  -I../../inc -O  -c -p gets.c && mv gets.o gets.p
+getw.c:
+	cc  -I../../inc -O  -c -p getw.c && mv getw.o getw.p
+popen.c:
+	cc  -I../../inc -O  -c -p popen.c && mv popen.o popen.p
+"popen.c", line 72: warning: illegal pointer combination, op =
+"popen.c", line 73: warning: illegal pointer combination, op =
+"popen.c", line 74: warning: illegal pointer combination, op =
+putchar.c:
+	cc  -I../../inc -O  -c -p putchar.c && mv putchar.o putchar.p
+puts.c:
+	cc  -I../../inc -O  -c -p puts.c && mv puts.o puts.p
+putw.c:
+	cc  -I../../inc -O  -c -p putw.c && mv putw.o putw.p
+rew.c:
+	cc  -I../../inc -O  -c -p rew.c && mv rew.o rew.p
+scanf.c:
+	cc  -I../../inc -O  -c -p scanf.c && mv scanf.o scanf.p
+setbuf.c:
+	cc  -I../../inc -O  -c -p setbuf.c && mv setbuf.o setbuf.p
+setvbuf.c:
+	cc  -I../../inc -O  -c -p setvbuf.c && mv setvbuf.o setvbuf.p
+system.c:
+	cc  -I../../inc -O  -c -p system.c && mv system.o system.p
+"system.c", line 30: warning: illegal pointer combination, op =
+"system.c", line 31: warning: illegal pointer combination, op =
+tempnam.c:
+	cc  -I../../inc -O  -c -p tempnam.c && mv tempnam.o tempnam.p
+tmpfile.c:
+	cc  -I../../inc -O  -c -p tmpfile.c && mv tmpfile.o tmpfile.p
+tmpnam.c:
+	cc  -I../../inc -O  -c -p tmpnam.c && mv tmpnam.o tmpnam.p
+ungetc.c:
+	cc  -I../../inc -O  -c -p ungetc.c && mv ungetc.o ungetc.p
+	cd sys; make -e  prof NONPROF=@#
+execl.c:
+	cc  -I../../inc -O -c -p execl.c  && mv execl.o execl.p
+execle.c:
+	cc  -I../../inc -O -c -p execle.c  && mv execle.o execle.p
+execv.c:
+	cc  -I../../inc -O -c -p execv.c  && mv execv.o execv.p
+lockf.c:
+	cc  -I../../inc -O -c -p lockf.c  && mv lockf.o lockf.p
+msgsys.c:
+	cc  -I../../inc -O -c -p msgsys.c  && mv msgsys.o msgsys.p
+semsys.c:
+	cc  -I../../inc -O -c -p semsys.c  && mv semsys.o semsys.p
+shmsys.c:
+	cc  -I../../inc -O -c -p shmsys.c  && mv shmsys.o shmsys.p
+sigcall.c:
+	cc  -I../../inc -O -c -p sigcall.c  && mv sigcall.o sigcall.p
+"sigcall.c", line 67: warning: illegal pointer combination, op =
+"sigcall.c", line 98: warning: illegal pointer combination, op ==
+	cd gen; make -e  nonprof PROF=@#
+a64l.c:
+	cc   -I../../inc -O -c a64l.c
+abort.c:
+	cc   -I../../inc -O -c abort.c
+"abort.c", line 25: warning: illegal pointer combination, op =
+"abort.c", line 25: warning: illegal pointer combination, op !=
+abs.c:
+	cc   -I../../inc -O -c abs.c
+assert.c:
+	cc   -I../../inc -O -c assert.c
+atof.c:
+	cc   -I../../inc -O -c atof.c
+atoi.c:
+	cc   -I../../inc -O -c atoi.c
+atol.c:
+	cc   -I../../inc -O -c atol.c
+bsearch.c:
+	cc   -I../../inc -O -c bsearch.c
+calloc.c:
+	cc   -I../../inc -O -c calloc.c
+clock.c:
+	cc   -I../../inc -O -c clock.c
+closedir.c:
+	cc   -I../../inc -O -c closedir.c
+crypt.c:
+	cc   -I../../inc -O -c crypt.c
+ctime.c:
+	cc   -I../../inc -O -c ctime.c
+ctype.c:
+	cc   -I../../inc -O -c ctype.c
+ctype_def.c:
+	cc   -I../../inc -O -c ctype_def.c
+dial.c:
+	cc   -I../../inc -O -c dial.c
+"dial.c", line 150: warning: illegal pointer combination, op =
+"dial.c", line 151: warning: illegal pointer combination, op =
+drand48.c:
+	cc   -I../../inc -O -c drand48.c
+dup2.c:
+	cc   -I../../inc -O -c dup2.c
+ecvt.c:
+	cc   -I../../inc -O -c ecvt.c
+errlst.c:
+	cc   -I../../inc -O -c errlst.c
+err_def.c:
+	cc   -I../../inc -O -c err_def.c
+execvp.c:
+	cc   -I../../inc -O -c execvp.c
+fakcu.c:
+	cc   -I../../inc -O -c fakcu.c
+frexp.c:
+	cc   -I../../inc -O -c frexp.c
+ftok.c:
+	cc   -I../../inc -O -c ftok.c
+ftw.c:
+	cc   -I../../inc -O -c ftw.c
+gcvt.c:
+	cc   -I../../inc -O -c gcvt.c
+getcwd.c:
+	cc   -I../../inc -O -c getcwd.c
+getenv.c:
+	cc   -I../../inc -O -c getenv.c
+getgrent.c:
+	cc   -I../../inc -O -c getgrent.c
+getgrgid.c:
+	cc   -I../../inc -O -c getgrgid.c
+getgrnam.c:
+	cc   -I../../inc -O -c getgrnam.c
+getlogin.c:
+	cc   -I../../inc -O -c getlogin.c
+getopt.c:
+	cc   -I../../inc -O -c getopt.c
+getpw.c:
+	cc   -I../../inc -O -c getpw.c
+getpwent.c:
+	cc   -I../../inc -O -c getpwent.c
+getpwnam.c:
+	cc   -I../../inc -O -c getpwnam.c
+getpwuid.c:
+	cc   -I../../inc -O -c getpwuid.c
+getut.c:
+	cc   -I../../inc -O -c getut.c
+grent_def.c:
+	cc   -I../../inc -O -c grent_def.c
+hsearch.c:
+	cc   -I../../inc -O -c hsearch.c
+"hsearch.c", line 258: warning: enumeration type clash, operator ==
+isatty.c:
+	cc   -I../../inc -O -c isatty.c
+l3.c:
+	cc   -I../../inc -O -c l3.c
+l64a.c:
+	cc   -I../../inc -O -c l64a.c
+ldexp.c:
+	cc   -I../../inc -O -c ldexp.c
+lfind.c:
+	cc   -I../../inc -O -c lfind.c
+lsearch.c:
+	cc   -I../../inc -O -c lsearch.c
+malloc.c:
+	cc   -I../../inc -O -c malloc.c
+mall_def.c:
+	cc   -I../../inc -O -c mall_def.c
+memccpy.c:
+	cc   -I../../inc -O -c memccpy.c
+memchr.c:
+	cc   -I../../inc -O -c memchr.c
+memcmp.c:
+	cc   -I../../inc -O -c memcmp.c
+memcpy.c:
+	cc   -I../../inc -O -c memcpy.c
+memset.c:
+	cc   -I../../inc -O -c memset.c
+mktemp.c:
+	cc   -I../../inc -O -c mktemp.c
+modf.c:
+	cc   -I../../inc -O -c modf.c
+mon.c:
+	cc   -I../../inc -O -c mon.c
+nlist.c:
+	cc   -I../../inc -O -c nlist.c
+opendir.c:
+	cc   -I../../inc -O -c opendir.c
+opt_data.c:
+	cc   -I../../inc -O -c opt_data.c
+perror.c:
+	cc   -I../../inc -O -c perror.c
+putenv.c:
+	cc   -I../../inc -O -c putenv.c
+putpwent.c:
+	cc   -I../../inc -O -c putpwent.c
+pwent_def.c:
+	cc   -I../../inc -O -c pwent_def.c
+qsort.c:
+	cc   -I../../inc -O -c qsort.c
+rand.c:
+	cc   -I../../inc -O -c rand.c
+readdir.c:
+	cc   -I../../inc -O -c readdir.c
+seekdir.c:
+	cc   -I../../inc -O -c seekdir.c
+sleep.c:
+	cc   -I../../inc -O -c sleep.c
+ssignal.c:
+	cc   -I../../inc -O -c ssignal.c
+"ssignal.c", line 38: warning: illegal pointer combination, op =
+"ssignal.c", line 50: warning: illegal pointer combination, op ==
+"ssignal.c", line 52: warning: illegal pointer combination, op ==
+"ssignal.c", line 55: warning: illegal pointer combination, op =
+strcat.c:
+	cc   -I../../inc -O -c strcat.c
+strchr.c:
+	cc   -I../../inc -O -c strchr.c
+strcmp.c:
+	cc   -I../../inc -O -c strcmp.c
+strcpy.c:
+	cc   -I../../inc -O -c strcpy.c
+strcspn.c:
+	cc   -I../../inc -O -c strcspn.c
+strdup.c:
+	cc   -I../../inc -O -c strdup.c
+strlen.c:
+	cc   -I../../inc -O -c strlen.c
+strncat.c:
+	cc   -I../../inc -O -c strncat.c
+strncmp.c:
+	cc   -I../../inc -O -c strncmp.c
+strncpy.c:
+	cc   -I../../inc -O -c strncpy.c
+strpbrk.c:
+	cc   -I../../inc -O -c strpbrk.c
+strrchr.c:
+	cc   -I../../inc -O -c strrchr.c
+strspn.c:
+	cc   -I../../inc -O -c strspn.c
+strtod.c:
+	cc   -I../../inc -O -c strtod.c
+strtok.c:
+	cc   -I../../inc -O -c strtok.c
+strtol.c:
+	cc   -I../../inc -O -c strtol.c
+swab.c:
+	cc   -I../../inc -O -c swab.c
+tell.c:
+	cc   -I../../inc -O -c tell.c
+telldir.c:
+	cc   -I../../inc -O -c telldir.c
+tfind.c:
+	cc   -I../../inc -O -c tfind.c
+tolower.c:
+	cc   -I../../inc -O -c tolower.c
+toupper.c:
+	cc   -I../../inc -O -c toupper.c
+tsearch.c:
+	cc   -I../../inc -O -c tsearch.c
+ttyname.c:
+	cc   -I../../inc -O -c ttyname.c
+ttyslot.c:
+	cc   -I../../inc -O -c ttyslot.c
+	cd print; make -e  nonprof PROF=@#
+doprnt.c:
+	cc   -I../../inc -O -c doprnt.c
+fprintf.c:
+	cc   -I../../inc -O -c fprintf.c
+printf.c:
+	cc   -I../../inc -O -c printf.c
+sprintf.c:
+	cc   -I../../inc -O -c sprintf.c
+vfprintf.c:
+	cc   -I../../inc -O -c vfprintf.c
+vprintf.c:
+	cc   -I../../inc -O -c vprintf.c
+vsprintf.c:
+	cc   -I../../inc -O -c vsprintf.c
+	cd stdio; make -e  nonprof PROF=@#
+clrerr.c:
+	cc   -I../../inc -O  -c clrerr.c
+ctermid.c:
+	cc   -I../../inc -O  -c ctermid.c
+cuserid.c:
+	cc   -I../../inc -O  -c cuserid.c
+data.c:
+	cc   -I../../inc -O  -c data.c
+doscan.c:
+	cc   -I../../inc -O  -c doscan.c
+fdopen.c:
+	cc   -I../../inc -O  -c fdopen.c
+fgetc.c:
+	cc   -I../../inc -O  -c fgetc.c
+fgets.c:
+	cc   -I../../inc -O  -c fgets.c
+filbuf.c:
+	cc   -I../../inc -O  -c filbuf.c
+findiop.c:
+	cc   -I../../inc -O  -c findiop.c
+flsbuf.c:
+	cc   -I../../inc -O  -c flsbuf.c
+fopen.c:
+	cc   -I../../inc -O  -c fopen.c
+fputc.c:
+	cc   -I../../inc -O  -c fputc.c
+fputs.c:
+	cc   -I../../inc -O  -c fputs.c
+fread.c:
+	cc   -I../../inc -O  -c fread.c
+fseek.c:
+	cc   -I../../inc -O  -c fseek.c
+ftell.c:
+	cc   -I../../inc -O  -c ftell.c
+fwrite.c:
+	cc   -I../../inc -O  -c fwrite.c
+getchar.c:
+	cc   -I../../inc -O  -c getchar.c
+getpass.c:
+	cc   -I../../inc -O  -c getpass.c
+"getpass.c", line 41: warning: illegal pointer combination, op =
+gets.c:
+	cc   -I../../inc -O  -c gets.c
+getw.c:
+	cc   -I../../inc -O  -c getw.c
+popen.c:
+	cc   -I../../inc -O  -c popen.c
+"popen.c", line 72: warning: illegal pointer combination, op =
+"popen.c", line 73: warning: illegal pointer combination, op =
+"popen.c", line 74: warning: illegal pointer combination, op =
+putchar.c:
+	cc   -I../../inc -O  -c putchar.c
+puts.c:
+	cc   -I../../inc -O  -c puts.c
+putw.c:
+	cc   -I../../inc -O  -c putw.c
+rew.c:
+	cc   -I../../inc -O  -c rew.c
+scanf.c:
+	cc   -I../../inc -O  -c scanf.c
+setbuf.c:
+	cc   -I../../inc -O  -c setbuf.c
+setvbuf.c:
+	cc   -I../../inc -O  -c setvbuf.c
+stdio_def.c:
+	cc   -I../../inc -O  -c stdio_def.c
+system.c:
+	cc   -I../../inc -O  -c system.c
+"system.c", line 30: warning: illegal pointer combination, op =
+"system.c", line 31: warning: illegal pointer combination, op =
+tempnam.c:
+	cc   -I../../inc -O  -c tempnam.c
+tmpfile.c:
+	cc   -I../../inc -O  -c tmpfile.c
+tmpnam.c:
+	cc   -I../../inc -O  -c tmpnam.c
+ungetc.c:
+	cc   -I../../inc -O  -c ungetc.c
+	cd sys; make -e  nonprof PROF=@#
+execl.c:
+	cc   -I../../inc -O -c execl.c
+execle.c:
+	cc   -I../../inc -O -c execle.c
+execv.c:
+	cc   -I../../inc -O -c execv.c
+lockf.c:
+	cc   -I../../inc -O -c lockf.c
+msgsys.c:
+	cc   -I../../inc -O -c msgsys.c
+semsys.c:
+	cc   -I../../inc -O -c semsys.c
+shmsys.c:
+	cc   -I../../inc -O -c shmsys.c
+sigcall.c:
+	cc   -I../../inc -O -c sigcall.c
+"sigcall.c", line 67: warning: illegal pointer combination, op =
+"sigcall.c", line 98: warning: illegal pointer combination, op ==
+	#
+	# compile machine-dependent library modules
+	cd ../libc/m68k; make -e all CC=cc FP=m68881u		 DBLALIGN=NO 
+	cd crt ; make -e  nonprof PROF=@#
+addmag.c:
+	cc -O -S addmag.c
+	sed -f massage.sed <addmag.s >temp
+	mv temp addmag.s
+	cc -O -c addmag.s
+	rm addmag.s
+fladd.c:
+	cc -O -S fladd.c
+	sed -f massage.sed <fladd.s >temp
+	mv temp fladd.s
+	cc -O -c fladd.s
+	rm fladd.s
+flcmp.c:
+	cc -O -S flcmp.c
+	sed -f massage.sed <flcmp.s >temp
+	mv temp flcmp.s
+	cc -O -c flcmp.s
+	rm flcmp.s
+fldiv.c:
+	cc -O -S fldiv.c
+	sed -f massage.sed <fldiv.s >temp
+	mv temp fldiv.s
+	cc -O -c fldiv.s
+	rm fldiv.s
+flmul.c:
+	cc -O -S flmul.c
+	sed -f massage.sed <flmul.s >temp
+	mv temp flmul.s
+	cc -O -c flmul.s
+	rm flmul.s
+flneg.c:
+	cc -O -S flneg.c
+	sed -f massage.sed <flneg.s >temp
+	mv temp flneg.s
+	cc -O -c flneg.s
+	rm flneg.s
+flsub.c:
+	cc -O -S flsub.c
+	sed -f massage.sed <flsub.s >temp
+	mv temp flsub.s
+	cc -O -c flsub.s
+	rm flsub.s
+fltst.c:
+	cc -O -S fltst.c
+	sed -f massage.sed <fltst.s >temp
+	mv temp fltst.s
+	cc -O -c fltst.s
+	rm fltst.s
+ftol.c:
+	cc -O -S ftol.c
+	sed -f massage.sed <ftol.s >temp
+	mv temp ftol.s
+	cc -O -c ftol.s
+	rm ftol.s
+itof.c:
+	cc -O -S itof.c
+	sed -f massage.sed <itof.s >temp
+	mv temp itof.s
+	cc -O -c itof.s
+	rm itof.s
+ltof.c:
+	cc -O -S ltof.c
+	sed -f massage.sed <ltof.s >temp
+	mv temp ltof.s
+	cc -O -c ltof.s
+	rm ltof.s
+submag.c:
+	cc -O -S submag.c
+	sed -f massage.sed <submag.s >temp
+	mv temp submag.s
+	cc -O -c submag.s
+	rm submag.s
+uitof.c:
+	cc -O -S uitof.c
+	sed -f massage.sed <uitof.s >temp
+	mv temp uitof.s
+	cc -O -c uitof.s
+	rm uitof.s
+ultof.c:
+	cc -O -S ultof.c
+	sed -f massage.sed <ultof.s >temp
+	mv temp ultof.s
+	cc -O -c ultof.s
+	rm ultof.s
+dbadd.s:
+	m4 ../m4.def -DMCOUNT=#  dbadd.s   > temp.s   && \
+	cc -O -c temp.s && mv temp.o dbadd.o
+dbcmp.s:
+	m4 ../m4.def -DMCOUNT=#  dbcmp.s   > temp.s   && \
+	cc -O -c temp.s && mv temp.o dbcmp.o
+dbdiv.s:
+	m4 ../m4.def -DMCOUNT=#  dbdiv.s   > temp.s   && \
+	cc -O -c temp.s && mv temp.o dbdiv.o
+dbmul.s:
+	m4 ../m4.def -DMCOUNT=#  dbmul.s   > temp.s   && \
+	cc -O -c temp.s && mv temp.o dbmul.o
+dbneg.s:
+	m4 ../m4.def -DMCOUNT=#  dbneg.s   > temp.s   && \
+	cc -O -c temp.s && mv temp.o dbneg.o
+dbtofl.s:
+	m4 ../m4.def -DMCOUNT=#  dbtofl.s   > temp.s   && \
+	cc -O -c temp.s && mv temp.o dbtofl.o
+dbtol.s:
+	m4 ../m4.def -DMCOUNT=#  dbtol.s   > temp.s   && \
+	cc -O -c temp.s && mv temp.o dbtol.o
+dbtst.s:
+	m4 ../m4.def -DMCOUNT=#  dbtst.s   > temp.s   && \
+	cc -O -c temp.s && mv temp.o dbtst.o
+fltodb.s:
+	m4 ../m4.def -DMCOUNT=#  fltodb.s   > temp.s   && \
+	cc -O -c temp.s && mv temp.o fltodb.o
+ltodb.s:
+	m4 ../m4.def -DMCOUNT=#  ltodb.s   > temp.s   && \
+	cc -O -c temp.s && mv temp.o ltodb.o
+fpdata.s:
+	m4 ../m4.def -DMCOUNT=#  fpdata.s   > temp.s   && \
+	cc -O -c temp.s && mv temp.o fpdata.o
+table.s:
+	m4 ../m4.def -DMCOUNT=#  table.s   > temp.s   && \
+	cc -O -c temp.s && mv temp.o table.o
+chrtab.c:
+	cc -O -S chrtab.c
+	sed -f massage.sed <chrtab.s >temp
+	mv temp chrtab.s
+	cc -O -c chrtab.s
+	rm chrtab.s
+ldiv.s:
+	m4 ../m4.def -DMCOUNT=#  ldiv.s   > temp.s   && \
+	cc -O -c temp.s && mv temp.o ldiv.o
+lmul.s:
+	m4 ../m4.def -DMCOUNT=#  lmul.s   > temp.s   && \
+	cc -O -c temp.s && mv temp.o lmul.o
+cerror.s:
+	m4 ../m4.def -DMCOUNT=#  cerror.s   > temp.s   && \
+	cc -O -c temp.s && mv temp.o cerror.o
+sigcode.s:
+	m4 ../m4.def -DMCOUNT=#  sigcode.s   > temp.s   && \
+	cc -O -c temp.s && mv temp.o sigcode.o
+spgrow.s:
+	m4 ../m4.def -DMCOUNT=#  spgrow.s   > temp.s   && \
+	cc -O -c temp.s && mv temp.o spgrow.o
+mcount.s:
+	m4 ../m4.def -DMCOUNT=#  mcount.s   > temp.s   && \
+	cc -O -c temp.s && mv temp.o mcount.o
+	cd crt ; make -e  prof NONPROF=@#
+addmag.c:
+	if test -f addmag.o ; then mv addmag.o tmp.o ; fi ; \
+		cc -p -O -S addmag.c
+	sed -f massage.sed <addmag.s >temp
+	mv temp addmag.s
+	cc -p -O -c addmag.s && mv addmag.o addmag.p ; \
+		if test -f tmp.o ; then mv tmp.o addmag.o ; fi
+	rm addmag.s
+fladd.c:
+	if test -f fladd.o ; then mv fladd.o tmp.o ; fi ; \
+		cc -p -O -S fladd.c
+	sed -f massage.sed <fladd.s >temp
+	mv temp fladd.s
+	cc -p -O -c fladd.s && mv fladd.o fladd.p ; \
+		if test -f tmp.o ; then mv tmp.o fladd.o ; fi
+	rm fladd.s
+flcmp.c:
+	if test -f flcmp.o ; then mv flcmp.o tmp.o ; fi ; \
+		cc -p -O -S flcmp.c
+	sed -f massage.sed <flcmp.s >temp
+	mv temp flcmp.s
+	cc -p -O -c flcmp.s && mv flcmp.o flcmp.p ; \
+		if test -f tmp.o ; then mv tmp.o flcmp.o ; fi
+	rm flcmp.s
+fldiv.c:
+	if test -f fldiv.o ; then mv fldiv.o tmp.o ; fi ; \
+		cc -p -O -S fldiv.c
+	sed -f massage.sed <fldiv.s >temp
+	mv temp fldiv.s
+	cc -p -O -c fldiv.s && mv fldiv.o fldiv.p ; \
+		if test -f tmp.o ; then mv tmp.o fldiv.o ; fi
+	rm fldiv.s
+flmul.c:
+	if test -f flmul.o ; then mv flmul.o tmp.o ; fi ; \
+		cc -p -O -S flmul.c
+	sed -f massage.sed <flmul.s >temp
+	mv temp flmul.s
+	cc -p -O -c flmul.s && mv flmul.o flmul.p ; \
+		if test -f tmp.o ; then mv tmp.o flmul.o ; fi
+	rm flmul.s
+flneg.c:
+	if test -f flneg.o ; then mv flneg.o tmp.o ; fi ; \
+		cc -p -O -S flneg.c
+	sed -f massage.sed <flneg.s >temp
+	mv temp flneg.s
+	cc -p -O -c flneg.s && mv flneg.o flneg.p ; \
+		if test -f tmp.o ; then mv tmp.o flneg.o ; fi
+	rm flneg.s
+flsub.c:
+	if test -f flsub.o ; then mv flsub.o tmp.o ; fi ; \
+		cc -p -O -S flsub.c
+	sed -f massage.sed <flsub.s >temp
+	mv temp flsub.s
+	cc -p -O -c flsub.s && mv flsub.o flsub.p ; \
+		if test -f tmp.o ; then mv tmp.o flsub.o ; fi
+	rm flsub.s
+fltst.c:
+	if test -f fltst.o ; then mv fltst.o tmp.o ; fi ; \
+		cc -p -O -S fltst.c
+	sed -f massage.sed <fltst.s >temp
+	mv temp fltst.s
+	cc -p -O -c fltst.s && mv fltst.o fltst.p ; \
+		if test -f tmp.o ; then mv tmp.o fltst.o ; fi
+	rm fltst.s
+ftol.c:
+	if test -f ftol.o ; then mv ftol.o tmp.o ; fi ; \
+		cc -p -O -S ftol.c
+	sed -f massage.sed <ftol.s >temp
+	mv temp ftol.s
+	cc -p -O -c ftol.s && mv ftol.o ftol.p ; \
+		if test -f tmp.o ; then mv tmp.o ftol.o ; fi
+	rm ftol.s
+itof.c:
+	if test -f itof.o ; then mv itof.o tmp.o ; fi ; \
+		cc -p -O -S itof.c
+	sed -f massage.sed <itof.s >temp
+	mv temp itof.s
+	cc -p -O -c itof.s && mv itof.o itof.p ; \
+		if test -f tmp.o ; then mv tmp.o itof.o ; fi
+	rm itof.s
+ltof.c:
+	if test -f ltof.o ; then mv ltof.o tmp.o ; fi ; \
+		cc -p -O -S ltof.c
+	sed -f massage.sed <ltof.s >temp
+	mv temp ltof.s
+	cc -p -O -c ltof.s && mv ltof.o ltof.p ; \
+		if test -f tmp.o ; then mv tmp.o ltof.o ; fi
+	rm ltof.s
+submag.c:
+	if test -f submag.o ; then mv submag.o tmp.o ; fi ; \
+		cc -p -O -S submag.c
+	sed -f massage.sed <submag.s >temp
+	mv temp submag.s
+	cc -p -O -c submag.s && mv submag.o submag.p ; \
+		if test -f tmp.o ; then mv tmp.o submag.o ; fi
+	rm submag.s
+uitof.c:
+	if test -f uitof.o ; then mv uitof.o tmp.o ; fi ; \
+		cc -p -O -S uitof.c
+	sed -f massage.sed <uitof.s >temp
+	mv temp uitof.s
+	cc -p -O -c uitof.s && mv uitof.o uitof.p ; \
+		if test -f tmp.o ; then mv tmp.o uitof.o ; fi
+	rm uitof.s
+ultof.c:
+	if test -f ultof.o ; then mv ultof.o tmp.o ; fi ; \
+		cc -p -O -S ultof.c
+	sed -f massage.sed <ultof.s >temp
+	mv temp ultof.s
+	cc -p -O -c ultof.s && mv ultof.o ultof.p ; \
+		if test -f tmp.o ; then mv tmp.o ultof.o ; fi
+	rm ultof.s
+chrtab.c:
+	if test -f chrtab.o ; then mv chrtab.o tmp.o ; fi ; \
+		cc -p -O -S chrtab.c
+	sed -f massage.sed <chrtab.s >temp
+	mv temp chrtab.s
+	cc -p -O -c chrtab.s && mv chrtab.o chrtab.p ; \
+		if test -f tmp.o ; then mv tmp.o chrtab.o ; fi
+	rm chrtab.s
+	make -e  prof NONPROF=@#
+csu/crt0.s:
+	m4 m4.def mcount.def  csu/crt0.s   > crt0.s 
+	cc  -O -c -p crt0.s  && mv crt0.o csu/crt0.p
+	rm crt0.s
+csu/mcrt0.s:
+	m4 m4.def mcount.def  csu/mcrt0.s   > mcrt0.s 
+	cc  -O -c -p mcrt0.s  && mv mcrt0.o csu/mcrt0.p
+	rm mcrt0.s
+csu/initfpu.s:
+	m4 m4.def mcount.def  csu/initfpu.s   > initfpu.s 
+	cc  -O -c -p initfpu.s  && mv initfpu.o csu/initfpu.p
+	rm initfpu.s
+gen/abs.s:
+	m4 m4.def mcount.def  gen/abs.s   > abs.s 
+	cc  -O -c -p abs.s  && mv abs.o gen/abs.p
+	rm abs.s
+gen/cuexit.s:
+	m4 m4.def mcount.def  gen/cuexit.s   > cuexit.s 
+	cc  -O -c -p cuexit.s  && mv cuexit.o gen/cuexit.p
+	rm cuexit.s
+gen/ecvt.c:
+	cc  -I../inc -O -c -p gen/ecvt.c  && mv ecvt.o gen/ecvt.p
+gen/frexp.c:
+	cc  -I../inc -O -c -p gen/frexp.c  && mv frexp.o gen/frexp.p
+gen/ltostr.c:
+	cc  -I../inc -O -c -p gen/ltostr.c  && mv ltostr.o gen/ltostr.p
+gen/memcpy.s:
+	m4 m4.def mcount.def  gen/memcpy.s   > memcpy.s 
+	cc  -O -c -p memcpy.s  && mv memcpy.o gen/memcpy.p
+	rm memcpy.s
+gen/setjmp.s:
+	m4 m4.def mcount.def  gen/setjmp.s   > setjmp.s 
+	cc  -O -c -p setjmp.s  && mv setjmp.o gen/setjmp.p
+	rm setjmp.s
+gen/strcpy.s:
+	m4 m4.def mcount.def  gen/strcpy.s   > strcpy.s 
+	cc  -O -c -p strcpy.s  && mv strcpy.o gen/strcpy.p
+	rm strcpy.s
+gen/strcmp.s:
+	m4 m4.def mcount.def  gen/strcmp.s   > strcmp.s 
+	cc  -O -c -p strcmp.s  && mv strcmp.o gen/strcmp.p
+	rm strcmp.s
+gen/strlen.s:
+	m4 m4.def mcount.def  gen/strlen.s   > strlen.s 
+	cc  -O -c -p strlen.s  && mv strlen.o gen/strlen.p
+	rm strlen.s
+gen/sysm68k.c:
+	cc  -I../inc -O -c -p gen/sysm68k.c  && mv sysm68k.o gen/sysm68k.p
+sys/access.s:
+	m4 m4.def mcount.def  sys/access.s   > access.s 
+	cc  -O -c -p access.s  && mv access.o sys/access.p
+	rm access.s
+sys/acct.s:
+	m4 m4.def mcount.def  sys/acct.s   > acct.s 
+	cc  -O -c -p acct.s  && mv acct.o sys/acct.p
+	rm acct.s
+sys/alarm.s:
+	m4 m4.def mcount.def  sys/alarm.s   > alarm.s 
+	cc  -O -c -p alarm.s  && mv alarm.o sys/alarm.p
+	rm alarm.s
+sys/chdir.s:
+	m4 m4.def mcount.def  sys/chdir.s   > chdir.s 
+	cc  -O -c -p chdir.s  && mv chdir.o sys/chdir.p
+	rm chdir.s
+sys/chmod.s:
+	m4 m4.def mcount.def  sys/chmod.s   > chmod.s 
+	cc  -O -c -p chmod.s  && mv chmod.o sys/chmod.p
+	rm chmod.s
+sys/chown.s:
+	m4 m4.def mcount.def  sys/chown.s   > chown.s 
+	cc  -O -c -p chown.s  && mv chown.o sys/chown.p
+	rm chown.s
+sys/chroot.s:
+	m4 m4.def mcount.def  sys/chroot.s   > chroot.s 
+	cc  -O -c -p chroot.s  && mv chroot.o sys/chroot.p
+	rm chroot.s
+sys/close.s:
+	m4 m4.def mcount.def  sys/close.s   > close.s 
+	cc  -O -c -p close.s  && mv close.o sys/close.p
+	rm close.s
+sys/creat.s:
+	m4 m4.def mcount.def  sys/creat.s   > creat.s 
+	cc  -O -c -p creat.s  && mv creat.o sys/creat.p
+	rm creat.s
+sys/dup.s:
+	m4 m4.def mcount.def  sys/dup.s   > dup.s 
+	cc  -O -c -p dup.s  && mv dup.o sys/dup.p
+	rm dup.s
+sys/execve.s:
+	m4 m4.def mcount.def  sys/execve.s   > execve.s 
+	cc  -O -c -p execve.s  && mv execve.o sys/execve.p
+	rm execve.s
+sys/exit.s:
+	m4 m4.def mcount.def  sys/exit.s   > exit.s 
+	cc  -O -c -p exit.s  && mv exit.o sys/exit.p
+	rm exit.s
+sys/fcntl.s:
+	m4 m4.def mcount.def  sys/fcntl.s   > fcntl.s 
+	cc  -O -c -p fcntl.s  && mv fcntl.o sys/fcntl.p
+	rm fcntl.s
+sys/fork.s:
+	m4 m4.def mcount.def  sys/fork.s   > fork.s 
+	cc  -O -c -p fork.s  && mv fork.o sys/fork.p
+	rm fork.s
+sys/fstat.s:
+	m4 m4.def mcount.def  sys/fstat.s   > fstat.s 
+	cc  -O -c -p fstat.s  && mv fstat.o sys/fstat.p
+	rm fstat.s
+sys/getegid.s:
+	m4 m4.def mcount.def  sys/getegid.s   > getegid.s 
+	cc  -O -c -p getegid.s  && mv getegid.o sys/getegid.p
+	rm getegid.s
+sys/geteuid.s:
+	m4 m4.def mcount.def  sys/geteuid.s   > geteuid.s 
+	cc  -O -c -p geteuid.s  && mv geteuid.o sys/geteuid.p
+	rm geteuid.s
+sys/getgid.s:
+	m4 m4.def mcount.def  sys/getgid.s   > getgid.s 
+	cc  -O -c -p getgid.s  && mv getgid.o sys/getgid.p
+	rm getgid.s
+sys/getpid.s:
+	m4 m4.def mcount.def  sys/getpid.s   > getpid.s 
+	cc  -O -c -p getpid.s  && mv getpid.o sys/getpid.p
+	rm getpid.s
+sys/getppid.s:
+	m4 m4.def mcount.def  sys/getppid.s   > getppid.s 
+	cc  -O -c -p getppid.s  && mv getppid.o sys/getppid.p
+	rm getppid.s
+sys/getuid.s:
+	m4 m4.def mcount.def  sys/getuid.s   > getuid.s 
+	cc  -O -c -p getuid.s  && mv getuid.o sys/getuid.p
+	rm getuid.s
+sys/gtty.s:
+	m4 m4.def mcount.def  sys/gtty.s   > gtty.s 
+	cc  -O -c -p gtty.s  && mv gtty.o sys/gtty.p
+	rm gtty.s
+sys/ioctl.s:
+	m4 m4.def mcount.def  sys/ioctl.s   > ioctl.s 
+	cc  -O -c -p ioctl.s  && mv ioctl.o sys/ioctl.p
+	rm ioctl.s
+sys/kill.s:
+	m4 m4.def mcount.def  sys/kill.s   > kill.s 
+	cc  -O -c -p kill.s  && mv kill.o sys/kill.p
+	rm kill.s
+sys/link.s:
+	m4 m4.def mcount.def  sys/link.s   > link.s 
+	cc  -O -c -p link.s  && mv link.o sys/link.p
+	rm link.s
+sys/lseek.s:
+	m4 m4.def mcount.def  sys/lseek.s   > lseek.s 
+	cc  -O -c -p lseek.s  && mv lseek.o sys/lseek.p
+	rm lseek.s
+sys/mknod.s:
+	m4 m4.def mcount.def  sys/mknod.s   > mknod.s 
+	cc  -O -c -p mknod.s  && mv mknod.o sys/mknod.p
+	rm mknod.s
+sys/mount.s:
+	m4 m4.def mcount.def  sys/mount.s   > mount.s 
+	cc  -O -c -p mount.s  && mv mount.o sys/mount.p
+	rm mount.s
+sys/msgsys.c:
+	cc  -I../inc -O -c -p sys/msgsys.c  && mv msgsys.o sys/msgsys.p
+sys/nice.s:
+	m4 m4.def mcount.def  sys/nice.s   > nice.s 
+	cc  -O -c -p nice.s  && mv nice.o sys/nice.p
+	rm nice.s
+sys/open.s:
+	m4 m4.def mcount.def  sys/open.s   > open.s 
+	cc  -O -c -p open.s  && mv open.o sys/open.p
+	rm open.s
+sys/pause.s:
+	m4 m4.def mcount.def  sys/pause.s   > pause.s 
+	cc  -O -c -p pause.s  && mv pause.o sys/pause.p
+	rm pause.s
+sys/pipe.s:
+	m4 m4.def mcount.def  sys/pipe.s   > pipe.s 
+	cc  -O -c -p pipe.s  && mv pipe.o sys/pipe.p
+	rm pipe.s
+sys/profil.s:
+	m4 m4.def mcount.def  sys/profil.s   > profil.s 
+	cc  -O -c -p profil.s  && mv profil.o sys/profil.p
+	rm profil.s
+sys/plock.s:
+	m4 m4.def mcount.def  sys/plock.s   > plock.s 
+	cc  -O -c -p plock.s  && mv plock.o sys/plock.p
+	rm plock.s
+sys/ptrace.s:
+	m4 m4.def mcount.def  sys/ptrace.s   > ptrace.s 
+	cc  -O -c -p ptrace.s  && mv ptrace.o sys/ptrace.p
+	rm ptrace.s
+sys/read.s:
+	m4 m4.def mcount.def  sys/read.s   > read.s 
+	cc  -O -c -p read.s  && mv read.o sys/read.p
+	rm read.s
+sys/sbrk.s:
+	m4 m4.def mcount.def  sys/sbrk.s   > sbrk.s 
+	cc  -O -c -p sbrk.s  && mv sbrk.o sys/sbrk.p
+	rm sbrk.s
+sys/semsys.c:
+	cc  -I../inc -O -c -p sys/semsys.c  && mv semsys.o sys/semsys.p
+sys/putmsg.s:
+	m4 m4.def mcount.def  sys/putmsg.s   > putmsg.s 
+	cc  -O -c -p putmsg.s  && mv putmsg.o sys/putmsg.p
+	rm putmsg.s
+sys/getmsg.s:
+	m4 m4.def mcount.def  sys/getmsg.s   > getmsg.s 
+	cc  -O -c -p getmsg.s  && mv getmsg.o sys/getmsg.p
+	rm getmsg.s
+sys/poll.s:
+	m4 m4.def mcount.def  sys/poll.s   > poll.s 
+	cc  -O -c -p poll.s  && mv poll.o sys/poll.p
+	rm poll.s
+sys/setgid.s:
+	m4 m4.def mcount.def  sys/setgid.s   > setgid.s 
+	cc  -O -c -p setgid.s  && mv setgid.o sys/setgid.p
+	rm setgid.s
+sys/setpgrp.s:
+	m4 m4.def mcount.def  sys/setpgrp.s   > setpgrp.s 
+	cc  -O -c -p setpgrp.s  && mv setpgrp.o sys/setpgrp.p
+	rm setpgrp.s
+sys/setuid.s:
+	m4 m4.def mcount.def  sys/setuid.s   > setuid.s 
+	cc  -O -c -p setuid.s  && mv setuid.o sys/setuid.p
+	rm setuid.s
+sys/shmsys.c:
+	cc  -I../inc -O -c -p sys/shmsys.c  && mv shmsys.o sys/shmsys.p
+sys/signal.s:
+	m4 m4.def mcount.def  sys/signal.s   > signal.s 
+	cc  -O -c -p signal.s  && mv signal.o sys/signal.p
+	rm signal.s
+sys/stat.s:
+	m4 m4.def mcount.def  sys/stat.s   > stat.s 
+	cc  -O -c -p stat.s  && mv stat.o sys/stat.p
+	rm stat.s
+sys/stime.s:
+	m4 m4.def mcount.def  sys/stime.s   > stime.s 
+	cc  -O -c -p stime.s  && mv stime.o sys/stime.p
+	rm stime.s
+sys/stty.s:
+	m4 m4.def mcount.def  sys/stty.s   > stty.s 
+	cc  -O -c -p stty.s  && mv stty.o sys/stty.p
+	rm stty.s
+sys/sync.s:
+	m4 m4.def mcount.def  sys/sync.s   > sync.s 
+	cc  -O -c -p sync.s  && mv sync.o sys/sync.p
+	rm sync.s
+sys/_sysm68k.s:
+	m4 m4.def mcount.def  sys/_sysm68k.s   > _sysm68k.s 
+	cc  -O -c -p _sysm68k.s  && mv _sysm68k.o sys/_sysm68k.p
+	rm _sysm68k.s
+sys/syscall.s:
+	m4 m4.def mcount.def  sys/syscall.s   > syscall.s 
+	cc  -O -c -p syscall.s  && mv syscall.o sys/syscall.p
+	rm syscall.s
+sys/time.s:
+	m4 m4.def mcount.def  sys/time.s   > time.s 
+	cc  -O -c -p time.s  && mv time.o sys/time.p
+	rm time.s
+sys/times.s:
+	m4 m4.def mcount.def  sys/times.s   > times.s 
+	cc  -O -c -p times.s  && mv times.o sys/times.p
+	rm times.s
+sys/ulimit.s:
+	m4 m4.def mcount.def  sys/ulimit.s   > ulimit.s 
+	cc  -O -c -p ulimit.s  && mv ulimit.o sys/ulimit.p
+	rm ulimit.s
+sys/umask.s:
+	m4 m4.def mcount.def  sys/umask.s   > umask.s 
+	cc  -O -c -p umask.s  && mv umask.o sys/umask.p
+	rm umask.s
+sys/umount.s:
+	m4 m4.def mcount.def  sys/umount.s   > umount.s 
+	cc  -O -c -p umount.s  && mv umount.o sys/umount.p
+	rm umount.s
+sys/uname.s:
+	m4 m4.def mcount.def  sys/uname.s   > uname.s 
+	cc  -O -c -p uname.s  && mv uname.o sys/uname.p
+	rm uname.s
+sys/unlink.s:
+	m4 m4.def mcount.def  sys/unlink.s   > unlink.s 
+	cc  -O -c -p unlink.s  && mv unlink.o sys/unlink.p
+	rm unlink.s
+sys/ustat.s:
+	m4 m4.def mcount.def  sys/ustat.s   > ustat.s 
+	cc  -O -c -p ustat.s  && mv ustat.o sys/ustat.p
+	rm ustat.s
+sys/utime.s:
+	m4 m4.def mcount.def  sys/utime.s   > utime.s 
+	cc  -O -c -p utime.s  && mv utime.o sys/utime.p
+	rm utime.s
+sys/advfs.s:
+	m4 m4.def mcount.def  sys/advfs.s   > advfs.s 
+	cc  -O -c -p advfs.s  && mv advfs.o sys/advfs.p
+	rm advfs.s
+sys/rdebug.s:
+	m4 m4.def mcount.def  sys/rdebug.s   > rdebug.s 
+	cc  -O -c -p rdebug.s  && mv rdebug.o sys/rdebug.p
+	rm rdebug.s
+sys/rfstart.s:
+	m4 m4.def mcount.def  sys/rfstart.s   > rfstart.s 
+	cc  -O -c -p rfstart.s  && mv rfstart.o sys/rfstart.p
+	rm rfstart.s
+sys/rfstop.s:
+	m4 m4.def mcount.def  sys/rfstop.s   > rfstop.s 
+	cc  -O -c -p rfstop.s  && mv rfstop.o sys/rfstop.p
+	rm rfstop.s
+sys/rmount.s:
+	m4 m4.def mcount.def  sys/rmount.s   > rmount.s 
+	cc  -O -c -p rmount.s  && mv rmount.o sys/rmount.p
+	rm rmount.s
+sys/rumount.s:
+	m4 m4.def mcount.def  sys/rumount.s   > rumount.s 
+	cc  -O -c -p rumount.s  && mv rumount.o sys/rumount.p
+	rm rumount.s
+sys/rfsys.s:
+	m4 m4.def mcount.def  sys/rfsys.s   > rfsys.s 
+	cc  -O -c -p rfsys.s  && mv rfsys.o sys/rfsys.p
+	rm rfsys.s
+sys/unadvfs.s:
+	m4 m4.def mcount.def  sys/unadvfs.s   > unadvfs.s 
+	cc  -O -c -p unadvfs.s  && mv unadvfs.o sys/unadvfs.p
+	rm unadvfs.s
+sys/fstatfs.s:
+	m4 m4.def mcount.def  sys/fstatfs.s   > fstatfs.s 
+	cc  -O -c -p fstatfs.s  && mv fstatfs.o sys/fstatfs.p
+	rm fstatfs.s
+sys/getdents.s:
+	m4 m4.def mcount.def  sys/getdents.s   > getdents.s 
+	cc  -O -c -p getdents.s  && mv getdents.o sys/getdents.p
+	rm getdents.s
+sys/mkdir.s:
+	m4 m4.def mcount.def  sys/mkdir.s   > mkdir.s 
+	cc  -O -c -p mkdir.s  && mv mkdir.o sys/mkdir.p
+	rm mkdir.s
+sys/rmdir.s:
+	m4 m4.def mcount.def  sys/rmdir.s   > rmdir.s 
+	cc  -O -c -p rmdir.s  && mv rmdir.o sys/rmdir.p
+	rm rmdir.s
+sys/statfs.s:
+	m4 m4.def mcount.def  sys/statfs.s   > statfs.s 
+	cc  -O -c -p statfs.s  && mv statfs.o sys/statfs.p
+	rm statfs.s
+sys/sysfs.s:
+	m4 m4.def mcount.def  sys/sysfs.s   > sysfs.s 
+	cc  -O -c -p sysfs.s  && mv sysfs.o sys/sysfs.p
+	rm sysfs.s
+sys/wait.s:
+	m4 m4.def mcount.def  sys/wait.s   > wait.s 
+	cc  -O -c -p wait.s  && mv wait.o sys/wait.p
+	rm wait.s
+sys/write.s:
+	m4 m4.def mcount.def  sys/write.s   > write.s 
+	cc  -O -c -p write.s  && mv write.o sys/write.p
+	rm write.s
+sys/uadmin.s:
+	m4 m4.def mcount.def  sys/uadmin.s   > uadmin.s 
+	cc  -O -c -p uadmin.s  && mv uadmin.o sys/uadmin.p
+	rm uadmin.s
+	make -e  nonprof PROF=@#
+csu/crt0.s:
+	m4 m4.def  -DMCOUNT=#  csu/crt0.s   > crt0.s   
+	cc  -O -c crt0.s && mv crt0.o csu/crt0.o
+	rm crt0.s
+csu/mcrt0.s:
+	m4 m4.def  -DMCOUNT=#  csu/mcrt0.s   > mcrt0.s   
+	cc  -O -c mcrt0.s && mv mcrt0.o csu/mcrt0.o
+	rm mcrt0.s
+csu/initfpu.s:
+	m4 m4.def  -DMCOUNT=#  csu/initfpu.s   > initfpu.s   
+	cc  -O -c initfpu.s && mv initfpu.o csu/initfpu.o
+	rm initfpu.s
+gen/abs.s:
+	m4 m4.def  -DMCOUNT=#  gen/abs.s   > abs.s   
+	cc  -O -c abs.s && mv abs.o gen/abs.o
+	rm abs.s
+gen/cuexit.s:
+	m4 m4.def  -DMCOUNT=#  gen/cuexit.s   > cuexit.s   
+	cc  -O -c cuexit.s && mv cuexit.o gen/cuexit.o
+	rm cuexit.s
+gen/ecvt.c:
+	cc   -I../inc -O  -c gen/ecvt.c
+	mv ecvt.o gen/ecvt.o
+gen/frexp.c:
+	cc   -I../inc -O  -c gen/frexp.c
+	mv frexp.o gen/frexp.o
+gen/gen_def.c:
+	cc   -I../inc -O  -c gen/gen_def.c
+	mv gen_def.o gen/gen_def.o
+gen/ltostr.c:
+	cc   -I../inc -O  -c gen/ltostr.c
+	mv ltostr.o gen/ltostr.o
+gen/memcpy.s:
+	m4 m4.def  -DMCOUNT=#  gen/memcpy.s   > memcpy.s   
+	cc  -O -c memcpy.s && mv memcpy.o gen/memcpy.o
+	rm memcpy.s
+gen/setjmp.s:
+	m4 m4.def  -DMCOUNT=#  gen/setjmp.s   > setjmp.s   
+	cc  -O -c setjmp.s && mv setjmp.o gen/setjmp.o
+	rm setjmp.s
+gen/strcpy.s:
+	m4 m4.def  -DMCOUNT=#  gen/strcpy.s   > strcpy.s   
+	cc  -O -c strcpy.s && mv strcpy.o gen/strcpy.o
+	rm strcpy.s
+gen/strcmp.s:
+	m4 m4.def  -DMCOUNT=#  gen/strcmp.s   > strcmp.s   
+	cc  -O -c strcmp.s && mv strcmp.o gen/strcmp.o
+	rm strcmp.s
+gen/sysm68k.c:
+	cc   -I../inc -O  -c gen/sysm68k.c
+	mv sysm68k.o gen/sysm68k.o
+gen/strlen.s:
+	m4 m4.def  -DMCOUNT=#  gen/strlen.s   > strlen.s   
+	cc  -O -c strlen.s && mv strlen.o gen/strlen.o
+	rm strlen.s
+sys/access.s:
+	m4 m4.def  -DMCOUNT=#  sys/access.s   > access.s   
+	cc  -O -c access.s && mv access.o sys/access.o
+	rm access.s
+sys/acct.s:
+	m4 m4.def  -DMCOUNT=#  sys/acct.s   > acct.s   
+	cc  -O -c acct.s && mv acct.o sys/acct.o
+	rm acct.s
+sys/alarm.s:
+	m4 m4.def  -DMCOUNT=#  sys/alarm.s   > alarm.s   
+	cc  -O -c alarm.s && mv alarm.o sys/alarm.o
+	rm alarm.s
+sys/chdir.s:
+	m4 m4.def  -DMCOUNT=#  sys/chdir.s   > chdir.s   
+	cc  -O -c chdir.s && mv chdir.o sys/chdir.o
+	rm chdir.s
+sys/chmod.s:
+	m4 m4.def  -DMCOUNT=#  sys/chmod.s   > chmod.s   
+	cc  -O -c chmod.s && mv chmod.o sys/chmod.o
+	rm chmod.s
+sys/chown.s:
+	m4 m4.def  -DMCOUNT=#  sys/chown.s   > chown.s   
+	cc  -O -c chown.s && mv chown.o sys/chown.o
+	rm chown.s
+sys/chroot.s:
+	m4 m4.def  -DMCOUNT=#  sys/chroot.s   > chroot.s   
+	cc  -O -c chroot.s && mv chroot.o sys/chroot.o
+	rm chroot.s
+sys/close.s:
+	m4 m4.def  -DMCOUNT=#  sys/close.s   > close.s   
+	cc  -O -c close.s && mv close.o sys/close.o
+	rm close.s
+sys/creat.s:
+	m4 m4.def  -DMCOUNT=#  sys/creat.s   > creat.s   
+	cc  -O -c creat.s && mv creat.o sys/creat.o
+	rm creat.s
+sys/dup.s:
+	m4 m4.def  -DMCOUNT=#  sys/dup.s   > dup.s   
+	cc  -O -c dup.s && mv dup.o sys/dup.o
+	rm dup.s
+sys/execve.s:
+	m4 m4.def  -DMCOUNT=#  sys/execve.s   > execve.s   
+	cc  -O -c execve.s && mv execve.o sys/execve.o
+	rm execve.s
+sys/exit.s:
+	m4 m4.def  -DMCOUNT=#  sys/exit.s   > exit.s   
+	cc  -O -c exit.s && mv exit.o sys/exit.o
+	rm exit.s
+sys/fcntl.s:
+	m4 m4.def  -DMCOUNT=#  sys/fcntl.s   > fcntl.s   
+	cc  -O -c fcntl.s && mv fcntl.o sys/fcntl.o
+	rm fcntl.s
+sys/fork.s:
+	m4 m4.def  -DMCOUNT=#  sys/fork.s   > fork.s   
+	cc  -O -c fork.s && mv fork.o sys/fork.o
+	rm fork.s
+sys/fstat.s:
+	m4 m4.def  -DMCOUNT=#  sys/fstat.s   > fstat.s   
+	cc  -O -c fstat.s && mv fstat.o sys/fstat.o
+	rm fstat.s
+sys/getegid.s:
+	m4 m4.def  -DMCOUNT=#  sys/getegid.s   > getegid.s   
+	cc  -O -c getegid.s && mv getegid.o sys/getegid.o
+	rm getegid.s
+sys/geteuid.s:
+	m4 m4.def  -DMCOUNT=#  sys/geteuid.s   > geteuid.s   
+	cc  -O -c geteuid.s && mv geteuid.o sys/geteuid.o
+	rm geteuid.s
+sys/getgid.s:
+	m4 m4.def  -DMCOUNT=#  sys/getgid.s   > getgid.s   
+	cc  -O -c getgid.s && mv getgid.o sys/getgid.o
+	rm getgid.s
+sys/getpid.s:
+	m4 m4.def  -DMCOUNT=#  sys/getpid.s   > getpid.s   
+	cc  -O -c getpid.s && mv getpid.o sys/getpid.o
+	rm getpid.s
+sys/getppid.s:
+	m4 m4.def  -DMCOUNT=#  sys/getppid.s   > getppid.s   
+	cc  -O -c getppid.s && mv getppid.o sys/getppid.o
+	rm getppid.s
+sys/getuid.s:
+	m4 m4.def  -DMCOUNT=#  sys/getuid.s   > getuid.s   
+	cc  -O -c getuid.s && mv getuid.o sys/getuid.o
+	rm getuid.s
+sys/gtty.s:
+	m4 m4.def  -DMCOUNT=#  sys/gtty.s   > gtty.s   
+	cc  -O -c gtty.s && mv gtty.o sys/gtty.o
+	rm gtty.s
+sys/ioctl.s:
+	m4 m4.def  -DMCOUNT=#  sys/ioctl.s   > ioctl.s   
+	cc  -O -c ioctl.s && mv ioctl.o sys/ioctl.o
+	rm ioctl.s
+sys/kill.s:
+	m4 m4.def  -DMCOUNT=#  sys/kill.s   > kill.s   
+	cc  -O -c kill.s && mv kill.o sys/kill.o
+	rm kill.s
+sys/link.s:
+	m4 m4.def  -DMCOUNT=#  sys/link.s   > link.s   
+	cc  -O -c link.s && mv link.o sys/link.o
+	rm link.s
+sys/lseek.s:
+	m4 m4.def  -DMCOUNT=#  sys/lseek.s   > lseek.s   
+	cc  -O -c lseek.s && mv lseek.o sys/lseek.o
+	rm lseek.s
+sys/locking.s:
+	m4 m4.def  -DMCOUNT=#  sys/locking.s   > locking.s   
+	cc  -O -c locking.s && mv locking.o sys/locking.o
+	rm locking.s
+sys/mknod.s:
+	m4 m4.def  -DMCOUNT=#  sys/mknod.s   > mknod.s   
+	cc  -O -c mknod.s && mv mknod.o sys/mknod.o
+	rm mknod.s
+sys/mount.s:
+	m4 m4.def  -DMCOUNT=#  sys/mount.s   > mount.s   
+	cc  -O -c mount.s && mv mount.o sys/mount.o
+	rm mount.s
+sys/msgsys.c:
+	cc   -I../inc -O  -c sys/msgsys.c
+	mv msgsys.o sys/msgsys.o
+sys/nice.s:
+	m4 m4.def  -DMCOUNT=#  sys/nice.s   > nice.s   
+	cc  -O -c nice.s && mv nice.o sys/nice.o
+	rm nice.s
+sys/open.s:
+	m4 m4.def  -DMCOUNT=#  sys/open.s   > open.s   
+	cc  -O -c open.s && mv open.o sys/open.o
+	rm open.s
+sys/pause.s:
+	m4 m4.def  -DMCOUNT=#  sys/pause.s   > pause.s   
+	cc  -O -c pause.s && mv pause.o sys/pause.o
+	rm pause.s
+sys/pipe.s:
+	m4 m4.def  -DMCOUNT=#  sys/pipe.s   > pipe.s   
+	cc  -O -c pipe.s && mv pipe.o sys/pipe.o
+	rm pipe.s
+sys/profil.s:
+	m4 m4.def  -DMCOUNT=#  sys/profil.s   > profil.s   
+	cc  -O -c profil.s && mv profil.o sys/profil.o
+	rm profil.s
+sys/plock.s:
+	m4 m4.def  -DMCOUNT=#  sys/plock.s   > plock.s   
+	cc  -O -c plock.s && mv plock.o sys/plock.o
+	rm plock.s
+sys/uadmin.s:
+	m4 m4.def  -DMCOUNT=#  sys/uadmin.s   > uadmin.s   
+	cc  -O -c uadmin.s && mv uadmin.o sys/uadmin.o
+	rm uadmin.s
+sys/ptrace.s:
+	m4 m4.def  -DMCOUNT=#  sys/ptrace.s   > ptrace.s   
+	cc  -O -c ptrace.s && mv ptrace.o sys/ptrace.o
+	rm ptrace.s
+sys/read.s:
+	m4 m4.def  -DMCOUNT=#  sys/read.s   > read.s   
+	cc  -O -c read.s && mv read.o sys/read.o
+	rm read.s
+sys/sbrk.s:
+	m4 m4.def  -DMCOUNT=#  sys/sbrk.s   > sbrk.s   
+	cc  -O -c sbrk.s && mv sbrk.o sys/sbrk.o
+	rm sbrk.s
+sys/semsys.c:
+	cc   -I../inc -O  -c sys/semsys.c
+	mv semsys.o sys/semsys.o
+sys/putmsg.s:
+	m4 m4.def  -DMCOUNT=#  sys/putmsg.s   > putmsg.s   
+	cc  -O -c putmsg.s && mv putmsg.o sys/putmsg.o
+	rm putmsg.s
+sys/getmsg.s:
+	m4 m4.def  -DMCOUNT=#  sys/getmsg.s   > getmsg.s   
+	cc  -O -c getmsg.s && mv getmsg.o sys/getmsg.o
+	rm getmsg.s
+sys/poll.s:
+	m4 m4.def  -DMCOUNT=#  sys/poll.s   > poll.s   
+	cc  -O -c poll.s && mv poll.o sys/poll.o
+	rm poll.s
+sys/setgid.s:
+	m4 m4.def  -DMCOUNT=#  sys/setgid.s   > setgid.s   
+	cc  -O -c setgid.s && mv setgid.o sys/setgid.o
+	rm setgid.s
+sys/setpgrp.s:
+	m4 m4.def  -DMCOUNT=#  sys/setpgrp.s   > setpgrp.s   
+	cc  -O -c setpgrp.s && mv setpgrp.o sys/setpgrp.o
+	rm setpgrp.s
+sys/setuid.s:
+	m4 m4.def  -DMCOUNT=#  sys/setuid.s   > setuid.s   
+	cc  -O -c setuid.s && mv setuid.o sys/setuid.o
+	rm setuid.s
+sys/shmsys.c:
+	cc   -I../inc -O  -c sys/shmsys.c
+	mv shmsys.o sys/shmsys.o
+sys/signal.s:
+	m4 m4.def  -DMCOUNT=#  sys/signal.s   > signal.s   
+	cc  -O -c signal.s && mv signal.o sys/signal.o
+	rm signal.s
+sys/stat.s:
+	m4 m4.def  -DMCOUNT=#  sys/stat.s   > stat.s   
+	cc  -O -c stat.s && mv stat.o sys/stat.o
+	rm stat.s
+sys/stime.s:
+	m4 m4.def  -DMCOUNT=#  sys/stime.s   > stime.s   
+	cc  -O -c stime.s && mv stime.o sys/stime.o
+	rm stime.s
+sys/stty.s:
+	m4 m4.def  -DMCOUNT=#  sys/stty.s   > stty.s   
+	cc  -O -c stty.s && mv stty.o sys/stty.o
+	rm stty.s
+sys/sync.s:
+	m4 m4.def  -DMCOUNT=#  sys/sync.s   > sync.s   
+	cc  -O -c sync.s && mv sync.o sys/sync.o
+	rm sync.s
+sys/_sysm68k.s:
+	m4 m4.def  -DMCOUNT=#  sys/_sysm68k.s   > _sysm68k.s   
+	cc  -O -c _sysm68k.s && mv _sysm68k.o sys/_sysm68k.o
+	rm _sysm68k.s
+sys/syscall.s:
+	m4 m4.def  -DMCOUNT=#  sys/syscall.s   > syscall.s   
+	cc  -O -c syscall.s && mv syscall.o sys/syscall.o
+	rm syscall.s
+sys/time.s:
+	m4 m4.def  -DMCOUNT=#  sys/time.s   > time.s   
+	cc  -O -c time.s && mv time.o sys/time.o
+	rm time.s
+sys/times.s:
+	m4 m4.def  -DMCOUNT=#  sys/times.s   > times.s   
+	cc  -O -c times.s && mv times.o sys/times.o
+	rm times.s
+sys/ulimit.s:
+	m4 m4.def  -DMCOUNT=#  sys/ulimit.s   > ulimit.s   
+	cc  -O -c ulimit.s && mv ulimit.o sys/ulimit.o
+	rm ulimit.s
+sys/umask.s:
+	m4 m4.def  -DMCOUNT=#  sys/umask.s   > umask.s   
+	cc  -O -c umask.s && mv umask.o sys/umask.o
+	rm umask.s
+sys/umount.s:
+	m4 m4.def  -DMCOUNT=#  sys/umount.s   > umount.s   
+	cc  -O -c umount.s && mv umount.o sys/umount.o
+	rm umount.s
+sys/uname.s:
+	m4 m4.def  -DMCOUNT=#  sys/uname.s   > uname.s   
+	cc  -O -c uname.s && mv uname.o sys/uname.o
+	rm uname.s
+sys/unlink.s:
+	m4 m4.def  -DMCOUNT=#  sys/unlink.s   > unlink.s   
+	cc  -O -c unlink.s && mv unlink.o sys/unlink.o
+	rm unlink.s
+sys/ustat.s:
+	m4 m4.def  -DMCOUNT=#  sys/ustat.s   > ustat.s   
+	cc  -O -c ustat.s && mv ustat.o sys/ustat.o
+	rm ustat.s
+sys/utime.s:
+	m4 m4.def  -DMCOUNT=#  sys/utime.s   > utime.s   
+	cc  -O -c utime.s && mv utime.o sys/utime.o
+	rm utime.s
+sys/wait.s:
+	m4 m4.def  -DMCOUNT=#  sys/wait.s   > wait.s   
+	cc  -O -c wait.s && mv wait.o sys/wait.o
+	rm wait.s
+sys/write.s:
+	m4 m4.def  -DMCOUNT=#  sys/write.s   > write.s   
+	cc  -O -c write.s && mv write.o sys/write.o
+	rm write.s
+sys/advfs.s:
+	m4 m4.def  -DMCOUNT=#  sys/advfs.s   > advfs.s   
+	cc  -O -c advfs.s && mv advfs.o sys/advfs.o
+	rm advfs.s
+sys/rdebug.s:
+	m4 m4.def  -DMCOUNT=#  sys/rdebug.s   > rdebug.s   
+	cc  -O -c rdebug.s && mv rdebug.o sys/rdebug.o
+	rm rdebug.s
+sys/rfstart.s:
+	m4 m4.def  -DMCOUNT=#  sys/rfstart.s   > rfstart.s   
+	cc  -O -c rfstart.s && mv rfstart.o sys/rfstart.o
+	rm rfstart.s
+sys/rfstop.s:
+	m4 m4.def  -DMCOUNT=#  sys/rfstop.s   > rfstop.s   
+	cc  -O -c rfstop.s && mv rfstop.o sys/rfstop.o
+	rm rfstop.s
+sys/rfsys.s:
+	m4 m4.def  -DMCOUNT=#  sys/rfsys.s   > rfsys.s   
+	cc  -O -c rfsys.s && mv rfsys.o sys/rfsys.o
+	rm rfsys.s
+sys/rmount.s:
+	m4 m4.def  -DMCOUNT=#  sys/rmount.s   > rmount.s   
+	cc  -O -c rmount.s && mv rmount.o sys/rmount.o
+	rm rmount.s
+sys/rumount.s:
+	m4 m4.def  -DMCOUNT=#  sys/rumount.s   > rumount.s   
+	cc  -O -c rumount.s && mv rumount.o sys/rumount.o
+	rm rumount.s
+sys/unadvfs.s:
+	m4 m4.def  -DMCOUNT=#  sys/unadvfs.s   > unadvfs.s   
+	cc  -O -c unadvfs.s && mv unadvfs.o sys/unadvfs.o
+	rm unadvfs.s
+sys/fstatfs.s:
+	m4 m4.def  -DMCOUNT=#  sys/fstatfs.s   > fstatfs.s   
+	cc  -O -c fstatfs.s && mv fstatfs.o sys/fstatfs.o
+	rm fstatfs.s
+sys/getdents.s:
+	m4 m4.def  -DMCOUNT=#  sys/getdents.s   > getdents.s   
+	cc  -O -c getdents.s && mv getdents.o sys/getdents.o
+	rm getdents.s
+sys/mkdir.s:
+	m4 m4.def  -DMCOUNT=#  sys/mkdir.s   > mkdir.s   
+	cc  -O -c mkdir.s && mv mkdir.o sys/mkdir.o
+	rm mkdir.s
+sys/rmdir.s:
+	m4 m4.def  -DMCOUNT=#  sys/rmdir.s   > rmdir.s   
+	cc  -O -c rmdir.s && mv rmdir.o sys/rmdir.o
+	rm rmdir.s
+sys/statfs.s:
+	m4 m4.def  -DMCOUNT=#  sys/statfs.s   > statfs.s   
+	cc  -O -c statfs.s && mv statfs.o sys/statfs.o
+	rm statfs.s
+sys/sysfs.s:
+	m4 m4.def  -DMCOUNT=#  sys/sysfs.s   > sysfs.s   
+	cc  -O -c sysfs.s && mv sysfs.o sys/sysfs.o
+	rm sysfs.s
+	# compile MC68881-dependent library modules
+	cd ../libc881/m68k; make -e all CC=cc FP=m68881u		 DBLALIGN=NO   
+	# PROCESSOR = M68020
+	# DBLALIGN  = NO
+	# FP        = m68881u
+	cd crt ; make -e  nonprof
+fladd.s:
+	if test -f fladd.o ; then mv fladd.o tmp.o ; fi ; \
+		m4 ../../../libc/m68k/m4.def ../../../libc/m68k/mcount.def  fladd.s   > temp.s   && \
+		cc -O -I../../../libc/m68k/crt -c temp.s  && mv temp.o fladd.p ; \
+		if test -f tmp.o ; then mv tmp.o fladd.o ; fi
+	m4 ../../../libc/m68k/m4.def -DMCOUNT=#  fladd.s   > temp.s   && \
+	cc -O -I../../../libc/m68k/crt -c temp.s && mv temp.o fladd.o
+fldiv.s:
+	if test -f fldiv.o ; then mv fldiv.o tmp.o ; fi ; \
+		m4 ../../../libc/m68k/m4.def ../../../libc/m68k/mcount.def  fldiv.s   > temp.s   && \
+		cc -O -I../../../libc/m68k/crt -c temp.s  && mv temp.o fldiv.p ; \
+		if test -f tmp.o ; then mv tmp.o fldiv.o ; fi
+	m4 ../../../libc/m68k/m4.def -DMCOUNT=#  fldiv.s   > temp.s   && \
+	cc -O -I../../../libc/m68k/crt -c temp.s && mv temp.o fldiv.o
+flmul.s:
+	if test -f flmul.o ; then mv flmul.o tmp.o ; fi ; \
+		m4 ../../../libc/m68k/m4.def ../../../libc/m68k/mcount.def  flmul.s   > temp.s   && \
+		cc -O -I../../../libc/m68k/crt -c temp.s  && mv temp.o flmul.p ; \
+		if test -f tmp.o ; then mv tmp.o flmul.o ; fi
+	m4 ../../../libc/m68k/m4.def -DMCOUNT=#  flmul.s   > temp.s   && \
+	cc -O -I../../../libc/m68k/crt -c temp.s && mv temp.o flmul.o
+ftol.s:
+	if test -f ftol.o ; then mv ftol.o tmp.o ; fi ; \
+		m4 ../../../libc/m68k/m4.def ../../../libc/m68k/mcount.def  ftol.s   > temp.s   && \
+		cc -O -I../../../libc/m68k/crt -c temp.s  && mv temp.o ftol.p ; \
+		if test -f tmp.o ; then mv tmp.o ftol.o ; fi
+	m4 ../../../libc/m68k/m4.def -DMCOUNT=#  ftol.s   > temp.s   && \
+	cc -O -I../../../libc/m68k/crt -c temp.s && mv temp.o ftol.o
+itof.s:
+	if test -f itof.o ; then mv itof.o tmp.o ; fi ; \
+		m4 ../../../libc/m68k/m4.def ../../../libc/m68k/mcount.def  itof.s   > temp.s   && \
+		cc -O -I../../../libc/m68k/crt -c temp.s  && mv temp.o itof.p ; \
+		if test -f tmp.o ; then mv tmp.o itof.o ; fi
+	m4 ../../../libc/m68k/m4.def -DMCOUNT=#  itof.s   > temp.s   && \
+	cc -O -I../../../libc/m68k/crt -c temp.s && mv temp.o itof.o
+uitof.s:
+	if test -f uitof.o ; then mv uitof.o tmp.o ; fi ; \
+		m4 ../../../libc/m68k/m4.def ../../../libc/m68k/mcount.def  uitof.s   > temp.s   && \
+		cc -O -I../../../libc/m68k/crt -c temp.s  && mv temp.o uitof.p ; \
+		if test -f tmp.o ; then mv tmp.o uitof.o ; fi
+	m4 ../../../libc/m68k/m4.def -DMCOUNT=#  uitof.s   > temp.s   && \
+	cc -O -I../../../libc/m68k/crt -c temp.s && mv temp.o uitof.o
+dbadd.s:
+	if test -f dbadd.o ; then mv dbadd.o tmp.o ; fi ; \
+		m4 ../../../libc/m68k/m4.def ../../../libc/m68k/mcount.def  dbadd.s   > temp.s   && \
+		cc -O -I../../../libc/m68k/crt -c temp.s  && mv temp.o dbadd.p ; \
+		if test -f tmp.o ; then mv tmp.o dbadd.o ; fi
+	m4 ../../../libc/m68k/m4.def -DMCOUNT=#  dbadd.s   > temp.s   && \
+	cc -O -I../../../libc/m68k/crt -c temp.s && mv temp.o dbadd.o
+dbcmp.s:
+	if test -f dbcmp.o ; then mv dbcmp.o tmp.o ; fi ; \
+		m4 ../../../libc/m68k/m4.def ../../../libc/m68k/mcount.def  dbcmp.s   > temp.s   && \
+		cc -O -I../../../libc/m68k/crt -c temp.s  && mv temp.o dbcmp.p ; \
+		if test -f tmp.o ; then mv tmp.o dbcmp.o ; fi
+	m4 ../../../libc/m68k/m4.def -DMCOUNT=#  dbcmp.s   > temp.s   && \
+	cc -O -I../../../libc/m68k/crt -c temp.s && mv temp.o dbcmp.o
+dbdiv.s:
+	if test -f dbdiv.o ; then mv dbdiv.o tmp.o ; fi ; \
+		m4 ../../../libc/m68k/m4.def ../../../libc/m68k/mcount.def  dbdiv.s   > temp.s   && \
+		cc -O -I../../../libc/m68k/crt -c temp.s  && mv temp.o dbdiv.p ; \
+		if test -f tmp.o ; then mv tmp.o dbdiv.o ; fi
+	m4 ../../../libc/m68k/m4.def -DMCOUNT=#  dbdiv.s   > temp.s   && \
+	cc -O -I../../../libc/m68k/crt -c temp.s && mv temp.o dbdiv.o
+dbmul.s:
+	if test -f dbmul.o ; then mv dbmul.o tmp.o ; fi ; \
+		m4 ../../../libc/m68k/m4.def ../../../libc/m68k/mcount.def  dbmul.s   > temp.s   && \
+		cc -O -I../../../libc/m68k/crt -c temp.s  && mv temp.o dbmul.p ; \
+		if test -f tmp.o ; then mv tmp.o dbmul.o ; fi
+	m4 ../../../libc/m68k/m4.def -DMCOUNT=#  dbmul.s   > temp.s   && \
+	cc -O -I../../../libc/m68k/crt -c temp.s && mv temp.o dbmul.o
+dbtofl.s:
+	if test -f dbtofl.o ; then mv dbtofl.o tmp.o ; fi ; \
+		m4 ../../../libc/m68k/m4.def ../../../libc/m68k/mcount.def  dbtofl.s   > temp.s   && \
+		cc -O -I../../../libc/m68k/crt -c temp.s  && mv temp.o dbtofl.p ; \
+		if test -f tmp.o ; then mv tmp.o dbtofl.o ; fi
+	m4 ../../../libc/m68k/m4.def -DMCOUNT=#  dbtofl.s   > temp.s   && \
+	cc -O -I../../../libc/m68k/crt -c temp.s && mv temp.o dbtofl.o
+access81.s:
+	if test -f access81.o ; then mv access81.o tmp.o ; fi ; \
+		m4 ../../../libc/m68k/m4.def ../../../libc/m68k/mcount.def  access81.s   > temp.s   && \
+		cc -O -I../../../libc/m68k/crt -c temp.s  && mv temp.o access81.p ; \
+		if test -f tmp.o ; then mv tmp.o access81.o ; fi
+	m4 ../../../libc/m68k/m4.def -DMCOUNT=#  access81.s   > temp.s   && \
+	cc -O -I../../../libc/m68k/crt -c temp.s && mv temp.o access81.o
+dbtol.s:
+	if test -f dbtol.o ; then mv dbtol.o tmp.o ; fi ; \
+		m4 ../../../libc/m68k/m4.def ../../../libc/m68k/mcount.def  dbtol.s   > temp.s   && \
+		cc -O -I../../../libc/m68k/crt -c temp.s  && mv temp.o dbtol.p ; \
+		if test -f tmp.o ; then mv tmp.o dbtol.o ; fi
+	m4 ../../../libc/m68k/m4.def -DMCOUNT=#  dbtol.s   > temp.s   && \
+	cc -O -I../../../libc/m68k/crt -c temp.s && mv temp.o dbtol.o
+fltodb.s:
+	if test -f fltodb.o ; then mv fltodb.o tmp.o ; fi ; \
+		m4 ../../../libc/m68k/m4.def ../../../libc/m68k/mcount.def  fltodb.s   > temp.s   && \
+		cc -O -I../../../libc/m68k/crt -c temp.s  && mv temp.o fltodb.p ; \
+		if test -f tmp.o ; then mv tmp.o fltodb.o ; fi
+	m4 ../../../libc/m68k/m4.def -DMCOUNT=#  fltodb.s   > temp.s   && \
+	cc -O -I../../../libc/m68k/crt -c temp.s && mv temp.o fltodb.o
+ltodb.s:
+	if test -f ltodb.o ; then mv ltodb.o tmp.o ; fi ; \
+		m4 ../../../libc/m68k/m4.def ../../../libc/m68k/mcount.def  ltodb.s   > temp.s   && \
+		cc -O -I../../../libc/m68k/crt -c temp.s  && mv temp.o ltodb.p ; \
+		if test -f tmp.o ; then mv tmp.o ltodb.o ; fi
+	m4 ../../../libc/m68k/m4.def -DMCOUNT=#  ltodb.s   > temp.s   && \
+	cc -O -I../../../libc/m68k/crt -c temp.s && mv temp.o ltodb.o
+	cd crt ; make -e  prof NONPROF=@#
+	make -e  nonprof
+gen/atof.c:
+	cc -O -DM68881 -c gen/atof.c  && mv atof.o gen/atof.o
+	cc -p -O -DM68881 -c gen/atof.c  && mv atof.o gen/atof.p
+gen/ecvt.c:
+	cc -O -DM68881 -c gen/ecvt.c  && mv ecvt.o gen/ecvt.o
+	cc -p -O -DM68881 -c gen/ecvt.c  && mv ecvt.o gen/ecvt.p
+gen/sysm68k.c:
+	M68000= STACKCHECK=OFF cc -O -DM68881 -c gen/sysm68k.c  && mv sysm68k.o gen/sysm68k.o
+	M68000= STACKCHECK=OFF cc -p -O -DM68881 -c gen/sysm68k.c  && mv sysm68k.o gen/sysm68k.p
+	make -e  prof NONPROF=@#
+	#
+	# place portable modules in "object" directory, then overlay
+	# 	the machine-dependent modules.
+	#
+	# The following two commands had to be changed as the command lines
+	# became to long.  The replacement command lines follow, uncommented.
+	# cp ../libc/port/*/*.[op] object
+	# cp ../libc/m68k/*/*.[op] object
+	#
+	rm -rf object
+	mkdir object
+	cp ../libc/port/[a-p]*/*.o object
+	cp ../libc/port/[q-z]*/*.o object
+	 cp ../libc/port/[a-p]*/*.p object
+	 cp ../libc/port/[q-z]*/*.p object
+	cp ../libc/m68k/*/*.o object
+	 cp ../libc/m68k/*/*.p object
+	#
+	# Remove a few files made obsolete by the inclusion of MC68881-
+	# specific routines.
+	#
+	(cd object; rm -f table.o addmag.o submag.o flsub.o ltof.o ultof.o)
+	#
+	# Copy MC68881-specific routines over previous versions of these
+	# files.
+	#
+	cp ../libc881/m68k/*/*.[op] object
+	#
+	# delete temporary libraries
+	rm -f lib.libc
+	rm -f libp.libc
+	#
+	# set aside run-time modules, which don't go in library archive!
+	cd object; for i in *crt0.o ; do mv $i .. ; done
+	#
+	# build archive out of the remaining modules.
+	cd object; make -e -f ../../libc881/m68k/makefile archive \
+		AR=ar STRIP=strip LORDER=lorder PROF=
+	#
+	# Note that "archive" is invoked with libc/object as current directory.
+	#
+	# figure out the correct ordering for all the archive modules except
+	#	cuexit and fakcu, which must go at end of archive.
+	chmod 664 *.o 
+	chgrp bin  *.o
+	chown bin  *.o
+	mv cuexit.o cuexit.x
+	mv fakcu.o fakcu.x
+	lorder *.o | tsort >objlist
+UX tsort: INFORM: cycle in data
+	sigcall.o
+	sigcode.o
+	_sysm68k.o
+	mv cuexit.x cuexit.o
+	mv fakcu.x fakcu.o
+	#
+	# build the archive with the modules in correct order.
+	ar q ../lib.libc `cat objlist` cuexit.o fakcu.o
+ar: creating ../lib.libc
+	ar t ../lib.libc >../lib.contents
+	rm -f *.o
+	#
+	# build the profiled library archive, first renaming the
+	#	.p (profiled object) modules to .o
+	for i in *.p ; do mv $i `basename $i .p`.o ; done
+	chmod 664 *.o
+	chgrp bin  *.o
+	chown bin  *.o
+	ar q ../libp.libc `cat objlist` cuexit.o fakcu.o
+ar: creating ../libp.libc
+ar: ctype_def.o cannot open
+ar: err_def.o cannot open
+ar: gen_def.o cannot open
+ar: grent_def.o cannot open
+ar: locking.o cannot open
+ar: mall_def.o cannot open
+ar: opt_data.o cannot open
+ar: pwent_def.o cannot open
+ar: stdio_def.o cannot open
+	strip -r ../libp.libc
+strip: Warning - symbol directory deleted from archive ../libp.libc
+	execute  `ar ts ../libp.libc` to restore symbol directory.
+	ar ts ../libp.libc >../libp.contents
+	rm -rf object
+	#
+	if test -f /lib/libc881u.a ; \
+	then \
+		rm -f /lib/OLDlibc881u.a ; \
+		cp /lib/libc881u.a /lib/OLDlibc881u.a ; \
+		chmod 664		 /lib/OLDlibc881u.a ; \
+		chmod -x /lib/OLDlibc881u.a ; \
+		chgrp bin		 /lib/OLDlibc881u.a ; \
+		chown bin		 /lib/OLDlibc881u.a ; \
+	fi
+cp: bad copy to /lib/OLDlibc881u.a
+*** Error code 2
+
+Stop.
+:mklib: *** make failed using libc881u.mk
+	#
+	# remove intermediate files except object modules and temp library
+	rm -rf lib*.contents obj*
+	cd ../libc/port ;  make clean
+	if m68k ; then cd ../libc/m68k ; make clean ; fi
+	rm -f *.o
+	rm -f *.p
+	rm -f *.s
+	if m68k ; then cd ../libc881/m68k ; make clean ; fi
+	rm -f *.[ops]
+	if pdp11 ; then cd pdp11 ; make clean ; fi
+	if vax ;   then cd vax ;   make clean ; fi
+	if u3b ;   then cd u3b ;   make clean ; fi
+	if u370 ;  then cd u370 ;  make clean ; fi
+	#
+	# remove intermediate files
+	rm -rf *.o lib*.libc lib*.contents obj*
+	cd ../libc/port ;  make clobber
+	rm -f */*.o
+	rm -f */*.p
+	if m68k ; then cd ../libc/m68k ; make clobber ; fi
+	rm -f *.o
+	rm -f *.p
+	rm -f *.s
+	rm -f */*.o
+	rm -f */*.p
+	if m68k ; then cd ../libc881/m68k ; make clobber ; fi
+	rm -f *.[ops]
+	rm -f */*.[op] */temp.s
+	if pdp11 ; then cd pdp11 ; make clobber ; fi
+	if vax ;   then cd vax ;   make clobber ; fi
+	if u3b ;   then cd u3b ;   make clobber ; fi
+	if u370 ;  then cd u370 ;  make clobber ; fi

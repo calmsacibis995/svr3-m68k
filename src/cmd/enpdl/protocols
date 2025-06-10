@@ -1,0 +1,12 @@
+# derived from netinet/in.h file
+# these entries should be compared to something real for verification
+#			Deb Brown	CMC	9 August 1984
+
+icmp	1	ICMP
+ggp	2	GGP
+tcp	6	TCP
+pup	12	PUP
+udp	17	UDP
+nd	77	ND
+raw	255	RAW	# is this really a protocol?
+max	256	MAX	# is this really a protocol?

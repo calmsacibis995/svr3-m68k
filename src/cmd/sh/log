@@ -1,0 +1,84 @@
+Wed Sep  3 13:32:17 MST 1986 -- Make id=49
+	cc -O -DNICE -DACCT -DNICEVAL=4 -c setbrk.c
+	cc -O -DNICE -DACCT -DNICEVAL=4 -c blok.c
+	cc -O -DNICE -DACCT -DNICEVAL=4 -c stak.c
+	cc -O -DNICE -DACCT -DNICEVAL=4 -c cmd.c
+	cc -O -DNICE -DACCT -DNICEVAL=4 -c fault.c
+	cc -O -DNICE -DACCT -DNICEVAL=4 -c main.c
+	cc -O -DNICE -DACCT -DNICEVAL=4 -c word.c
+	cc -O -DNICE -DACCT -DNICEVAL=4 -c string.c
+	cc -O -DNICE -DACCT -DNICEVAL=4 -c name.c
+	cc -O -DNICE -DACCT -DNICEVAL=4 -c args.c
+	set +e; if u370;\
+	then \
+	cc -O -DNICE -DACCT -DNICEVAL=4 -b1,0 -c xec.c;\
+	else \
+	cc -O -DNICE -DACCT -DNICEVAL=4 -c xec.c;\
+	fi
+	cc -O -DNICE -DACCT -DNICEVAL=4 -I/usr/src/cmd/acct -c service.c
+service.c: 605: Can't find include file acctdef.h
+*** Error code 1
+
+Stop.
+Wed Sep  3 13:54:02 MST 1986 -- Make id=50
+	cc -O -DNICE -DACCT -DNICEVAL=4 -c setbrk.c
+	cc -O -DNICE -DACCT -DNICEVAL=4 -c blok.c
+	cc -O -DNICE -DACCT -DNICEVAL=4 -c stak.c
+	cc -O -DNICE -DACCT -DNICEVAL=4 -c cmd.c
+	cc -O -DNICE -DACCT -DNICEVAL=4 -c fault.c
+"fault.c", line 124: warning: illegal pointer combination, op ==
+	cc -O -DNICE -DACCT -DNICEVAL=4 -c main.c
+	cc -O -DNICE -DACCT -DNICEVAL=4 -c word.c
+	cc -O -DNICE -DACCT -DNICEVAL=4 -c string.c
+	cc -O -DNICE -DACCT -DNICEVAL=4 -c name.c
+	cc -O -DNICE -DACCT -DNICEVAL=4 -c args.c
+	set +e; if u370;\
+	then \
+	cc -O -DNICE -DACCT -DNICEVAL=4 -b1,0 -c xec.c;\
+	else \
+	cc -O -DNICE -DACCT -DNICEVAL=4 -c xec.c;\
+	fi
+	cc -O -DNICE -DACCT -DNICEVAL=4 -I/usr/src/cmd/acct -c service.c
+service.c: 605: Can't find include file acctdef.h
+*** Error code 1
+
+Stop.
+Thu Sep  4 09:02:54 MST 1986 -- Make id=51
+	cc -O -DNICE -DACCT -DNICEVAL=4 -I/aq1/usr/src/cmd/acct -c service.c
+service.c: 605: Can't find include file acctdef.h
+*** Error code 1
+
+Stop.
+Thu Sep  4 09:04:28 MST 1986 -- Make id=52
+	cc -O -DNICE -DACCT -DNICEVAL=4 -I/rl/usr/src/cmd/acct -c service.c
+	cc -O -DNICE -DACCT -DNICEVAL=4 -c error.c
+	cc -O -DNICE -DACCT -DNICEVAL=4 -c io.c
+	cc -O -DNICE -DACCT -DNICEVAL=4 -c print.c
+	cc -O -DNICE -DACCT -DNICEVAL=4 -c macro.c
+	cc -O -DNICE -DACCT -DNICEVAL=4 -c expand.c
+	if [ "" ];\
+		then \
+			cc -O -DNICE -DACCT -DNICEVAL=4 -c ctype.c; \
+		elif [ "" ]; \
+		then \
+			CC=cc  ./:fix ctype; \
+		else \
+			CC=cc sh ./:fix ctype; \
+		fi
+	if [ "" ];\
+		then \
+			cc -O -DNICE -DACCT -DNICEVAL=4 -c msg.c; \
+		elif [ "" ]; \
+		then \
+			CC=cc  ./:fix msg; \
+		else \
+			CC=cc sh ./:fix msg; \
+		fi
+	cc -O -DNICE -DACCT -DNICEVAL=4 -c test.c
+	cc -O -DNICE -DACCT -DNICEVAL=4 -c defs.c
+	cc -O -DNICE -DACCT -DNICEVAL=4 -c echo.c
+	cc -O -DNICE -DACCT -DNICEVAL=4 -c hash.c
+	cc -O -DNICE -DACCT -DNICEVAL=4 -c hashserv.c
+	cc -O -DNICE -DACCT -DNICEVAL=4 -c pwd.c
+	cc -O -DNICE -DACCT -DNICEVAL=4 -c func.c
+	cc -n -s  setbrk.o blok.o stak.o cmd.o fault.o main.o word.o string.o name.o args.o xec.o service.o error.o io.o print.o macro.o expand.o ctype.o msg.o test.o defs.o echo.o hash.o hashserv.o pwd.o func.o -o ./sh 

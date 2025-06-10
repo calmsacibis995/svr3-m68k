@@ -1,0 +1,70 @@
+* vme331
+*
+Description File:	"MVME331 Serial Communications Controller Board"
+*
+* vme331 #1
+*
+Board Description:	"vme331 Controller #1"
+Description Keyword:	"vme331 #1"
+Device Type:	"vme331"
+Bus Request Level:	2
+Address:	0xffff3000
+Interrupt Vector Location:	0x3bc
+Default Number Of Devices:	8
+*
+* vme331
+*
+Device Description:	"vme331 Serial Communications driver"
+Description Keyword:	"vme331"
+Device Name:	"vme331"
+Handler Prefix:	"m331"
+Interrupt Vectors Size:	4
+Major Block Device Number:	0
+Major Character Device Number:	30
+Maximum Bus Request Level:	2
+Maximum Devices Per Controller:	8
+Page Registers Size:	4
+Block Or Character Device Handler Lines:
+Has a tty structure.
+Has an initialization handler.
+Has an open handler.
+Has a close handler.
+Has a read handler.
+Has a write handler.
+Has an ioctl handler.
+Device Type Information:
+Create interrupt vector array for this device.
+Create interrupt level array for this device.
+This is a character device.
+Device Configuration Tables Declarations:
+Device config table structure declaration:	"tty"
+*
+* vme331 #2
+*
+Board Description:	"vme331 Controller #2"
+Description Keyword:	"vme331 #2"
+Device Type:	"vme331"
+Bus Request Level:	2
+Address:	0xffff3100
+Interrupt Vector Location:	0x3b8
+Default Number Of Devices:	8
+*
+* vme331 #4
+*
+Board Description:	"vme331 Controller #4"
+Description Keyword:	"vme331 #4"
+Device Type:	"vme331"
+Bus Request Level:	2
+Address:	0xffff3300
+Interrupt Vector Location:	0x3b0
+Default Number Of Devices:	8
+*
+* vme331 #3
+*
+Board Description:	"vme331 Controller #3"
+Description Keyword:	"vme331 #3"
+Device Type:	"vme331"
+Bus Request Level:	2
+Address:	0xffff3200
+Interrupt Vector Location:	0x3b4
+Default Number Of Devices:	8

@@ -1,0 +1,228 @@
+CHK=/etc/fsck
+MKFS=/etc/mkfs
+FMT=/etc/dinit
+
+verify() {
+    vrfy=
+    while [ "$vrfy" != y -a "$vrfy" != n ]
+    do
+	echo ">>> Is this really what you wanted? <y/n>: \c"
+	read vrfy
+    done
+}
+
+chkdsk() {
+    echo
+    check=
+    while [ "$check" != y -a "$check" != n ]
+    do
+	echo ">>> Do you want to scan the disk for new bad tracks? <y/n>: \c"
+	read check
+    done
+
+    if [ "$check" = y ]
+    then
+	FMODES="-c $FMODES"
+    fi
+}
+
+getdevice() {
+
+    echo
+
+    DTYPE=
+    TFILE=
+
+    case "$ROOTDEV" in
+	00s0)
+		DTYPE=m32070m 
+		device=00 ;;
+	20s0)
+		DTYPE=m360337
+		device=20 ;;
+	*)
+		echo ROOTDEV variable set to \"$ROOTDEV\" -- invalid
+		echo Must be   '00s0'   or  '20s0'
+		exit 1
+		;;
+    esac
+
+    TFILE=/etc/badtracks/${device}
+    FMTDEV=r${device}s7
+}
+
+getbads() {
+
+    # If formatting or setting up config/bad tracks, and we don't yet
+    # have a badtracks file to work from, get current bad
+    # list from disk.  If format or config is blown, this may fail,
+    # but it's worth a try.
+
+    justmade=NO
+    if [ ! -f "$TFILE" -a "$ans" != b ]
+    then
+	${FMT} -r $DTYPE /dev/$FMTDEV >$TFILE 
+	if [ $? != 0 ]
+	then
+	    echo "\n\t*** Cannot get current bad track list from drive"
+	    rm -f $TFILE
+	    /etc/badtrack $device 
+	    echo "\n*** Bad track list preserved in $TFILE"
+	    justmade=YES
+	else
+	    echo "*** Current bad track list on disk preserved in $TFILE"
+	fi
+    fi
+
+    if [ "$ans" != b -a "$justmade" = NO ]
+    then
+	echo
+	add=
+	while [ "$add" != y -a "$add" != n ]
+	do
+	    echo ">>> Do you wish to add to the bad track list in $TFILE? <y/n>: \c"
+	    read add
+	done
+
+	if [ "$add" = y ]
+	then
+	    /etc/badtrack -a $device
+	    echo "\n*** New bad tracks appended to  $TFILE"
+	fi
+    fi
+
+}
+
+echo "\n*** Hdsetup can format the primary 70Mb Micropolis Winchester,"
+echo "*** (/dev/00) initialize the disk-resident configuration parameters and"
+echo "*** software/hardware bad track management facility"
+echo "*** (redirection of defective tracks), install a new bootloader,"
+echo "*** scan the disk for bad spots, and create 'root' and 'usr'"
+echo "*** filesystems.  Formatting always includes bad"
+echo "*** track initialization and installation of a bootloader."
+echo "*** Bad track initialization always includes installation of"
+echo "*** the bootloader (/stand/m68k/boots/vmeboot)."
+echo "\n*** If the disk needs only to have empty filesytems created,"
+echo "*** only <m> need be entered."
+echo "*** The location and size of the 'usr' filesystem can be changed"
+echo "*** by modifying the USRDEV & USRSIZE variables in '/.profile'."
+
+while :
+TFILE=
+check=
+do
+    echo "\n*** Does the disk need to be formatted, initialized, made bootable"
+    echo "*** or have initial root/usr filesystems created?\n"
+    ans=
+    while [ "$ans" != f -a "$ans" != i -a "$ans" != b -a "$ans" != m -a "$ans" != q ]
+    do
+	echo ">>> Enter  <f>ormat, <i>nit, <b>ootable, <m>kfs or <q>uit: \c"
+	read ans
+    done
+
+    case "$ans" in
+    f*)
+	getdevice
+	FMODES="-fob /stand/m68k/boots/vmeboot ${DTYPE} /dev/${FMTDEV}"
+	getbads
+	chkdsk
+	echo "\n*** About to format   /dev/${FMTDEV}"
+	;;
+    i*)
+	getdevice
+	FMODES="-ob /stand/m68k/boots/vmeboot ${DTYPE} /dev/${FMTDEV}"
+	getbads
+	chkdsk
+	echo "\n*** About to initialize configuration and bad track info on   /dev/${FMTDEV}"
+	;;
+    b*)
+	getdevice
+	echo "\n*** About to install  vmeboot  as bootloader on  /dev/${FMTDEV}"
+	FMODES="-b /stand/m68k/boots/vmeboot ${DTYPE} /dev/${FMTDEV}"
+	;;
+    m*)
+	getdevice
+
+	if [ -z "$ROOTSIZE" -o "$ROOTSIZE" -lt 15000 ]
+	then
+	    echo "*** Invalid ROOTSIZE value :  \"$ROOTSIZE\""
+	    echo "***\tNeed at least 15000 blocks for root"
+	    exit 1
+	fi
+
+	if [ -z "$USRSIZE" -o "$USRSIZE" -le 24000 ]
+	then
+	    echo "*** Invalid USRSIZE value: \"$USRSIZE\""
+	    echo "***\tNeed at least 24000 blocks for usr"
+	    exit 1
+	fi
+
+	echo "*** Making root filesystem on /dev/r$ROOTDEV ($ROOTSIZE blocks)"
+	verify
+	if [ "$vrfy" != y ]
+	then
+	    continue
+	fi
+	${MKFS} /dev/r$ROOTDEV $ROOTSIZE
+	if [ $? != 0 ]
+	then
+	    echo "\t*** Cannot make root filesystem"
+	    exit 2
+	fi
+
+	echo "\n*** Making usr filesystem on /dev/r$USRDEV ($USRSIZE blocks)"
+	verify
+	if [ "$vrfy" != y ]
+	then
+	    continue
+	fi
+	${MKFS} /dev/r$USRDEV $USRSIZE
+	if [ $? != 0 ]
+	then
+	    echo "\t*** Cannot make usr filesystem"
+	    exit 2
+	fi
+
+	echo "\n*** Checking root filesystem"
+	${CHK} -n /dev/r$ROOTDEV || {
+	    echo "\t*** Corrupt root filesystem"
+	    exit 3
+	}
+
+	echo "\n*** Checking usr filesystem"
+	${CHK} -n /dev/r$USRDEV ||  {
+	    echo "\t*** Corrupt usr filesystem"
+	    exit 3
+	}
+	continue
+	;;
+    *)
+	exit 1
+	;;
+    esac
+
+    if [ "$check" = y ]
+    then
+	echo "*** The disk will be (DESTRUCTIVELY) scanned for new bad tracks"
+    fi
+    if [ -f "$TFILE" -a "$ans" != b ]
+    then
+	echo "*** with known bad track numbers taken from the file   $TFILE"
+	FMODES="-t $TFILE $FMODES"
+    fi
+    verify
+    if [ "$vrfy" = n ]
+    then continue
+    fi
+    echo "\n*** ${FMT} $FMODES"
+    ${FMT} $FMODES
+    if [ $? != 0 ]
+    then
+	    echo "\n	**** ${FMT} failed ****"
+    elif [ "$ans" != b ]
+    then
+	${FMT} -r ${DTYPE} /dev/${FMTDEV} > $TFILE 2>/dev/null
+	echo "*** Current bad track list from disk $device  preserved in $TFILE"
+    fi
+
+done

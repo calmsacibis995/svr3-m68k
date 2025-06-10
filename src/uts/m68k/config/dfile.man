@@ -1,0 +1,330 @@
+
+
+
+     DDDDFFFFIIIILLLLEEEE((((4444))))						      DDDDFFFFIIIILLLLEEEE((((4444))))
+
+
+
+     NNNNAAAAMMMMEEEE
+	  dfile	- device information file
+
+     DDDDEEEESSSSCCCCRRRRIIIIPPPPTTTTIIIIOOOONNNN
+	  The user must	supply a description file, ddddffffiiiilllleeee, containing
+	  device information for the user's system.  The file is
+	  divided into three parts.  The first part contains physical
+	  device specifications.  The second part contains system-
+	  dependent information.  The third part contains
+	  microprocessor-specific information.	The first two parts
+	  are required,	the third part is optional.  A line with an
+	  asterisk (****) in column 1 is a	comment.  Any kernel can be
+	  used to generate the dfile used to configure that kernel.
+	  Refer	to the utility _s_y_s_d_e_f(1M).
+
+	FFFFIIIIRRRRSSSSTTTT PPPPAAAARRRRTTTT OOOOFFFF _d_f_i_l_e
+	  Each line contains four or five fields, delimited by blanks
+	  and/or tabs in the following format:
+
+	       _d_e_v_n_a_m_e	  _v_e_c_t_o_r    _a_d_d_r_e_s_s    _b_u_s    _n_u_m_b_e_r
+
+	  The first field, _d_e_v_n_a_m_e, is the name	of the device as it
+	  appears in the ////eeeettttcccc////mmmmaaaasssstttteeeerrrr device table.  The	device name is
+	  Field	1 of Part 1 and	has a maximum of eight characters
+	  (refer to _m_a_s_t_e_r(4).	The second field, _v_e_c_t_o_r, is the
+	  interrupt vector location (hexadecimal); this	value is also
+	  used in the interrupt	vector array created by	setting	the
+	  004000 bit of	Field 4	in the _m_a_s_t_e_r(4) file.	The third
+	  field, _a_d_d_r_e_s_s, is the device	address	(hexadecimal); the
+	  array	for device addresses is	automatically created (e.g.,
+	  vm22_addr[]).	 The fourth field, _b_u_s,	is the bus request
+	  level, or interrupt level (1 through 7), and is used in the
+	  interrupt level array	(e.g., vm22_ilev[]) that is created by
+	  the 001000 bit in Field 4 of _m_a_s_t_e_r.	The fifth field,
+	  _n_u_m_b_e_r, is the number	(decimal) of devices associated	with
+	  the corresponding controller;	_n_u_m_b_e_r is optional, and	if
+	  omitted, a default value which is the	maximum	value for that
+	  controller is	used.  This field is the same as Field 9 in
+	  Part 1 of the	_m_a_s_t_e_r(4) file and overrides the _m_a_s_t_e_r	field
+	  if specified in _d_f_i_l_e.
+
+	  There	are certain drivers which may be provided with the
+	  system that are actually pseudo-device drivers; that is,
+	  there	is no real hardware associated with the	driver.
+	  Drivers of this type are identified on their respective
+	  manual entries.  When	these devices are specified in the
+	  description file, the	interrupt _v_e_c_t_o_r, device _a_d_d_r_e_s_s, and
+	  _b_u_s request level must all be	zero.
+
+	SSSSEEEECCCCOOOONNNNDDDD PPPPAAAARRRRTTTT OOOOFFFF _d_f_i_l_e
+	  The second part contains three different types of lines.
+	  Note that all	specifications of this part are	required,
+
+
+
+     Page 1					     (printed 2/15/85)
+
+
+
+
+
+
+     DDDDFFFFIIIILLLLEEEE((((4444))))						      DDDDFFFFIIIILLLLEEEE((((4444))))
+
+
+
+	  although their order is arbitrary.
+
+	  1.  _R_o_o_t/_p_i_p_e/_d_u_m_p _d_e_v_i_c_e _s_p_e_c_i_f_i_c_a_t_i_o_n
+
+	      Three lines of three fields each:
+
+		  rrrrooooooootttt _d_e_v_n_a_m_e	 _m_i_n_o_r [,_m_i_n_o_r]...
+		  ppppiiiippppeeee _d_e_v_n_a_m_e	 _m_i_n_o_r [,_m_i_n_o_r]...
+		  dddduuuummmmpppp _d_e_v_n_a_m_e	 _m_i_n_o_r [,_m_i_n_o_r]...
+
+	      where _m_i_n_o_r is the minor device number (in octal).  For
+	      certain Motorola Inc.  disk controllers, it is possible
+	      to have a	single SYSTEM V/68 capable of executing	on any
+	      device on	the controller.	 For such devices, _m_i_n_o_r can
+	      be repeated (separated by	commas).  The first reference
+	      to _m_i_n_o_r specifies the rrrrooooooootttt (ppppiiiippppeeee, dddduuuummmmpppp) to be used for
+	      disk 0, the second _m_i_n_o_r for disk	1, etc.	 The same
+	      number of	_m_i_n_o_r references must be present for rrrrooooooootttt,
+	      ppppiiiippppeeee, dddduuuummmmpppp, and sssswwwwaaaapppp.  Currently,	eight _m_i_n_o_r numbers
+	      may be specified,	with the restriction that they must
+	      fit on the 100-character line given for each of rrrrooooooootttt,
+	      ppppiiiippppeeee, dddduuuummmmpppp, and sssswwwwaaaapppp.
+
+	  2.  _S_w_a_p _d_e_v_i_c_e _s_p_e_c_i_f_i_c_a_t_i_o_n
+
+	      One line that contains five fields as follows:
+
+	       sssswwwwaaaapppp _d_e_v_n_a_m_e   _m_i_n_o_r	_s_w_p_l_o	  _n_s_w_a_p	    [,_m_i_n_o_r
+	       _s_w_p_l_o _n_s_w_a_p]...
+
+	      where _s_w_p_l_o is the lowest	disk block (decimal) in	the
+	      swap area	and _n_s_w_a_p is the number	of disk	blocks
+	      (decimal)	in the swap area.  Multiple _m_i_n_o_r, _s_w_p_l_o, and
+	      _n_s_w_a_p specifications can be given; refer to the
+	      restrictions described above for multiple	_m_i_n_o_r
+	      specifications.
+
+	  3.  _P_a_r_a_m_e_t_e_r	_s_p_e_c_i_f_i_c_a_t_i_o_n
+
+	      Several lines of two fields each as follows (number is
+	      decimal):
+
+		  bbbbuuuuffffffffeeeerrrrssss	 number
+		  iiiinnnnooooddddeeeessss	 number
+		  ffffiiiilllleeeessss		 number
+		  mmmmoooouuuunnnnttttssss	 number
+		  ccccoooorrrreeeemmmmaaaapppp	 number
+		  sssswwwwaaaappppmmmmaaaapppp	 number
+		  ccccaaaallllllllssss		 number
+		  pppprrrrooooccccssss		 number
+		  mmmmaaaaxxxxpppprrrroooocccc	 number
+		  tttteeeexxxxttttssss		 number
+
+
+
+     Page 2					     (printed 2/15/85)
+
+
+
+
+
+
+     DDDDFFFFIIIILLLLEEEE((((4444))))						      DDDDFFFFIIIILLLLEEEE((((4444))))
+
+
+
+		  cccclllliiiissssttttssss	 number
+		  hhhhaaaasssshhhhbbbbuuuuffff	 number
+		  pppphhhhyyyyssssbbbbuuuuffff	 number
+		  ppppoooowwwweeeerrrr		 0 or 1
+		  mmmmeeeessssgggg		 0 or 1
+		  sssseeeemmmmaaaa		 0 or 1
+		  sssshhhhmmmmeeeemmmm		 0 or 1
+
+	TTTTHHHHIIIIRRRRDDDD PPPPAAAARRRRTTTT OOOOFFFF _d_f_i_l_e
+	  The third part contains lines	identified by a	keyword.  The
+	  format of each line differs for each keyword.	 The ordering
+	  of the third part is significant.
+
+	  1.  _N_o_n-_u_n_i_q_u_e _d_r_i_v_e_r	_s_p_e_c_i_f_i_c_a_t_i_o_n_s
+
+	      Several lines of two fields:
+
+		  ffffoooorrrrcccceeee	identifier
+
+	      where _i_d_e_n_t_i_f_i_e_r is the name of a	unique identifier
+	      defined within a driver, located in the kernel I/O
+	      library file.  This forces the correct linking of	non-
+	      table driven drivers, such as those for the clock,
+	      console, and mmu.
+
+	  2.  _M_e_m_o_r_y _p_r_o_b_e _s_p_e_c_i_f_i_c_a_t_i_o_n_s
+
+	      Several lines of three fields:
+
+		  pppprrrroooobbbbeeee	    _a_d_d_r_e_s_s	   _v_a_l_u_e
+
+	      where _a_d_d_r_e_s_s is the hexadecimal number specifying a
+	      memory-mapped I/O	location that must be reset for	SYSTEM
+	      V/68 to execute properly.	 The intent is to provide a
+	      means by which non-standard (or unsupported) devices can
+	      be set to	a harmless state.  _V_a_l_u_e is a hexadecimal
+	      number (0x00-0xff) to be written in _a_d_d_r_e_s_s, or ----1111,
+	      indicating that the address is to	be ``read only''.
+
+	  3.  _A_l_i_e_n _h_a_n_d_l_e_r _e_n_t_r_y _s_p_e_c_i_f_i_c_a_t_i_o_n_s
+
+	      Several lines of three fields:
+
+		  aaaalllliiiieeeennnn	    _v_e_c_t_o_r__a_d_d_r_e_s_s	_a_l_i_e_n__a_d_d_r_e_s_s
+
+	      where _v_e_c_t_o_r__a_d_d_r_e_s_s is the hexadecimal address of the
+	      normal exception vector for the alien entry point, and
+	      _a_l_i_e_n__a_d_d_r_e_s_s is the hexadecimal entry point for the
+	      non-SYSTEM V/68 handler. If no SYSTEM V/68 handler is
+	      associated with the _v_e_c_t_o_r__a_d_d_r_e_s_s, then _a_l_i_e_n__a_d_d_r_e_s_s
+	      is entered into the vector.  Otherwise, code is produced
+	      in lllloooowwww....ssss (refer to _c_o_n_f_i_g(1M)) so	that the alien handler
+
+
+
+     Page 3					     (printed 2/15/85)
+
+
+
+
+
+
+     DDDDFFFFIIIILLLLEEEE((((4444))))						      DDDDFFFFIIIILLLLEEEE((((4444))))
+
+
+
+	      is entered only when the exception occurs	in the
+	      processor's supervisor state.
+
+	  4.  _M_u_l_t_i_p_l_e _h_a_n_d_l_e_r _s_p_e_c_i_f_i_c_a_t_i_o_n_s
+
+	      Several lines of four or five fields:
+
+		  dddduuuupppp  _f_l_a_g _v_e_c_t_o_r__a_d_d_r_e_s_s _h_a_n_d_l_e_r   [_a_r_g_u_m_e_n_t]
+
+	      where _f_l_a_g is a bit mask.	 The bits are interpreted as:
+
+		  1111 - if _h_a_n_d_l_e_r returns 0, go to the normal interrupt
+		      return point (``intret'').
+
+		  2222 - if _h_a_n_d_l_e_r returns 0, go to the normal trap
+		      return point (``alltraps'').
+
+		  4444 - if _h_a_n_d_l_e_r returns 0, go to the branch equal
+		  return point (``beq return'').
+
+		  11110000 - _a_r_g_u_m_e_n_t	is to be passed	to _h_a_n_d_l_e_r.
+
+	      _V_e_c_t_o_r__a_d_d_r_e_s_s is	the hexadecimal	address	of the
+	      exception	vector.	 _H_a_n_d_l_e_r is the	name of	an exception
+	      handling routine,	with the optional _a_r_g_u_m_e_n_t passed to
+	      it.  The intent is to provide a means of specifying
+	      multiple handlers	for a single exception.	 These
+	      handlers are called in the order given in	_d_f_i_l_e(4); then
+	      the normal handler is called.  If	bits 1,	2 or 4 of _f_l_a_g
+	      are set and the handler returns zero, then the remainder
+	      of the handlers are not called.
+
+	  5.  _M_e_m_o_r_y _c_o_n_f_i_g_u_r_a_t_i_o_n _s_p_e_c_i_f_i_c_a_t_i_o_n_s
+
+	      Several lines of four or five fields:
+
+		  rrrraaaammmm  _f_l_a_g _l_o_w	 _h_i_g_h [_s_i_z_e]
+
+	      where _f_l_a_g is an octal bit mask, which is	interpreted as
+	      follows:
+
+		  1111 - memory has no parity check and, therfore,
+		      need not be initialized after power up.
+
+		  2222 - a	single memory block may	exist, ranging from
+		      _l_o_w through _h_i_g_h-1.
+
+		  4444 - multiple memory blocks may be located in the
+		      range and	are of _s_i_z_e bytes.
+
+	       _L_o_w and _h_i_g_h are	hexadecimal memory addresses, and _s_i_z_e
+	       is a hexadecimal	number.	 The intent is to provide
+
+
+
+     Page 4					     (printed 2/15/85)
+
+
+
+
+
+
+     DDDDFFFFIIIILLLLEEEE((((4444))))						      DDDDFFFFIIIILLLLEEEE((((4444))))
+
+
+
+	       information to SYSTEM V/68 about	noncontiguous memory.
+	       _L_o_w specifies the low memory address where memory may
+	       be located, and which may extend	through	_h_i_g_h-1.	 If
+	       the range consists of multiple boards, which may	or may
+	       not be present, they are	of _s_i_z_e	bytes.
+
+	       For flag	2 ranges, SYSTEM V/68 writes sequential	memory
+	       locations, starting at low, until a memory fault
+	       occurs.	For flag 4 ranges, SYSTEM V/68 performs	a test
+	       for each	_s_i_z_e-sized subrange.  If memory	need not be
+	       initialized, only the first byte	of the range (flag 2)
+	       or subrange (flag 4) is tested to determine the
+	       presence	of the memory.
+
+	       It is essential that _r_a_m	lines be ordered in ascending
+	       _l_o_w addresses.  If two _l_o_ws are equal (more than	one
+	       size memory block may be	located	within a range), they
+	       must be ordered in ascending _s_i_z_es.
+
+	       If no rrrraaaammmm specifier is present, the default is:
+
+		   rrrraaaammmm	2222    0000	  FFFF00000000000000000000
+
+     SSSSEEEEEEEE AAAALLLLSSSSOOOO
+	  master(4), config(1M).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     Page 5					     (printed 2/15/85)
+
+
+

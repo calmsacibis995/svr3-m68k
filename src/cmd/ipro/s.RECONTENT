@@ -1,0 +1,75 @@
+for FILE
+
+   in $*
+
+do
+   if [ ! -f s.$FILE ]
+   then
+      echo "$0: $FILE: SCCS file, s.$FILE, does not exist."
+      continue
+   fi
+
+   rm -f $FILE.A $FILE.B $FILE p.$FILE
+
+   get -s -p s.$FILE  > $FILE
+
+   if [ `fgrep '/***  CONTENTS: ' $FILE | wc -l` -eq 0 ]
+   then
+      echo "$0: $FILE: no CONTENTS line."
+      continue
+
+   elif [ `fgrep '/***     begin ' $FILE | wc -l` -eq 0 ]
+   then
+      echo "$0: $FILE: no begin line."
+      continue
+
+   elif [ `fgrep '/***     end ' $FILE | wc -l` -eq 0 ]
+   then
+      echo "$0: $FILE: no end line."
+      continue
+
+   fi
+
+   ed - $FILE  > /dev/null  2> /dev/null  <<%%
+1
+/\/\*\*\*  CONTENTS: /+1,/\/\*\*\*     end /+1w $FILE.A
+g/\/\* /s/^/Z/
+g/^[^Z]/d
+g/^Z/s///
+g/\/\* /s//      /
+g/^    /s//\/\*\*\*/
+g/ \*\/$/s//  \*\*\*\//
+1
+s/$/ /
+g/  *$/s///
+g/^$/d
+w
+q
+%%
+
+   uniq $FILE  > $FILE.B
+
+   rm -f $FILE
+
+   if [ `diff $FILE.A $FILE.B | wc -l` -ne 0 ]
+   then
+      mv $FILE.B $FILE.A
+
+      get -s -e s.$FILE
+
+      ed - $FILE  > /dev/null  2> /dev/null  <<%%
+1
+/\/\*\*\*  CONTENTS: /+1,/\/\*\*\*     end /+1d
+1
+/\/\*\*\*  CONTENTS: /r $FILE.A
+w
+q
+%%
+
+      delta -s -y s.$FILE
+   fi
+
+   rm -f $FILE.A $FILE.B
+done
+
+exit 0

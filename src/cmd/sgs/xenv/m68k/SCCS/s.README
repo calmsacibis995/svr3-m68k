@@ -1,0 +1,247 @@
+h16546
+s 00032/00033/00075
+d D 1.2 86/11/19 12:03:37 fnf 2 1
+c First cut at pathedit integration for m68k (native only).
+e
+s 00108/00000/00000
+d D 1.1 86/07/29 14:43:46 fnf 1 0
+c Baseline code from 5.3 release for 3b2
+e
+u
+U
+t
+T
+I 1
+D 2
+#ident	"@(#)xenv:m32/README	1.16"
+E 2
+I 2
+#ident	"@(#)xenv:m68k/README	1.16"
+E 2
+#
+D 2
+#	MASTER README FOR WE-32000 SGS
+E 2
+I 2
+#	MASTER README FOR MOTOROLA-68K SGS
+E 2
+#
+#
+D 2
+This README file is in a directory called ....(path name).../xenv/m32 .
+E 2
+I 2
+This README file is in a directory called ....(path name).../xenv/m68k .
+E 2
+
+D 2
+The source files composing the WE-32000 SGS are stored in a directory
+E 2
+I 2
+The source files composing the MOTOROLA-M68K SGS are stored in a directory
+E 2
+structure of the form:
+
+D 2
+	../../inc/m32
+E 2
+I 2
+	../../inc/m68k
+E 2
+	../../inc/common
+D 2
+	../../inc/3b
+	../../<tool>/m32
+E 2
+I 2
+	../../<tool>/m68k
+E 2
+	../../<tool>/common
+	../../../make
+D 2
+	../../../../<lib>/m32
+E 2
+I 2
+	../../../../<lib>/m68k
+E 2
+	../../../../<lib>/common
+
+D 2
+where ../../inc/* contain the header files, ../../<tool>/* contains the
+source files used to build a particular tool, e.g. "as", and ../../../../<lib>/*
+E 2
+I 2
+where ../../inc/* contain the header files, ../../<tool>/* contains the source
+files used to build a particular tool, e.g. "as", and ../../../../<lib>/*
+E 2
+contains the source files used to build a particular library, e.g. "libc".
+While some tools are composed principally of common files, all of them are
+D 2
+built in the m32 structure.
+E 2
+I 2
+built in the m68k structure.
+E 2
+
+The directory containing this README file also contains the following
+files:
+	pathedit-- shell script to set path names in paths.h, sgs.h,
+D 2
+		   makefile, make-m32, env-m32,
+E 2
+I 2
+		   makefile, make-m68k, env-m68k,
+E 2
+		   ../../sgs.mk and ../../../../lib.mk
+
+	pted.shlink-- file to link the libc source files to shlibc
+                      (this file is invoked by pathedit)
+
+D 2
+	paths.h	-- a reusable skeleton of ../../inc/m32/paths.h
+E 2
+I 2
+	paths.h	-- a reusable skeleton of ../../inc/m68k/paths.h
+E 2
+
+D 2
+	sgs.h	-- a reusable copy of ../../inc/m32/sgs.h
+E 2
+I 2
+	sgs.h	-- a reusable copy of ../../inc/m68k/sgs.h
+E 2
+
+D 2
+	template.mk -- a reusable skeleton of WE 32000 Master SGS makefile
+E 2
+I 2
+	template.mk -- a reusable skeleton of MOTOROLA M68K Master SGS makefile
+E 2
+
+D 2
+	make-m32 -- a reusable skeleton of the front-end to make.
+E 2
+I 2
+	make-m68k -- a reusable skeleton of the front-end to make.
+E 2
+
+D 2
+	env-m32 -- a reusable skeleton of the cross-environment script
+E 2
+I 2
+	env-m68k -- a reusable skeleton of the cross-environment script
+E 2
+
+D 2
+To build the tools, the paths.h file (in ../../inc/m32/paths.h)
+E 2
+I 2
+To build the tools, the paths.h file (in ../../inc/m68k/paths.h)
+E 2
+must be set up properly.  This file contains the absolute path
+names for various tools and directories.  These path names can
+be set using the pathedit shell program in this directory.
+Pathedit will also set the path names in the master SGS makefile
+(./makefile), the global makefile (../../sgs.mk) which makes both the SGS
+D 2
+and the cross-libraries, the master library makefile (../../../../lib.mk),
+the front-end to make (./make-m32) and the cross-environment script (./env-m32), 
+as well as the SGS prefix in sgs.h (../../inc/m32/sgs.h).
+E 2
+I 2
+and the cross-libraries, the master library makefile (../../../../lib.mk), the
+front-end to make (./make-m68k) and the cross-environment script (./env-m68k), 
+as well as the SGS prefix in sgs.h (../../inc/m68k/sgs.h).
+E 2
+
+$(BASE) will denote the directory where the SGS source is rooted.
+
+Let:
+	MACH 	= Target machine, i.e. the machine for which SGS will produce
+		  code. This parameter is used to define the appropriate
+D 2
+		  variable in the C preprocessor. Legal responses are
+		  3b15, 3b5 and 3b2.
+E 2
+I 2
+		  variable in the C preprocessor. Legal response is
+		  m68k.
+E 2
+
+	BINDIR = directory containing the tools which are called
+D 2
+		 directly, such as m32cc, m32size, etc.. Default value
+E 2
+I 2
+		 directly, such as m68kcc, m68ksize, etc.. Default value
+E 2
+		 is $(BASE)/$(MACH)/bin.
+
+	LIBDIR = directory containing indirectly called passes of
+		 various tools, such as comp and cpp, as well as the
+		 libraries (libld.a, libc.a, etc.). Default value 
+		 is $(BASE)/$(MACH)/lib.
+
+        USRINC  = the ABSOLUTE name of the default include directory for
+                  the cpp. This is the directory in which the cross
+		  cpp will look for header files. Default value is
+		  $(BASE)/$(MACH)/usr/include.
+
+	PREFIX = generic prefix used for command names, e.g. setting
+D 2
+		 this to "m32" causes the command name for the C
+		 compiler to be called "m32cc". Default value is the target 
+E 2
+I 2
+		 this to "m68k" causes the command name for the C
+		 compiler to be called "m68kcc". Default value is the target 
+E 2
+		 machine name, $(MACH).
+
+To set the pathnames, run pathedit giving the names of the parameters
+as requested.  Pathedit should be executed with /bin/sh and thus execute
+it as follows:
+
+        sh pathedit <cr>
+
+Now the cross-SGS can be made. Simply type the following:
+
+	cd ../..		- go the root directory of the SGS source
+
+D 2
+	make -f sgs.mk		- builds all WE 32000 SGS tools and the 
+				  cross-libraries and installs them in BINDIR and
+				  LIBDIR
+E 2
+I 2
+	make -f sgs.mk		- builds all MOTOROLA M68K SGS tools and the 
+				  cross-libraries and installs them in BINDIR 
+				  and LIBDIR
+E 2
+
+
+Some other make capabilities are:
+
+D 2
+	make -f sgs.mk sgs	- builds the WE32000 SGS tools and libraries only
+E 2
+I 2
+	make -f sgs.mk sgs	- builds the M68K SGS tools and libraries only
+E 2
+				  This does not build the cross-libraries.
+
+	make -f sgs.mk install	- installs tools in BINDIR and LIBDIR 
+
+	make -f sgs.mk shrink	- removes ALL non-source files (i.e. .o and
+D 2
+			  	  executable) from the m32 and common directory
+			  	  structures. This DOES NOT remove the
+			  	  installed files.
+E 2
+I 2
+			  	  executable) from the m68k and common
+				  directory structures. This DOES NOT remove
+				  the installed files.
+E 2
+	
+E 1

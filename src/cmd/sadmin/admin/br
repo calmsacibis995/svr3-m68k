@@ -1,0 +1,8 @@
+#ident	"@(#)sadmin:admin/br	1.0"
+
+# Currently, the B&R system is a separate array of menus and control
+# files residing in /backups.  Maybe someday, it'll be re-written in
+# sysadm menu-ese.
+
+cd /backups
+./begin

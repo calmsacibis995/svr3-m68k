@@ -1,0 +1,439 @@
+Mon Oct 20 17:09:27 MST 1986 -- Make id=104
+	FP=m68881		 cc -c -O asin.c
+	chmod 664		 asin.o
+	chgrp bin		  asin.o
+	chown bin		  asin.o
+	ar rv libm881.a asin.o
+ar: creating libm881.a
+a - asin.o
+	rm asin.o
+	FP=m68881		 cc -c -O atan.c
+	chmod 664		 atan.o
+	chgrp bin		  atan.o
+	chown bin		  atan.o
+	ar rv libm881.a atan.o
+a - atan.o
+	rm atan.o
+	FP=m68881		 cc -c -O erf.c
+	chmod 664		 erf.o
+	chgrp bin		  erf.o
+	chown bin		  erf.o
+	ar rv libm881.a erf.o
+a - erf.o
+	rm erf.o
+	FP=m68881		 cc -c -O fabs.c
+	chmod 664		 fabs.o
+	chgrp bin		  fabs.o
+	chown bin		  fabs.o
+	ar rv libm881.a fabs.o
+a - fabs.o
+	rm fabs.o
+	FP=m68881		 cc -c -O floor.c
+	chmod 664		 floor.o
+	chgrp bin		  floor.o
+	chown bin		  floor.o
+	ar rv libm881.a floor.o
+a - floor.o
+	rm floor.o
+	FP=m68881		 cc -c -O fmod.c
+	chmod 664		 fmod.o
+	chgrp bin		  fmod.o
+	chown bin		  fmod.o
+	ar rv libm881.a fmod.o
+a - fmod.o
+	rm fmod.o
+	FP=m68881		 cc -c -O gamma.c
+	chmod 664		 gamma.o
+	chgrp bin		  gamma.o
+	chown bin		  gamma.o
+	ar rv libm881.a gamma.o
+a - gamma.o
+	rm gamma.o
+	FP=m68881		 cc -c -O hypot.c
+	chmod 664		 hypot.o
+	chgrp bin		  hypot.o
+	chown bin		  hypot.o
+	ar rv libm881.a hypot.o
+a - hypot.o
+	rm hypot.o
+	FP=m68881		 cc -c -O jn.c
+	chmod 664		 jn.o
+	chgrp bin		  jn.o
+	chown bin		  jn.o
+	ar rv libm881.a jn.o
+a - jn.o
+	rm jn.o
+	FP=m68881		 cc -c -O j0.c
+	chmod 664		 j0.o
+	chgrp bin		  j0.o
+	chown bin		  j0.o
+	ar rv libm881.a j0.o
+a - j0.o
+	rm j0.o
+	FP=m68881		 cc -c -O j1.c
+	chmod 664		 j1.o
+	chgrp bin		  j1.o
+	chown bin		  j1.o
+	ar rv libm881.a j1.o
+a - j1.o
+	rm j1.o
+	FP=m68881		 cc -c -O pow.c
+	chmod 664		 pow.o
+	chgrp bin		  pow.o
+	chown bin		  pow.o
+	ar rv libm881.a pow.o
+a - pow.o
+	rm pow.o
+	FP=m68881		 cc -c -O log.c
+	chmod 664		 log.o
+	chgrp bin		  log.o
+	chown bin		  log.o
+	ar rv libm881.a log.o
+a - log.o
+	rm log.o
+	FP=m68881		 cc -c -O sin.c
+	chmod 664		 sin.o
+	chgrp bin		  sin.o
+	chown bin		  sin.o
+	ar rv libm881.a sin.o
+a - sin.o
+	rm sin.o
+	FP=m68881		 cc -c -O sqrt.c
+	chmod 664		 sqrt.o
+	chgrp bin		  sqrt.o
+	chown bin		  sqrt.o
+	ar rv libm881.a sqrt.o
+a - sqrt.o
+	rm sqrt.o
+	FP=m68881		 cc -c -O tan.c
+	chmod 664		 tan.o
+	chgrp bin		  tan.o
+	chown bin		  tan.o
+	ar rv libm881.a tan.o
+a - tan.o
+	rm tan.o
+	FP=m68881		 cc -c -O tanh.c
+	chmod 664		 tanh.o
+	chgrp bin		  tanh.o
+	chown bin		  tanh.o
+	ar rv libm881.a tanh.o
+a - tanh.o
+	rm tanh.o
+	FP=m68881		 cc -c -O sinh.c
+	chmod 664		 sinh.o
+	chgrp bin		  sinh.o
+	chown bin		  sinh.o
+	ar rv libm881.a sinh.o
+a - sinh.o
+	rm sinh.o
+	FP=m68881		 cc -c -O exp.c
+	chmod 664		 exp.o
+	chgrp bin		  exp.o
+	chown bin		  exp.o
+	ar rv libm881.a exp.o
+a - exp.o
+	rm exp.o
+	FP=m68881		 cc -c -O matherr.c
+	chmod 664		 matherr.o
+	chgrp bin		  matherr.o
+	chown bin		  matherr.o
+	ar rv libm881.a matherr.o
+a - matherr.o
+	rm matherr.o
+	as  -o asin881.o asin881.s
+	chmod 664		 asin881.o
+	chgrp bin		  asin881.o
+	chown bin		  asin881.o
+	ar rv libm881.a asin881.o
+a - asin881.o
+	rm asin881.o
+	as  -o atan881.o atan881.s
+	chmod 664		 atan881.o
+	chgrp bin		  atan881.o
+	chown bin		  atan881.o
+	ar rv libm881.a atan881.o
+a - atan881.o
+	rm atan881.o
+	as  -o etox881.o etox881.s
+	chmod 664		 etox881.o
+	chgrp bin		  etox881.o
+	chown bin		  etox881.o
+	ar rv libm881.a etox881.o
+a - etox881.o
+	rm etox881.o
+	as  -o log881.o log881.s
+	chmod 664		 log881.o
+	chgrp bin		  log881.o
+	chown bin		  log881.o
+	ar rv libm881.a log881.o
+a - log881.o
+	rm log881.o
+	as  -o mul881.o mul881.s
+	chmod 664		 mul881.o
+	chgrp bin		  mul881.o
+	chown bin		  mul881.o
+	ar rv libm881.a mul881.o
+a - mul881.o
+	rm mul881.o
+	as  -o nan881.o nan881.s
+	chmod 664		 nan881.o
+	chgrp bin		  nan881.o
+	chown bin		  nan881.o
+	ar rv libm881.a nan881.o
+a - nan881.o
+	rm nan881.o
+	as  -o sin881.o sin881.s
+	chmod 664		 sin881.o
+	chgrp bin		  sin881.o
+	chown bin		  sin881.o
+	ar rv libm881.a sin881.o
+a - sin881.o
+	rm sin881.o
+	as  -o sinh881.o sinh881.s
+	chmod 664		 sinh881.o
+	chgrp bin		  sinh881.o
+	chown bin		  sinh881.o
+	ar rv libm881.a sinh881.o
+a - sinh881.o
+	rm sinh881.o
+	as  -o sqrt881.o sqrt881.s
+	chmod 664		 sqrt881.o
+	chgrp bin		  sqrt881.o
+	chown bin		  sqrt881.o
+	ar rv libm881.a sqrt881.o
+a - sqrt881.o
+	rm sqrt881.o
+	as  -o tan881.o tan881.s
+	chmod 664		 tan881.o
+	chgrp bin		  tan881.o
+	chown bin		  tan881.o
+	ar rv libm881.a tan881.o
+a - tan881.o
+	rm tan881.o
+	as  -o tanh881.o tanh881.s
+	chmod 664		 tanh881.o
+	chgrp bin		  tanh881.o
+	chown bin		  tanh881.o
+	ar rv libm881.a tanh881.o
+a - tanh881.o
+	rm tanh881.o
+	make -f libm881.mk -e libp.libm881.a LIBNAME=libp.libm881.a \
+						CFLAGS="-p -c -O"
+	FP=m68881		 cc -p -c -O asin.c
+	chmod 664		 asin.o
+	chgrp bin		  asin.o
+	chown bin		  asin.o
+	ar rv libp.libm881.a asin.o
+ar: creating libp.libm881.a
+a - asin.o
+	rm asin.o
+	FP=m68881		 cc -p -c -O atan.c
+	chmod 664		 atan.o
+	chgrp bin		  atan.o
+	chown bin		  atan.o
+	ar rv libp.libm881.a atan.o
+a - atan.o
+	rm atan.o
+	FP=m68881		 cc -p -c -O erf.c
+	chmod 664		 erf.o
+	chgrp bin		  erf.o
+	chown bin		  erf.o
+	ar rv libp.libm881.a erf.o
+a - erf.o
+	rm erf.o
+	FP=m68881		 cc -p -c -O fabs.c
+	chmod 664		 fabs.o
+	chgrp bin		  fabs.o
+	chown bin		  fabs.o
+	ar rv libp.libm881.a fabs.o
+a - fabs.o
+	rm fabs.o
+	FP=m68881		 cc -p -c -O floor.c
+	chmod 664		 floor.o
+	chgrp bin		  floor.o
+	chown bin		  floor.o
+	ar rv libp.libm881.a floor.o
+a - floor.o
+	rm floor.o
+	FP=m68881		 cc -p -c -O fmod.c
+	chmod 664		 fmod.o
+	chgrp bin		  fmod.o
+	chown bin		  fmod.o
+	ar rv libp.libm881.a fmod.o
+a - fmod.o
+	rm fmod.o
+	FP=m68881		 cc -p -c -O gamma.c
+	chmod 664		 gamma.o
+	chgrp bin		  gamma.o
+	chown bin		  gamma.o
+	ar rv libp.libm881.a gamma.o
+a - gamma.o
+	rm gamma.o
+	FP=m68881		 cc -p -c -O hypot.c
+	chmod 664		 hypot.o
+	chgrp bin		  hypot.o
+	chown bin		  hypot.o
+	ar rv libp.libm881.a hypot.o
+a - hypot.o
+	rm hypot.o
+	FP=m68881		 cc -p -c -O jn.c
+	chmod 664		 jn.o
+	chgrp bin		  jn.o
+	chown bin		  jn.o
+	ar rv libp.libm881.a jn.o
+a - jn.o
+	rm jn.o
+	FP=m68881		 cc -p -c -O j0.c
+	chmod 664		 j0.o
+	chgrp bin		  j0.o
+	chown bin		  j0.o
+	ar rv libp.libm881.a j0.o
+a - j0.o
+	rm j0.o
+	FP=m68881		 cc -p -c -O j1.c
+	chmod 664		 j1.o
+	chgrp bin		  j1.o
+	chown bin		  j1.o
+	ar rv libp.libm881.a j1.o
+a - j1.o
+	rm j1.o
+	FP=m68881		 cc -p -c -O pow.c
+	chmod 664		 pow.o
+	chgrp bin		  pow.o
+	chown bin		  pow.o
+	ar rv libp.libm881.a pow.o
+a - pow.o
+	rm pow.o
+	FP=m68881		 cc -p -c -O log.c
+	chmod 664		 log.o
+	chgrp bin		  log.o
+	chown bin		  log.o
+	ar rv libp.libm881.a log.o
+a - log.o
+	rm log.o
+	FP=m68881		 cc -p -c -O sin.c
+	chmod 664		 sin.o
+	chgrp bin		  sin.o
+	chown bin		  sin.o
+	ar rv libp.libm881.a sin.o
+a - sin.o
+	rm sin.o
+	FP=m68881		 cc -p -c -O sqrt.c
+	chmod 664		 sqrt.o
+	chgrp bin		  sqrt.o
+	chown bin		  sqrt.o
+	ar rv libp.libm881.a sqrt.o
+a - sqrt.o
+	rm sqrt.o
+	FP=m68881		 cc -p -c -O tan.c
+	chmod 664		 tan.o
+	chgrp bin		  tan.o
+	chown bin		  tan.o
+	ar rv libp.libm881.a tan.o
+a - tan.o
+	rm tan.o
+	FP=m68881		 cc -p -c -O tanh.c
+	chmod 664		 tanh.o
+	chgrp bin		  tanh.o
+	chown bin		  tanh.o
+	ar rv libp.libm881.a tanh.o
+a - tanh.o
+	rm tanh.o
+	FP=m68881		 cc -p -c -O sinh.c
+	chmod 664		 sinh.o
+	chgrp bin		  sinh.o
+	chown bin		  sinh.o
+	ar rv libp.libm881.a sinh.o
+a - sinh.o
+	rm sinh.o
+	FP=m68881		 cc -p -c -O exp.c
+	chmod 664		 exp.o
+	chgrp bin		  exp.o
+	chown bin		  exp.o
+	ar rv libp.libm881.a exp.o
+a - exp.o
+	rm exp.o
+	FP=m68881		 cc -p -c -O matherr.c
+	chmod 664		 matherr.o
+	chgrp bin		  matherr.o
+	chown bin		  matherr.o
+	ar rv libp.libm881.a matherr.o
+a - matherr.o
+	rm matherr.o
+	as  -o asin881.o asin881.s
+	chmod 664		 asin881.o
+	chgrp bin		  asin881.o
+	chown bin		  asin881.o
+	ar rv libp.libm881.a asin881.o
+a - asin881.o
+	rm asin881.o
+	as  -o atan881.o atan881.s
+	chmod 664		 atan881.o
+	chgrp bin		  atan881.o
+	chown bin		  atan881.o
+	ar rv libp.libm881.a atan881.o
+a - atan881.o
+	rm atan881.o
+	as  -o etox881.o etox881.s
+	chmod 664		 etox881.o
+	chgrp bin		  etox881.o
+	chown bin		  etox881.o
+	ar rv libp.libm881.a etox881.o
+a - etox881.o
+	rm etox881.o
+	as  -o log881.o log881.s
+	chmod 664		 log881.o
+	chgrp bin		  log881.o
+	chown bin		  log881.o
+	ar rv libp.libm881.a log881.o
+a - log881.o
+	rm log881.o
+	as  -o mul881.o mul881.s
+	chmod 664		 mul881.o
+	chgrp bin		  mul881.o
+	chown bin		  mul881.o
+	ar rv libp.libm881.a mul881.o
+a - mul881.o
+	rm mul881.o
+	as  -o nan881.o nan881.s
+	chmod 664		 nan881.o
+	chgrp bin		  nan881.o
+	chown bin		  nan881.o
+	ar rv libp.libm881.a nan881.o
+a - nan881.o
+	rm nan881.o
+	as  -o sin881.o sin881.s
+	chmod 664		 sin881.o
+	chgrp bin		  sin881.o
+	chown bin		  sin881.o
+	ar rv libp.libm881.a sin881.o
+a - sin881.o
+	rm sin881.o
+	as  -o sinh881.o sinh881.s
+	chmod 664		 sinh881.o
+	chgrp bin		  sinh881.o
+	chown bin		  sinh881.o
+	ar rv libp.libm881.a sinh881.o
+a - sinh881.o
+	rm sinh881.o
+	as  -o sqrt881.o sqrt881.s
+	chmod 664		 sqrt881.o
+	chgrp bin		  sqrt881.o
+	chown bin		  sqrt881.o
+	ar rv libp.libm881.a sqrt881.o
+a - sqrt881.o
+	rm sqrt881.o
+	as  -o tan881.o tan881.s
+	chmod 664		 tan881.o
+	chgrp bin		  tan881.o
+	chown bin		  tan881.o
+	ar rv libp.libm881.a tan881.o
+a - tan881.o
+	rm tan881.o
+	as  -o tanh881.o tanh881.s
+	chmod 664		 tanh881.o
+	chgrp bin		  tanh881.o
+	chown bin		  tanh881.o
+	ar rv libp.libm881.a tanh881.o
+a - tanh881.o
+	rm tanh881.o

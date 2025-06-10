@@ -1,0 +1,58 @@
+* vme131
+*
+Description File:	"MVME131 CPU board"
+*
+* console
+*
+Board Description:	"Console Board"
+Description Keyword:	"console"
+Device Type:	"m564con"
+Bus Request Level:	2
+Address:	0xfffb0040
+Interrupt Vector Location:	0x110
+Default Number Of Devices:	2
+*
+* m564con
+*
+Device Description:	"Console device description"
+Description Keyword:	"m564con"
+Device Name:	"m564con"
+Handler Prefix:	"m564"
+Interrupt Vectors Size:	4
+Major Block Device Number:	0
+Major Character Device Number:	0
+Maximum Bus Request Level:	5
+Maximum Devices Per Controller:	2
+Page Registers Size:	4
+Block Or Character Device Handler Lines:
+Has a tty structure.
+Has an initialization handler.
+Has an open handler.
+Has a close handler.
+Has a read handler.
+Has a write handler.
+Has an ioctl handler.
+Device Type Information:
+Create interrupt vector array for this device.
+This is a character device.
+Device Configuration Tables Declarations:
+Device config table structure declaration:	"tty"
+*
+* clock
+*
+Device Description:	"System Clock Device"
+Description Keyword:	"clock"
+Device Name:	"clock"
+Handler Prefix:	"clk"
+Interrupt Vectors Size:	4
+Major Block Device Number:	0
+Major Character Device Number:	0
+Maximum Bus Request Level:	6
+Maximum Devices Per Controller:	1
+Page Registers Size:	4
+Block Or Character Device Handler Lines:
+Device Type Information:
+Allow only one of these devices.
+Do not create a count field for this device.
+This is an interrupt driven device.
+Device Configuration Tables Declarations:

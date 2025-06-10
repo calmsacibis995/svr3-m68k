@@ -1,0 +1,1 @@
+lpr Makefile .hierarchy .interface iprodefs.h main.c [a-l]*.c memops.c [n-r]*.c sighand.c [t-z]*.c fsp.c

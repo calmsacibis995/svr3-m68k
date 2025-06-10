@@ -1,0 +1,9 @@
+#ident	"@(#)initpkg:init.d/nodename	1.0"
+#	Set node name for system.
+
+set `who -r`
+if [ $9 = "S" ]
+then
+	uname -S sysV68
+	echo "Node name set to `uname -n`."
+fi 

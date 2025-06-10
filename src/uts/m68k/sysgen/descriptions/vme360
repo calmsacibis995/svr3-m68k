@@ -1,0 +1,52 @@
+* vme360
+*
+Description File:	"MVME360 SMD Disk Controller Board"
+*
+* vme360
+*
+Device Description:	"vme360 SMD Disk Driver"
+Description Keyword:	"vme360"
+Device Name:	"vme360"
+Handler Prefix:	"m360"
+Interrupt Vectors Size:	4
+Major Block Device Number:	6
+Major Character Device Number:	25
+Maximum Bus Request Level:	5
+Maximum Devices Per Controller:	32
+Page Registers Size:	4
+Block Or Character Device Handler Lines:
+Has separate open/close routines for block/character devices.
+Has an initialization handler.
+Has a power-failure handler.
+Has an open handler.
+Has a close handler.
+Has a read handler.
+Has a write handler.
+Has an ioctl handler.
+Device Type Information:
+Create interrupt vector array for this device.
+Create character and/or block major device numbers for this device.
+Create interrupt level array for this device.
+This is a block device.
+This is a character device.
+Device Configuration Tables Declarations:
+*
+* vme360 #1
+*
+Board Description:	"vme360 SMD Controller #1"
+Description Keyword:	"vme360 #1"
+Device Type:	"vme360"
+Bus Request Level:	5
+Address:	0xffff0c00
+Interrupt Vector Location:	0x3e4
+Default Number Of Devices:	0
+*
+* vme360 #2
+*
+Board Description:	"vme360 SMD Controller #2"
+Description Keyword:	"vme360 #2"
+Device Type:	"vme360"
+Bus Request Level:	5
+Address:	0xffff0e00
+Interrupt Vector Location:	0x3dc
+Default Number Of Devices:	0

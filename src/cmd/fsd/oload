@@ -1,0 +1,16 @@
+cp  dmp /usr/bin
+cp serv /usr/bin
+cp servon /usr/bin
+cp servoff /usr/bin
+cp download /u/service
+cp upload /u/service
+chmod 111 /usr/bin/dmp
+chmod 6111 /usr/bin/serv
+chmod 6111 /usr/bin/servon
+chmod 6111 /usr/bin/servoff
+chmod 6111 /u/service/download
+chmod 6111 /u/service/upload
+cp hard /u/service
+cp soft /u/service
+cp site_log /u/service
+cp site_data /u/service

@@ -1,0 +1,115 @@
+* vme050
+*
+Description File:	"MVME050 System Controller Board"
+*
+* mvme050
+*
+Board Description:	"Mvme 050 Device Description"
+Description Keyword:	"mvme050"
+Device Type:	"vme050"
+Bus Request Level:	0
+Address:	0xffff1001
+Interrupt Vector Location:	0x1d0
+Default Number Of Devices:	1
+*
+* lp050
+*
+Device Description:	"Mvme 050 Parallel port - Centronics"
+Description Keyword:	"lp050"
+Device Name:	"lp050"
+Handler Prefix:	"l050"
+Interrupt Vectors Size:	4
+Major Block Device Number:	0
+Major Character Device Number:	1
+Maximum Bus Request Level:	2
+Maximum Devices Per Controller:	1
+Page Registers Size:	8
+Block Or Character Device Handler Lines:
+Has an open handler.
+Has a close handler.
+Has a write handler.
+Has an ioctl handler.
+Device Type Information:
+Create interrupt vector array for this device.
+Create interrupt level array for this device.
+This is a character device.
+Device Configuration Tables Declarations:
+*
+* lp050#1
+*
+Board Description:	"Mvme 050 Parallel port Device"
+Description Keyword:	"lp050#1"
+Device Type:	"lp050"
+Bus Request Level:	2
+Address:	0xffff1081
+Interrupt Vector Location:	0x1cc
+Default Number Of Devices:	1
+*
+* mpcc
+*
+Device Description:	"Mvme 050 Serial port driver - tty"
+Description Keyword:	"mpcc"
+Device Name:	"mpcc"
+Handler Prefix:	"m5"
+Interrupt Vectors Size:	4
+Major Block Device Number:	0
+Major Character Device Number:	32
+Maximum Bus Request Level:	5
+Maximum Devices Per Controller:	1
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Has a tty structure.
+Has an initialization handler.
+Has an open handler.
+Has a close handler.
+Has a read handler.
+Has a write handler.
+Has an ioctl handler.
+Device Type Information:
+Create interrupt vector array for this device.
+This is a character device.
+Device Configuration Tables Declarations:
+Device config table structure declaration:	"tty"
+*
+* vme050
+*
+Device Description:	"Mvme 050 led control port"
+Description Keyword:	"vme050"
+Device Name:	"vme050"
+Handler Prefix:	"m050"
+Interrupt Vectors Size:	32
+Major Block Device Number:	0
+Major Character Device Number:	19
+Maximum Bus Request Level:	0
+Maximum Devices Per Controller:	1
+Page Registers Size:	4
+Block Or Character Device Handler Lines:
+Has an initialization handler.
+Has a read handler.
+Has a write handler.
+Has an ioctl handler.
+Device Type Information:
+Create interrupt vector array for this device.
+Allow only one of these devices.
+This is a character device.
+Device Configuration Tables Declarations:
+*
+* mpcc#1
+*
+Board Description:	"Mvme 050 mpcc #1 Device"
+Description Keyword:	"mpcc#1"
+Device Type:	"mpcc"
+Bus Request Level:	5
+Address:	0
+Interrupt Vector Location:	0x1c0
+Default Number Of Devices:	1
+*
+* mpcc#2
+*
+Board Description:	"Mvme 050 mpcc #2 Device"
+Description Keyword:	"mpcc#2"
+Device Type:	"mpcc"
+Bus Request Level:	5
+Address:	0
+Interrupt Vector Location:	0x1c4
+Default Number Of Devices:	1

@@ -1,0 +1,47 @@
+* du
+*
+Description File:	"Distributed Unix File System (DU)"
+*
+* du
+*
+Filesystem Handler Description:	"DU: RFS File System switch"
+Description Keyword:	"du"
+Filesystem Handler Name:	"du"
+Handler Prefix:	"du"
+Interrupt Vectors Size:	0
+Major Block Device Number:	0
+Major Character Device Number:	2
+Maximum Bus Request Level:	0
+Maximum Devices Per Controller:	32
+Page Registers Size:	0
+Filesystem Handler Device Handler Lines:
+Has an ioctl routine.
+Has a control routine.
+Has a notify routine.
+Has a free map routine.
+Has a get dents routine.
+Has an access routine.
+Has an update routine.
+Has a close inode routine.
+Has an open inode routine.
+Has a mount routine.
+Has a status file routine.
+Has an inode trunc routine.
+Has an init routine.
+Has a write inode routine.
+Has a read inode routine.
+Has an update inode routine.
+Has an inode read routine.
+Has an inode put routine.
+Device Type Information:
+Device Configuration Tables Declarations:
+*
+* du #1
+*
+Board Description:	"DU: RFS File System device info"
+Description Keyword:	"du #1"
+Device Type:	"du"
+Bus Request Level:	0
+Address:	0
+Interrupt Vector Location:	0
+Default Number Of Devices:	10

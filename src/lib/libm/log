@@ -1,0 +1,5820 @@
+Fri Jan  9 16:46:50 MST 1987 -- Make id=60
+	cc -c -\ asin.c atan.c erf.c fabs.c floor.c fmod.c gamma.c hypot.c jn.c j0.c j1.c pow.c log.c sin.c sqrt.c tan.c tanh.c sinh.c exp.c matherr.c
+atan.c:
+erf.c:
+fabs.c:
+floor.c:
+fmod.c:
+gamma.c:
+cc: too many temporary files!
+	file	"gamma.c"
+	data	1
+	ident	"@(#)libm:gamma.c	1.16"
+	ident	"@(#)kern-port:sys/errno.h	10.7"
+	comm	signgam,4
+	text
+	global	gamma
+gamma:
+.36	"gamma.c"
+131	0	1	4	
+[1	256	0	
+.40	"gamma.c"
+58	4	
+116	-32	16384	4	
+4	0	0	4	
+	data	2
+.41	"gamma.c"
+108	53	4	
+4	1	0	4	
+	byte	'g,'a,'m,'m,'a,0x00
+	text
+.41	"gamma.c"
+58	42	
+116	-28	16384	42	
+4	0	0	42	L%53
+.42	"gamma.c"
+58	7	
+116	-24	16384	7	
+117	8	16384	7	
+.43	"gamma.c"
+58	7	
+116	-8	16384	7	
+104	0	7	
+2	0	0	6	_MaXfLoA
+.44	"gamma.c"
+58	4	
+2	0	0	4	signgam
+4	1	0	4	
+	data	1
+	even
+.45	"gamma.c"
+108	55	4	
+4	1	0	4	
+	long	0x0	# 0.000000e+00
+	long	0x0
+	text
+.45	"gamma.c"
+109	4	
+85	4	
+117	8	16384	7	
+2	0	0	7	L%55
+4	54	0	4	
+.46	"gamma.c"
+58	7	
+117	8	16384	7	
+70	7	
+4	0	0	447	pos_gamma
+56	4	
+115	0	7	
+117	8	16384	7	
+115	64	50	
+16	0	50	
+116	-32	16384	10	
+.47	"gamma.c"
+112	56	4	
+4	1	0	4	
+.47	"gamma.c"
+108	54	4	
+4	1	0	4	
+	data	1
+	even
+.48	"gamma.c"
+108	57	4	
+4	1	0	4	
+	long	0x400921fb	# 3.141593e+00
+	long	0x54442d18
+[1	320	0	
+	text
+.51	"gamma.c"
+109	4	
+76	0	4	
+70	7	
+4	0	0	447	modf
+56	4	
+115	0	7	
+58	7	
+117	8	16384	7	
+10	0	7	
+117	8	16384	7	
+115	64	47	
+16	0	47	
+116	-40	16384	7	
+4	58	0	4	
+[1	320	0	
+.52	"gamma.c"
+58	4	
+116	-32	16384	4	
+4	2	0	4	
+.53	"gamma.c"
+109	4	
+76	0	4	
+70	4	
+4	0	0	444	matherr
+115	0	50	
+16	0	50	
+116	-32	16384	10	
+4	59	0	4	
+[1	320	0	
+	data	2
+.54	"gamma.c"
+108	61	4	
+4	1	0	4	
+	byte	'g,'a,'m,'m,'a,':,0x20,'S
+	byte	'I,'N,'G,0x20,'e,'r,'r,'o
+	byte	'r,'\n,0x00
+	text
+.54	"gamma.c"
+104	0	20	
+70	4	
+4	0	0	444	write
+56	4	
+56	4	
+115	0	4	
+4	2	0	4	
+115	32	42	
+4	0	0	42	L%61
+115	64	4	
+4	18	0	4	
+.55	"gamma.c"
+58	4	
+2	0	0	4	errno
+4	33	0	4	
+]4	0	
+.57	"gamma.c"
+108	59	4	
+4	1	0	4	
+.57	"gamma.c"
+58	7	
+118	0	771	7	
+116	-8	16384	7	
+.57	"gamma.c"
+112	51	4	
+4	1	0	4	
+]3	0	
+.59	"gamma.c"
+108	58	4	
+4	1	0	4	
+	data	1
+	even
+.59	"gamma.c"
+108	63	4	
+4	1	0	4	
+	long	0x41b0f876	# 2.847188e+08
+	long	0xccdf6cda
+	text
+.59	"gamma.c"
+109	4	
+84	4	
+117	8	16384	7	
+2	0	0	7	L%63
+4	62	0	4	
+.60	"gamma.c"
+58	4	
+116	-32	16384	4	
+4	3	0	4	
+.61	"gamma.c"
+112	64	4	
+4	1	0	4	
+.61	"gamma.c"
+108	62	4	
+4	1	0	4	
+[1	320	0	
+	data	1
+	even
+.62	"gamma.c"
+108	66	4	
+4	1	0	4	
+	long	0x0	# 0.000000e+00
+	long	0x0
+	text
+.62	"gamma.c"
+109	4	
+83	4	
+58	7	
+116	-40	16384	7	
+70	7	
+4	0	0	447	sin
+115	0	7	
+11	7	
+2	0	0	7	L%57
+117	8	16384	7	
+2	0	0	7	L%66
+4	65	0	4	
+.63	"gamma.c"
+58	7	
+116	-40	16384	7	
+10	0	7	
+116	-40	16384	7	
+.64	"gamma.c"
+112	67	4	
+4	1	0	4	
+.64	"gamma.c"
+108	65	4	
+4	1	0	4	
+.65	"gamma.c"
+58	4	
+2	0	0	4	signgam
+4	-1	0	4	
+.65	"gamma.c"
+108	67	4	
+4	1	0	4	
+.66	"gamma.c"
+58	7	
+118	0	771	7	
+10	0	7	
+6	7	
+70	7	
+4	0	0	447	log
+115	0	7	
+60	7	
+11	7	
+117	8	16384	7	
+116	-40	16384	7	
+2	0	0	7	L%57
+70	7	
+4	0	0	447	pos_gamma
+56	4	
+115	0	7	
+117	8	16384	7	
+115	64	50	
+16	0	50	
+116	-32	16384	10	
+.66	"gamma.c"
+112	51	4	
+4	1	0	4	
+]3	0	
+.67	"gamma.c"
+108	64	4	
+4	1	0	4	
+]2	0	
+.68	"gamma.c"
+108	56	4	
+4	1	0	4	
+.69	"gamma.c"
+109	4	
+81	4	
+116	-32	16384	4	
+4	3	0	4	
+4	68	0	4	
+.70	"gamma.c"
+58	7	
+118	0	771	7	
+117	8	16384	7	
+.70	"gamma.c"
+112	51	4	
+4	1	0	4	
+.71	"gamma.c"
+108	68	4	
+4	1	0	4	
+.71	"gamma.c"
+109	4	
+76	0	4	
+70	4	
+4	0	0	444	matherr
+115	0	50	
+16	0	50	
+116	-32	16384	10	
+4	69	0	4	
+.72	"gamma.c"
+58	4	
+2	0	0	4	errno
+4	34	0	4	
+.73	"gamma.c"
+108	69	4	
+4	1	0	4	
+.73	"gamma.c"
+58	7	
+118	0	771	7	
+116	-8	16384	7	
+.73	"gamma.c"
+112	51	4	
+4	1	0	4	
+.74	"gamma.c"
+108	51	4	
+4	1	0	4	
+.74	"gamma.c"
+132	0	7	4	
+]0	0	
+	data	1
+	text
+pos_gamma:
+.80	"gamma.c"
+131	0	2	4	
+	data	1
+	even
+.81	"gamma.c"
+108	71	4	
+4	1	0	4	
+	long	0xc01afad4	# -6.744951e+00
+	long	0x5cdd0691
+	long	0xc0490de9	# -5.010869e+01
+	long	0xad492516
+	long	0xc07b7549	# -4.393304e+02
+	long	0x7fb5ef7c
+	long	0xc09f621c	# -2.008527e+03
+	long	0xf169a87
+	long	0xc0c11d5a	# -8.762710e+03
+	long	0xeb0a3eb3
+	long	0xc0d465b7	# -2.088686e+04
+	long	0x278e2e8e
+	long	0xc0e4ae36	# -4.235369e+04
+	long	0x1076bd24
+	even
+.89	"gamma.c"
+108	72	4	
+4	1	0	4	
+	long	0x3ff00000	# 1.000000e+00
+	long	0x0
+	long	0xc03714e0	# -2.308155e+01
+	long	0x8f8b02b5
+	long	0x4067aff1	# 1.894982e+02
+	long	0x88c245ef
+	long	0xc07f3074	# -4.990285e+02
+	long	0xd854a256
+	long	0xc097e26d	# -1.528607e+03
+	long	0xd92d7b10
+	long	0x40c36a27	# 9.940307e+03
+	long	0x59609f66
+	long	0xc0a748c5	# -2.980385e+03
+	long	0x4a1857bd
+	long	0xc0e4ae36	# -4.235369e+04
+	long	0x1076bd24
+[2	128	0	
+	text
+	data	1
+	even
+.101	"gamma.c"
+108	74	4	
+4	1	0	4	
+	long	0x40200000	# 8.000000e+00
+	long	0x0
+	text
+.101	"gamma.c"
+109	4	
+85	4	
+117	8	16384	7	
+2	0	0	7	L%74
+4	73	0	4	
+	data	1
+	even
+.102	"gamma.c"
+108	75	4	
+4	1	0	4	
+	long	0xbf5ac321	# -1.633436e-03
+	long	0x34783f9
+	long	0x3f4b68b9	# 8.364588e-04
+	long	0x92738fbf
+	long	0xbf4380d0	# -5.951897e-04
+	long	0x1e4f7b8c
+	long	0x3f4a019f	# 7.936506e-04
+	long	0xa29f7264
+	long	0xbf66c16c	# -2.777778e-03
+	long	0x16b2acec
+	long	0x3fb55555	# 8.333333e-02
+	long	0x55555545
+[2	128	0	
+	text
+	data	1
+	even
+.111	"gamma.c"
+108	77	4	
+4	1	0	4	
+	long	0x40862e42	# 7.097827e+02
+	long	0xfefa39f0
+	text
+.111	"gamma.c"
+109	4	
+84	4	
+117	8	16384	7	
+60	7	
+2	0	0	7	_MaXdOuB
+2	0	0	7	L%77
+4	76	0	4	
+[2	128	0	
+.112	"gamma.c"
+58	4	
+13	0	4	
+117	16	16384	44	
+4	3	0	4	
+.113	"gamma.c"
+58	7	
+118	0	914	7	
+13	0	7	
+6	47	
+117	16	16384	47	
+4	24	0	4	
+.113	"gamma.c"
+112	70	4	
+4	1	0	4	
+]3	0	
+.115	"gamma.c"
+108	76	4	
+4	1	0	4	
+	data	1
+	even
+.115	"gamma.c"
+108	78	4	
+4	1	0	4	
+	long	0x3fed67f1	# 9.189385e-01
+	long	0xc864beb5
+	even
+.115	"gamma.c"
+108	79	4	
+4	1	0	4	
+	long	0x3fe00000	# 5.000000e-01
+	long	0x0
+	text
+.115	"gamma.c"
+58	7	
+116	-16	16384	7	
+6	7	
+8	7	
+11	7	
+8	7	
+117	8	16384	7	
+2	0	0	7	L%79
+70	7	
+4	0	0	447	log
+115	0	7	
+117	8	16384	7	
+117	8	16384	7	
+2	0	0	7	L%78
+	data	1
+	even
+.116	"gamma.c"
+108	81	4	
+4	1	0	4	
+	long	0x41b0f876	# 2.847188e+08
+	long	0xccdf6cda
+	text
+.116	"gamma.c"
+109	4	
+85	4	
+117	8	16384	7	
+2	0	0	7	L%81
+4	80	0	4	
+.117	"gamma.c"
+58	7	
+118	0	914	7	
+116	-16	16384	7	
+.117	"gamma.c"
+112	70	4	
+4	1	0	4	
+.118	"gamma.c"
+108	80	4	
+4	1	0	4	
+	data	1
+	even
+.118	"gamma.c"
+108	82	4	
+4	1	0	4	
+	long	0x3ff00000	# 1.000000e+00
+	long	0x0
+	text
+.118	"gamma.c"
+58	7	
+117	8	16384	7	
+60	7	
+2	0	0	7	L%82
+117	8	16384	7	
+.119	"gamma.c"
+58	7	
+116	-8	16384	7	
+11	7	
+117	8	16384	7	
+117	8	16384	7	
+.120	"gamma.c"
+58	7	
+118	0	914	7	
+6	7	
+116	-16	16384	7	
+11	7	
+117	8	16384	7	
+6	7	
+11	7	
+6	7	
+11	7	
+6	7	
+11	7	
+6	7	
+11	7	
+6	7	
+11	7	
+2	0	0	7	L%75
+116	-8	16384	7	
+2	8	0	7	L%75
+116	-8	16384	7	
+2	16	0	7	L%75
+116	-8	16384	7	
+2	24	0	7	L%75
+116	-8	16384	7	
+2	32	0	7	L%75
+116	-8	16384	7	
+2	40	0	7	L%75
+.120	"gamma.c"
+112	70	4	
+4	1	0	4	
+]2	0	
+.122	"gamma.c"
+108	73	4	
+4	1	0	4	
+	data	1
+	even
+.122	"gamma.c"
+108	83	4	
+4	1	0	4	
+	long	0x3ff00000	# 1.000000e+00
+	long	0x0
+	text
+.122	"gamma.c"
+58	7	
+116	-8	16384	7	
+2	0	0	7	L%83
+.123	"gamma.c"
+109	4	
+83	4	
+117	8	16384	7	
+116	-8	16384	7	
+4	84	0	4	
+.124	"gamma.c"
+61	7	
+116	-8	16384	7	
+11	7	
+117	8	16384	7	
+6	7	
+116	-8	16384	7	
+117	8	16384	7	
+.125	"gamma.c"
+112	85	4	
+4	1	0	4	
+.125	"gamma.c"
+108	84	4	
+4	1	0	4	
+	data	1
+	even
+.125	"gamma.c"
+108	87	4	
+4	1	0	4	
+	long	0x40000000	# 2.000000e+00
+	long	0x0
+	text
+.125	"gamma.c"
+109	4	
+83	4	
+117	8	16384	7	
+2	0	0	7	L%87
+4	86	0	4	
+[2	128	0	
+.126	"gamma.c"
+61	7	
+116	-8	16384	7	
+117	8	16384	7	
+	data	1
+	even
+.127	"gamma.c"
+108	88	4	
+4	1	0	4	
+	long	0x3ff00000	# 1.000000e+00
+	long	0x0
+	text
+.127	"gamma.c"
+9	7	
+117	8	16384	7	
+2	0	0	7	L%88
+]2	0	
+.128	"gamma.c"
+112	89	4	
+4	1	0	4	
+.128	"gamma.c"
+108	86	4	
+4	1	0	4	
+[2	128	0	
+.129	"gamma.c"
+108	92	4	
+4	1	0	4	
+	data	1
+	even
+.129	"gamma.c"
+108	93	4	
+4	1	0	4	
+	long	0x40080000	# 3.000000e+00
+	long	0x0
+	text
+.129	"gamma.c"
+109	4	
+84	4	
+117	8	16384	7	
+2	0	0	7	L%93
+4	91	0	4	
+	data	1
+	even
+.130	"gamma.c"
+108	94	4	
+4	1	0	4	
+	long	0x3ff00000	# 1.000000e+00
+	long	0x0
+	text
+.130	"gamma.c"
+9	7	
+117	8	16384	7	
+2	0	0	7	L%94
+.130	"gamma.c"
+108	90	4	
+4	1	0	4	
+.130	"gamma.c"
+12	7	
+116	-8	16384	7	
+117	8	16384	7	
+.130	"gamma.c"
+112	92	4	
+4	1	0	4	
+.130	"gamma.c"
+108	91	4	
+4	1	0	4	
+	data	1
+	even
+.131	"gamma.c"
+108	95	4	
+4	1	0	4	
+	long	0x40000000	# 2.000000e+00
+	long	0x0
+	text
+.131	"gamma.c"
+9	7	
+117	8	16384	7	
+2	0	0	7	L%95
+]2	0	
+.132	"gamma.c"
+108	89	4	
+4	1	0	4	
+.132	"gamma.c"
+108	85	4	
+4	1	0	4	
+.133	"gamma.c"
+58	7	
+118	0	914	7	
+70	7	
+4	0	0	447	log
+115	0	7	
+60	7	
+11	7	
+116	-8	16384	7	
+6	7	
+11	7	
+6	7	
+11	7	
+6	7	
+11	7	
+6	7	
+11	7	
+6	7	
+11	7	
+6	7	
+11	7	
+2	0	0	7	L%71
+117	8	16384	7	
+2	8	0	7	L%71
+117	8	16384	7	
+2	16	0	7	L%71
+117	8	16384	7	
+2	24	0	7	L%71
+117	8	16384	7	
+2	32	0	7	L%71
+117	8	16384	7	
+2	40	0	7	L%71
+117	8	16384	7	
+2	48	0	7	L%71
+6	7	
+11	7	
+6	7	
+11	7	
+6	7	
+11	7	
+6	7	
+11	7	
+6	7	
+11	7	
+6	7	
+11	7	
+6	7	
+11	7	
+2	0	0	7	L%72
+117	8	16384	7	
+2	8	0	7	L%72
+117	8	16384	7	
+2	16	0	7	L%72
+117	8	16384	7	
+2	24	0	7	L%72
+117	8	16384	7	
+2	32	0	7	L%72
+117	8	16384	7	
+2	40	0	7	L%72
+117	8	16384	7	
+2	48	0	7	L%72
+117	8	16384	7	
+2	56	0	7	L%72
+.133	"gamma.c"
+112	70	4	
+4	1	0	4	
+.134	"gamma.c"
+108	70	4	
+4	1	0	4	
+.134	"gamma.c"
+132	0	7	4	
+]0	0	
+	data	1
+cc: too many temporary files!
+Nonexistent file
+hypot.c:
+cc: too many temporary files!
+# 1 "hypot.c"
+
+
+
+
+
+
+
+#ident	"@(#)libm:hypot.c	1.13"
+
+
+
+
+
+
+# 1 "/usr/include/math.h"
+
+
+
+
+
+extern int errno, signgam;
+
+extern double atof(), frexp(), ldexp(), modf();
+extern double j0(), j1(), jn(), y0(), y1(), yn();
+extern double erf(), erfc();
+extern double exp(), log(), log10(), pow(), sqrt();
+extern double floor(), ceil(), fmod(), fabs();
+extern double gamma();
+extern double hypot();
+extern int matherr();
+extern double sinh(), cosh(), tanh();
+extern double sin(), cos(), tan(), asin(), acos(), atan(), atan2();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 35 "/usr/include/math.h"
+
+
+
+
+
+
+
+
+
+
+    extern double _MaXdOuB, _MiNdOuB;
+    extern float _MaXfLoA, _MiNfLoA;
+
+
+
+# 52 "/usr/include/math.h"
+
+# 55 "/usr/include/math.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+struct exception {
+	int type;
+	char *name;
+	double arg1;
+	double arg2;
+	double retval;
+};
+
+
+
+
+
+
+
+
+
+
+
+# 16 "hypot.c"
+# 1 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+# 12 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 60 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+    extern double _MaXdOuB, _MiNdOuB;
+    extern float _MaXfLoA, _MiNfLoA;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 119 "/usr/include/values.h"
+
+# 130 "/usr/include/values.h"
+
+# 133 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+
+
+# 147 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 17 "hypot.c"
+# 1 "/usr/include/errno.h"
+
+
+
+
+
+
+# 1 "/usr/include/sys/errno.h"
+
+
+
+
+
+
+
+#ident	"@(#)kern-port:sys/errno.h	10.7"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 8 "/usr/include/errno.h"
+extern int errno;
+# 18 "hypot.c"
+
+
+double
+hypot(a, b)
+register double a, b;
+{
+	register double t;
+	register int i = 4;
+	struct exception exc;
+
+	if ((exc.arg1 = a) < 0)
+		a = -a;
+	if ((exc.arg2 = b) < 0)
+		b = -b;
+	if (a > b) {				
+		t = a;
+		a = b;
+		b = t;
+	}
+	if(b == 0.0) return(b);			
+	if ((t = a/b) < (1.0/(((8 * (int)sizeof(double)) - 11 + 1 - 1) % 2 ? (1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1)/2) * 1.41421356237309504880 : 1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1)/2)))			
+		return (b);			
+	a = 1 + t * t;				
+	t = 0.5 + 0.5 * a;			
+	do {
+		t = 0.5 * (t + a/t);
+	} while (--i > 0);			
+	if (b < _MaXdOuB/1.41421356237309504880)		
+		return (t * b);
+	if ((t *= 0.5 * b) < _MaXdOuB/2)	
+		return (t + t);
+	exc.type = 3;
+	exc.name = "hypot";
+	exc.retval = _MaXfLoA;
+	if (!matherr(&exc))
+		errno = 34;
+	return (exc.retval);
+}
+cc: too many temporary files!
+	file	""
+	data	1
+cc: too many temporary files!
+Nonexistent file
+jn.c:
+cc: too many temporary files!
+# 1 "jn.c"
+
+
+
+
+
+
+
+#ident	"@(#)libm:jn.c	1.12"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 1 "/usr/include/math.h"
+
+
+
+
+
+extern int errno, signgam;
+
+extern double atof(), frexp(), ldexp(), modf();
+extern double j0(), j1(), jn(), y0(), y1(), yn();
+extern double erf(), erfc();
+extern double exp(), log(), log10(), pow(), sqrt();
+extern double floor(), ceil(), fmod(), fabs();
+extern double gamma();
+extern double hypot();
+extern int matherr();
+extern double sinh(), cosh(), tanh();
+extern double sin(), cos(), tan(), asin(), acos(), atan(), atan2();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 35 "/usr/include/math.h"
+
+
+
+
+
+
+
+
+
+
+    extern double _MaXdOuB, _MiNdOuB;
+    extern float _MaXfLoA, _MiNfLoA;
+
+
+
+# 52 "/usr/include/math.h"
+
+# 55 "/usr/include/math.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+struct exception {
+	int type;
+	char *name;
+	double arg1;
+	double arg2;
+	double retval;
+};
+
+
+
+
+
+
+
+
+
+
+
+# 39 "jn.c"
+# 1 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+# 12 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 60 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+    extern double _MaXdOuB, _MiNdOuB;
+    extern float _MaXfLoA, _MiNfLoA;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 119 "/usr/include/values.h"
+
+# 130 "/usr/include/values.h"
+
+# 133 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+
+
+# 147 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 40 "jn.c"
+# 1 "/usr/include/errno.h"
+
+
+
+
+
+
+# 1 "/usr/include/sys/errno.h"
+
+
+
+
+
+
+
+#ident	"@(#)kern-port:sys/errno.h	10.7"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 8 "/usr/include/errno.h"
+extern int errno;
+# 41 "jn.c"
+
+extern double jn_error();
+
+double
+jn(n, x)
+register int n;
+register double x;
+{
+	double a, b, temp, t;
+	int i;
+
+	if (((x) < 0 ? -(x) : (x)) > (3.14159265358979323846 * ((double)(1L << (8 * (int)sizeof(long)) - 2) * (1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1) - (8 * (int)sizeof(long)) + 1))))
+		return (jn_error(n, x, 1));
+	if (n == 0)
+		return (j0(x));
+	if (x == 0)
+		return (x);
+	if (n < 0) {
+		n = -n;
+		x = -x;
+	}
+	if (n == 1)
+		return (j1(x));
+	if (n <= x) {
+		a = j0(x);
+		b = j1(x);
+		for (i = 1; i < n; i++) {
+			temp = b;
+			b = (i + i)/x * b - a;
+			a = temp;
+		}
+		return (b);
+	}
+	temp = x * x;
+	for (t = 0, i = n + 16; i > n; i--)
+		t = temp/(i + i - t);
+	a = t = x/(n + n - t);
+	b = 1;
+	for (i = n - 1; i > 0; i--) {
+		temp = b;
+		b = (i + i)/x * b - a;
+		a = temp;
+	}
+	return (t * j0(x)/b);
+}
+
+double
+yn(n, x)
+register int n;
+register double x;
+{
+	double a, b, temp;
+	int i, neg;
+
+	if (x <= 0) {
+		struct exception exc;
+
+		exc.type = 1;
+		exc.name = "yn";
+		exc.arg1 = n;
+		exc.arg2 = x;
+		exc.retval = -_MaXfLoA;
+		if (!matherr(&exc)) {
+			(void) write(2, "yn: DOMAIN error\n", 17);
+			errno = 33;
+		}
+		return (exc.retval);
+	}
+	if (x > (3.14159265358979323846 * ((double)(1L << (8 * (int)sizeof(long)) - 2) * (1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1) - (8 * (int)sizeof(long)) + 1))))
+		return (jn_error(n, x, 0));
+	if (n == 0)
+		return (y0(x));
+	neg = 0;
+	if (n < 0) {
+		n = -n;
+		neg = n % 2;
+	}
+	b = y1(x);
+	if (n > 1) {
+		a = y0(x);
+		for (i = 1; i < n; i++) {
+			temp = b;
+			b = (i + i)/x * b - a;
+			a = temp;
+		}
+	}
+	return (neg ? -b : b);
+}
+
+static double
+jn_error(n, x, jnflag)
+int n;
+double x;
+int jnflag;
+{
+	struct exception exc;
+
+	exc.type = 5;
+	exc.name = jnflag ? "jn" : "yn";
+	exc.arg1 = n;
+	exc.arg2 = x;
+	exc.retval = 0.0;
+	if (!matherr(&exc)) {
+		(void) write(2, exc.name, 2);
+		(void) write(2, ": TLOSS error\n", 14);
+		errno = 34;
+	}
+	return (exc.retval);
+}
+cc: too many temporary files!
+	file	""
+	data	1
+cc: too many temporary files!
+Nonexistent file
+j0.c:
+cc: too many temporary files!
+# 1 "j0.c"
+
+
+
+
+
+
+
+#ident	"@(#)libm:j0.c	1.15"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 1 "/usr/include/math.h"
+
+
+
+
+
+extern int errno, signgam;
+
+extern double atof(), frexp(), ldexp(), modf();
+extern double j0(), j1(), jn(), y0(), y1(), yn();
+extern double erf(), erfc();
+extern double exp(), log(), log10(), pow(), sqrt();
+extern double floor(), ceil(), fmod(), fabs();
+extern double gamma();
+extern double hypot();
+extern int matherr();
+extern double sinh(), cosh(), tanh();
+extern double sin(), cos(), tan(), asin(), acos(), atan(), atan2();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 35 "/usr/include/math.h"
+
+
+
+
+
+
+
+
+
+
+    extern double _MaXdOuB, _MiNdOuB;
+    extern float _MaXfLoA, _MiNfLoA;
+
+
+
+# 52 "/usr/include/math.h"
+
+# 55 "/usr/include/math.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+struct exception {
+	int type;
+	char *name;
+	double arg1;
+	double arg2;
+	double retval;
+};
+
+
+
+
+
+
+
+
+
+
+
+# 48 "j0.c"
+# 1 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+# 12 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 60 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+    extern double _MaXdOuB, _MiNdOuB;
+    extern float _MaXfLoA, _MiNfLoA;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 119 "/usr/include/values.h"
+
+# 130 "/usr/include/values.h"
+
+# 133 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+
+
+# 147 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 49 "j0.c"
+# 1 "/usr/include/errno.h"
+
+
+
+
+
+
+# 1 "/usr/include/sys/errno.h"
+
+
+
+
+
+
+
+#ident	"@(#)kern-port:sys/errno.h	10.7"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 8 "/usr/include/errno.h"
+extern int errno;
+# 50 "j0.c"
+
+
+
+
+
+
+static double tpi = 0.6366197723675813430755350535;
+static double p1[] = {
+	0.4933787251794133561816813446e21,
+	-.1179157629107610536038440800e21,
+	0.6382059341072356562289432465e19,
+	-.1367620353088171386865416609e18,
+	0.1434354939140344111664316553e16,
+	-.8085222034853793871199468171e13,
+	0.2507158285536881945555156435e11,
+	-.4050412371833132706360663322e8,
+	0.2685786856980014981415848441e5,
+}, q1[] = {
+	0.4933787251794133562113278438e21,
+	0.5428918384092285160200195092e19,
+	0.3024635616709462698627330784e17,
+	0.1127756739679798507056031594e15,
+	0.3123043114941213172572469442e12,
+	0.6699987672982239671814028660e9,
+	0.1114636098462985378182402543e7,
+	0.1363063652328970604442810507e4,
+	1.0,
+};
+static double p2[] = {
+	0.5393485083869438325262122897e7,
+	0.1233238476817638145232406055e8,
+	0.8413041456550439208464315611e7,
+	0.2016135283049983642487182349e7,
+	0.1539826532623911470917825993e6,
+	0.2485271928957404011288128951e4,
+	0.0,
+}, q2[] = {
+	0.5393485083869438325560444960e7,
+	0.1233831022786324960844856182e8,
+	0.8426449050629797331554404810e7,
+	0.2025066801570134013891035236e7,
+	0.1560017276940030940592769933e6,
+	0.2615700736920839685159081813e4,
+	1.0,
+};
+static double p3[] = {
+	-.3984617357595222463506790588e4,
+	-.1038141698748464093880530341e5,
+	-.8239066313485606568803548860e4,
+	-.2365956170779108192723612816e4,
+	-.2262630641933704113967255053e3,
+	-.4887199395841261531199129300e1,
+	0.0,
+}, q3[] = {
+	0.2550155108860942382983170882e6,
+	0.6667454239319826986004038103e6,
+	0.5332913634216897168722255057e6,
+	0.1560213206679291652539287109e6,
+	0.1570489191515395519392882766e5,
+	0.4087714673983499223402830260e3,
+	1.0,
+};
+static double p4[] = {
+	-.2750286678629109583701933175e20,
+	0.6587473275719554925999402049e20,
+	-.5247065581112764941297350814e19,
+	0.1375624316399344078571335453e18,
+	-.1648605817185729473122082537e16,
+	0.1025520859686394284509167421e14,
+	-.3436371222979040378171030138e11,
+	0.5915213465686889654273830069e8,
+	-.4137035497933148554125235152e5,
+}, q4[] = {
+	0.3726458838986165881989980e21,
+	0.4192417043410839973904769661e19,
+	0.2392883043499781857439356652e17,
+	0.9162038034075185262489147968e14,
+	0.2613065755041081249568482092e12,
+	0.5795122640700729537480087915e9,
+	0.1001702641288906265666651753e7,
+	0.1282452772478993804176329391e4,
+	1.0,
+};
+
+extern double j0_asympt();
+
+double
+j0(x)
+register double x;
+{
+	register double n, d;
+	register int i;
+
+	if ((n = x) < 0)
+		x = -x;
+	if (x > 8)
+		return (j0_asympt(x, n, 1));
+	if (x < (1.0/(((8 * (int)sizeof(double)) - 11 + 1 - 1) % 2 ? (1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1)/2) * 1.41421356237309504880 : 1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1)/2)))
+		return (1);
+	x *= x;
+	for (n = d = 0, i = sizeof( p1)/sizeof( p1[0]); --i >= 0; ) { n = n * x +  p1[i]; d = d * x +  q1[i]; };
+	return (n/d);
+}
+
+double
+y0(x)
+register double x;
+{
+	register double n, d, y, z;
+	register int i;
+
+	if (x <= 0) {
+		struct exception exc;
+
+		exc.type = 1;
+		exc.name = "y0";
+		exc.arg1 = x;
+		exc.retval = -_MaXfLoA;
+		if (!matherr(&exc)) {
+			(void) write(2, "y0: DOMAIN error\n", 17);
+			errno = 33;
+		}
+		return (exc.retval);
+	}
+	if (x > 8)
+		return (j0_asympt(x, x, 0));
+	y = tpi * log(x);
+	if (x < (1.0/(((8 * (int)sizeof(double)) - 11 + 1 - 1) % 2 ? (1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1)/2) * 1.41421356237309504880 : 1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1)/2)))
+		return (y - 0.073804295108687225110222);
+	z = x * x;
+	for (n = d = 0, i = sizeof( p4)/sizeof( p4[0]); --i >= 0; ) { n = n * z +  p4[i]; d = d * z +  q4[i]; };
+	return (n/d + y * j0(x));
+}
+
+static double
+j0_asympt(x, n, j0flag)
+register double x, n;
+int j0flag;
+{
+	register double z, d, pzero, qzero;
+	register int i;
+
+	if (x > (3.14159265358979323846 * ((double)(1L << (8 * (int)sizeof(long)) - 2) * (1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1) - (8 * (int)sizeof(long)) + 1)))) {
+		struct exception exc;
+
+		exc.type = 5;
+		exc.name = j0flag ? "j0" : "y0";
+		exc.arg1 = n;
+		exc.retval = 0.0;
+		if (!matherr(&exc)) {
+			(void) write(2, exc.name, 2);
+			(void) write(2, ": TLOSS error\n", 14);
+			errno = 34;
+		}
+		return (exc.retval);
+	}
+	if (x > ((double)(long)(3.14159265358979323846 * (((8 * (int)sizeof(double)) - 11 + 1 - 1) % 2 ? (1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1)/2) * 1.41421356237309504880 : 1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1)/2)))) {
+		pzero = 0.999999999999999999944688442;
+		qzero = -0.0156249999999999999611615235;
+	} else {
+		z = 64/(x * x);
+		for (n = d = 0, i = sizeof( p2)/sizeof( p2[0]); --i >= 0; ) { n = n * z +  p2[i]; d = d * z +  q2[i]; };
+		pzero = n/d;
+		for (n = d = 0, i = sizeof( p3)/sizeof( p3[0]); --i >= 0; ) { n = n * z +  p3[i]; d = d * z +  q3[i]; };
+		qzero = n/d;
+	}
+	qzero *= 8/x;
+	z = sqrt(tpi/x);
+	pzero *= z;
+	qzero *= z;
+	x -= 0.78539816339744830962;
+	return (j0flag ? pzero * cos(x) - qzero * sin(x) :
+			 pzero * sin(x) + qzero * cos(x));
+}
+cc: too many temporary files!
+	file	""
+	data	1
+cc: too many temporary files!
+Nonexistent file
+j1.c:
+cc: too many temporary files!
+# 1 "j1.c"
+
+
+
+
+
+
+
+#ident	"@(#)libm:j1.c	1.13"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 1 "/usr/include/math.h"
+
+
+
+
+
+extern int errno, signgam;
+
+extern double atof(), frexp(), ldexp(), modf();
+extern double j0(), j1(), jn(), y0(), y1(), yn();
+extern double erf(), erfc();
+extern double exp(), log(), log10(), pow(), sqrt();
+extern double floor(), ceil(), fmod(), fabs();
+extern double gamma();
+extern double hypot();
+extern int matherr();
+extern double sinh(), cosh(), tanh();
+extern double sin(), cos(), tan(), asin(), acos(), atan(), atan2();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 35 "/usr/include/math.h"
+
+
+
+
+
+
+
+
+
+
+    extern double _MaXdOuB, _MiNdOuB;
+    extern float _MaXfLoA, _MiNfLoA;
+
+
+
+# 52 "/usr/include/math.h"
+
+# 55 "/usr/include/math.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+struct exception {
+	int type;
+	char *name;
+	double arg1;
+	double arg2;
+	double retval;
+};
+
+
+
+
+
+
+
+
+
+
+
+# 48 "j1.c"
+# 1 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+# 12 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 60 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+    extern double _MaXdOuB, _MiNdOuB;
+    extern float _MaXfLoA, _MiNfLoA;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 119 "/usr/include/values.h"
+
+# 130 "/usr/include/values.h"
+
+# 133 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+
+
+# 147 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 49 "j1.c"
+# 1 "/usr/include/errno.h"
+
+
+
+
+
+
+# 1 "/usr/include/sys/errno.h"
+
+
+
+
+
+
+
+#ident	"@(#)kern-port:sys/errno.h	10.7"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 8 "/usr/include/errno.h"
+extern int errno;
+# 50 "j1.c"
+
+
+
+
+
+
+static double tpi = 0.6366197723675813430755350535;
+static double p1[] = {
+	0.581199354001606143928050809e21,
+	-.6672106568924916298020941484e20,
+	0.2316433580634002297931815435e19,
+	-.3588817569910106050743641413e17,
+	0.2908795263834775409737601689e15,
+	-.1322983480332126453125473247e13,
+	0.3413234182301700539091292655e10,
+	-.4695753530642995859767162166e7,
+	0.2701122710892323414856790990e4,
+}, q1[] = {
+	0.1162398708003212287858529400e22,
+	0.1185770712190320999837113348e20,
+	0.6092061398917521746105196863e17,
+	0.2081661221307607351240184229e15,
+	0.5243710262167649715406728642e12,
+	0.1013863514358673989967045588e10,
+	0.1501793594998585505921097578e7,
+	0.1606931573481487801970916749e4,
+	1.0,
+};
+static double p2[] = {
+	-.4435757816794127857114720794e7,
+	-.9942246505077641195658377899e7,
+	-.6603373248364939109255245434e7,
+	-.1523529351181137383255105722e7,
+	-.1098240554345934672737413139e6,
+	-.1611616644324610116477412898e4,
+	0.0,
+}, q2[] = {
+	-.4435757816794127856828016962e7,
+	-.9934124389934585658967556309e7,
+	-.6585339479723087072826915069e7,
+	-.1511809506634160881644546358e7,
+	-.1072638599110382011903063867e6,
+	-.1455009440190496182453565068e4,
+	1.0,
+};
+static double p3[] = {
+	0.3322091340985722351859704442e5,
+	0.8514516067533570196555001171e5,
+	0.6617883658127083517939992166e5,
+	0.1849426287322386679652009819e5,
+	0.1706375429020768002061283546e4,
+	0.3526513384663603218592175580e2,
+	0.0,
+}, q3[] = {
+	0.7087128194102874357377502472e6,
+	0.1819458042243997298924553839e7,
+	0.1419460669603720892855755253e7,
+	0.4002944358226697511708610813e6,
+	0.3789022974577220264142952256e5,
+	0.8638367769604990967475517183e3,
+	1.0,
+};
+static double p4[] = {
+	-.9963753424306922225996744354e23,
+	0.2655473831434854326894248968e23,
+	-.1212297555414509577913561535e22,
+	0.2193107339917797592111427556e20,
+	-.1965887462722140658820322248e18,
+	0.9569930239921683481121552788e15,
+	-.2580681702194450950541426399e13,
+	0.3639488548124002058278999428e10,
+	-.2108847540133123652824139923e7,
+	0.0,
+}, q4[] = {
+	0.5082067366941243245314424152e24,
+	0.5435310377188854170800653097e22,
+	0.2954987935897148674290758119e20,
+	0.1082258259408819552553850180e18,
+	0.2976632125647276729292742282e15,
+	0.6465340881265275571961681500e12,
+	0.1128686837169442121732366891e10,
+	0.1563282754899580604737366452e7,
+	0.1612361029677000859332072312e4,
+	1.0,
+};
+
+extern double j1_asympt();
+
+double
+j1(x)
+register double x;
+{
+	register double n, d, y;
+	register int i;
+
+	if ((y = x) < 0)
+		x = -x;
+	if (x > 8)
+		return (j1_asympt(x, y, 1));
+	if (x < (1.0/(((8 * (int)sizeof(double)) - 11 + 1 - 1) % 2 ? (1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1)/2) * 1.41421356237309504880 : 1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1)/2)))
+		return (0.4999999999999999999989557017 * y);
+	x *= x;
+	for (n = d = 0, i = sizeof( p1)/sizeof( p1[0]); --i >= 0; ) { n = n * x +  p1[i]; d = d * x +  q1[i]; };
+	return (y * n/d);
+}
+
+double
+y1(x)
+register double x;
+{
+	register double n, d, z;
+	register int i;
+
+	if (x <= 0) {
+		struct exception exc;
+
+		exc.type = 1;
+		exc.name = "y1";
+		exc.arg1 = x;
+		exc.retval = -_MaXfLoA;
+		if (!matherr(&exc)) {
+			(void) write(2, "y1: DOMAIN error\n", 17);
+			errno = 33;
+		}
+		return (exc.retval);
+	}
+	if (x > 8)
+		return (j1_asympt(x, x, 0));
+	z = x * x;
+	for (n = d = 0, i = sizeof( p4)/sizeof( p4[0]); --i >= 0; ) { n = n * z +  p4[i]; d = d * z +  q4[i]; };
+	return (x * n/d + tpi * (j1(x) * log(x) - 1/x));
+}
+
+static double
+j1_asympt(x, n, j1flag)
+register double x, n;
+int j1flag;
+{
+	register double z, d, pzero, qzero;
+	register int i;
+	struct exception exc;
+
+	exc.arg1 = n;
+	if (x > (3.14159265358979323846 * ((double)(1L << (8 * (int)sizeof(long)) - 2) * (1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1) - (8 * (int)sizeof(long)) + 1)))) {
+		exc.type = 5;
+		exc.name = j1flag ? "j1" : "y1";
+		exc.retval = 0.0;
+		if (!matherr(&exc)) {
+			(void) write(2, exc.name, 2);
+			(void) write(2, ": TLOSS error\n", 14);
+			errno = 34;
+		}
+		return (exc.retval);
+	}
+	if (x > ((double)(long)(3.14159265358979323846 * (((8 * (int)sizeof(double)) - 11 + 1 - 1) % 2 ? (1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1)/2) * 1.41421356237309504880 : 1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1)/2)))) {
+		pzero = 1.0000000000000000000646346901;
+		qzero = 0.046874999999999999955398015174;
+	} else {
+		z = 64/(x * x);
+		for (n = d = 0, i = sizeof( p2)/sizeof( p2[0]); --i >= 0; ) { n = n * z +  p2[i]; d = d * z +  q2[i]; };
+		pzero = n/d;
+		for (n = d = 0, i = sizeof( p3)/sizeof( p3[0]); --i >= 0; ) { n = n * z +  p3[i]; d = d * z +  q3[i]; };
+		qzero = n/d;
+	}
+	qzero *= 8/x;
+	z = sqrt(tpi/x);
+	pzero *= z;
+	qzero *= z;
+	x -= 3 * 0.78539816339744830962;
+	if (!j1flag)
+		return (pzero * sin(x) + qzero * cos(x));
+	x = pzero * cos(x) - qzero * sin(x);
+	return (exc.arg1 < 0 ? -x : x);
+}
+cc: too many temporary files!
+	file	""
+	data	1
+cc: too many temporary files!
+Nonexistent file
+pow.c:
+cc: too many temporary files!
+# 1 "pow.c"
+
+
+
+
+
+
+
+#ident	"@(#)libm:pow.c	1.16"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 1 "/usr/include/math.h"
+
+
+
+
+
+extern int errno, signgam;
+
+extern double atof(), frexp(), ldexp(), modf();
+extern double j0(), j1(), jn(), y0(), y1(), yn();
+extern double erf(), erfc();
+extern double exp(), log(), log10(), pow(), sqrt();
+extern double floor(), ceil(), fmod(), fabs();
+extern double gamma();
+extern double hypot();
+extern int matherr();
+extern double sinh(), cosh(), tanh();
+extern double sin(), cos(), tan(), asin(), acos(), atan(), atan2();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 35 "/usr/include/math.h"
+
+
+
+
+
+
+
+
+
+
+    extern double _MaXdOuB, _MiNdOuB;
+    extern float _MaXfLoA, _MiNfLoA;
+
+
+
+# 52 "/usr/include/math.h"
+
+# 55 "/usr/include/math.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+struct exception {
+	int type;
+	char *name;
+	double arg1;
+	double arg2;
+	double retval;
+};
+
+
+
+
+
+
+
+
+
+
+
+# 24 "pow.c"
+# 1 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+# 12 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 60 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+    extern double _MaXdOuB, _MiNdOuB;
+    extern float _MaXfLoA, _MiNfLoA;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 119 "/usr/include/values.h"
+
+# 130 "/usr/include/values.h"
+
+# 133 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+
+
+# 147 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 25 "pow.c"
+# 1 "/usr/include/errno.h"
+
+
+
+
+
+
+# 1 "/usr/include/sys/errno.h"
+
+
+
+
+
+
+
+#ident	"@(#)kern-port:sys/errno.h	10.7"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 8 "/usr/include/errno.h"
+extern int errno;
+# 26 "pow.c"
+
+double
+pow(x, y)
+register double x, y;
+{
+	register int neg;
+	struct exception exc;
+
+	if (y == 1) 
+		return (x);
+	exc.name = "pow";
+	exc.arg1 = x;
+	exc.arg2 = y;
+	exc.retval = 0.0;
+	if (!x) {
+		if (y > 0)
+			return (x); 
+		goto domain;
+	}
+	neg = 0;
+	if (x < 0) { 
+		if (y >= -(~(1L << (8 * (int)sizeof(long)) - 1)) && y <= (~(1L << (8 * (int)sizeof(long)) - 1))) {
+			register long ly = (long)y;
+
+			if ((double)ly != y)
+				goto domain; 
+			neg = ly % 2;
+		} else {
+			double fr, dum, modf();
+
+			if (fr = modf(0.5 * y, &dum)) {
+				if (fr != 0.5)
+					goto domain; 
+				neg++; 
+			}
+		}
+		x = -x;
+	}
+	if (x != 1) { 
+		
+
+		if ((x = log(x)) < 0) { 
+			x = -x;
+			y = -y;
+		}
+		if (y > (0.69314718055994530942 * ((1 << 11 - 1) - 1 + 1))/x) {
+			exc.type = 3;
+			exc.retval = neg ? -_MaXfLoA : _MaXfLoA;
+			if (!matherr(&exc))
+				errno = 34;
+			return (exc.retval);
+		}
+		if (y < (0.69314718055994530942 * ((-(((1 << 11 - 1) - 1 + 1)) + 1) - 1))/x) {
+			exc.type = 4;
+			if (!matherr(&exc))
+				errno = 34;
+			return (exc.retval);
+		}
+		x = exp(x * y); 
+	}
+	return (neg ? -x : x);
+
+domain:
+	exc.type = 1;
+	if (!matherr(&exc)) {
+		(void) write(2, "pow: DOMAIN error\n", 18);
+		errno = 33;
+	}
+	return (exc.retval);
+}
+cc: too many temporary files!
+	file	""
+	data	1
+cc: too many temporary files!
+Nonexistent file
+log.c:
+cc: too many temporary files!
+# 1 "log.c"
+
+
+
+
+
+
+
+#ident	"@(#)libm:log.c	1.14"
+
+
+
+
+
+
+
+
+
+# 1 "/usr/include/math.h"
+
+
+
+
+
+extern int errno, signgam;
+
+extern double atof(), frexp(), ldexp(), modf();
+extern double j0(), j1(), jn(), y0(), y1(), yn();
+extern double erf(), erfc();
+extern double exp(), log(), log10(), pow(), sqrt();
+extern double floor(), ceil(), fmod(), fabs();
+extern double gamma();
+extern double hypot();
+extern int matherr();
+extern double sinh(), cosh(), tanh();
+extern double sin(), cos(), tan(), asin(), acos(), atan(), atan2();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 35 "/usr/include/math.h"
+
+
+
+
+
+
+
+
+
+
+    extern double _MaXdOuB, _MiNdOuB;
+    extern float _MaXfLoA, _MiNfLoA;
+
+
+
+# 52 "/usr/include/math.h"
+
+# 55 "/usr/include/math.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+struct exception {
+	int type;
+	char *name;
+	double arg1;
+	double arg2;
+	double retval;
+};
+
+
+
+
+
+
+
+
+
+
+
+# 19 "log.c"
+# 1 "/usr/include/errno.h"
+
+
+
+
+
+
+# 1 "/usr/include/sys/errno.h"
+
+
+
+
+
+
+
+#ident	"@(#)kern-port:sys/errno.h	10.7"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 8 "/usr/include/errno.h"
+extern int errno;
+# 20 "log.c"
+
+
+
+extern double log_error();
+
+double
+log(x)
+register double x;
+{
+	static double p[] = {
+		-0.78956112887491257267e0,
+		 0.16383943563021534222e2,
+		-0.64124943423745581147e2,
+	}, q[] = {
+		 1.0,
+		-0.35667977739034646171e2,
+		 0.31203222091924532844e3,
+		-0.76949932108494879777e3,
+	};
+	register double y;
+	int n; 
+
+	if (x <= 0)
+		return (log_error(x, "log", 3));
+	y = 1.0;
+	x = frexp(x, &n);
+	if (x < 0.70710678118654752440) {
+		n--;
+		y = 0.5;
+	}
+	x = (x - y)/(x + y);
+	x += x;
+	y = x * x;
+	x += x * y * ((( ( p))[0] * ((y)) + ( ( p))[1]) * (y) + ( p)[2])/(((( ( ( q)))[0] * (((y))) + ( ( ( q)))[1]) * ((y)) + ( ( q))[2]) * (y) + ( q)[3]);
+	y = (double)n;
+	x += y * -2.121944400546905827679e-4;
+	return (x + y * 0.693359375);
+}
+
+double
+log10(x)
+register double x;
+{
+	return (x > 0 ? log(x) * 0.43429448190325182765 : log_error(x, "log10", 5));
+}
+
+static double
+log_error(x, f_name, name_len)
+double x;
+char *f_name;
+unsigned int name_len;
+{
+	register char *err_type;
+	unsigned int mess_len;
+	struct exception exc;
+
+	exc.name = f_name;
+	exc.retval = -_MaXfLoA;
+	exc.arg1 = x;
+	if (x) {
+		exc.type = 1;
+		err_type = ": DOMAIN error\n";
+		mess_len = 15;
+	} else {
+		exc.type = 2;
+		err_type = ": SING error\n";
+		mess_len = 13;
+	}
+	if (!matherr(&exc)) {
+		(void) write(2, f_name, name_len);
+		(void) write(2, err_type, mess_len);
+		errno = 33;
+	}
+	return (exc.retval);
+}
+cc: too many temporary files!
+	file	""
+	data	1
+cc: too many temporary files!
+Nonexistent file
+sin.c:
+cc: too many temporary files!
+# 1 "sin.c"
+
+
+
+
+
+
+
+#ident	"@(#)libm:sin.c	1.15"
+
+
+
+
+
+
+
+# 1 "/usr/include/math.h"
+
+
+
+
+
+extern int errno, signgam;
+
+extern double atof(), frexp(), ldexp(), modf();
+extern double j0(), j1(), jn(), y0(), y1(), yn();
+extern double erf(), erfc();
+extern double exp(), log(), log10(), pow(), sqrt();
+extern double floor(), ceil(), fmod(), fabs();
+extern double gamma();
+extern double hypot();
+extern int matherr();
+extern double sinh(), cosh(), tanh();
+extern double sin(), cos(), tan(), asin(), acos(), atan(), atan2();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 35 "/usr/include/math.h"
+
+
+
+
+
+
+
+
+
+
+    extern double _MaXdOuB, _MiNdOuB;
+    extern float _MaXfLoA, _MiNfLoA;
+
+
+
+# 52 "/usr/include/math.h"
+
+# 55 "/usr/include/math.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+struct exception {
+	int type;
+	char *name;
+	double arg1;
+	double arg2;
+	double retval;
+};
+
+
+
+
+
+
+
+
+
+
+
+# 17 "sin.c"
+# 1 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+# 12 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 60 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+    extern double _MaXdOuB, _MiNdOuB;
+    extern float _MaXfLoA, _MiNfLoA;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 119 "/usr/include/values.h"
+
+# 130 "/usr/include/values.h"
+
+# 133 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+
+
+# 147 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 18 "sin.c"
+# 1 "/usr/include/errno.h"
+
+
+
+
+
+
+# 1 "/usr/include/sys/errno.h"
+
+
+
+
+
+
+
+#ident	"@(#)kern-port:sys/errno.h	10.7"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 8 "/usr/include/errno.h"
+extern int errno;
+# 19 "sin.c"
+
+double
+sin(x)
+double x;
+{
+	extern double sin_cos();
+
+	return (sin_cos(x, 0));
+}
+
+static double
+sin_cos(x, cosflag)
+register double x;
+int cosflag;
+{
+	register double y;
+	register int neg = 0;
+	struct exception exc;
+	
+	exc.arg1 = x;
+	if (x < 0) {
+		x = -x;
+		neg++;
+	}
+	y = x;
+	if (cosflag) {
+		neg = 0;
+		y += 1.57079632679489661923;
+		exc.name = "cos";
+	} else
+		exc.name = "sin";
+	if (y > (3.14159265358979323846 * ((double)(1L << (8 * (int)sizeof(long)) - 2) * (1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1) - (8 * (int)sizeof(long)) + 1)))) {
+		exc.type = 5;
+		exc.retval = 0.0;
+		if (!matherr(&exc)) {
+			(void) write(2, exc.name, 3);
+			(void) write(2, ": TLOSS error\n", 14);
+			errno = 34;
+		}
+		return (exc.retval);
+	}
+	y = y * 0.31830988618379067154 + 0.5;
+	if (x <= (~(1L << (8 * (int)sizeof(long)) - 1))) { 
+		register long n = (long)y;
+
+		y = (double)n;
+		if (cosflag)
+			y -= 0.5;
+		{ double x1 = (double)(long) x, x2 =  x - x1;  x = x1 - ( y) * ( 3.1416015625);  x += x2;  x -= ( y) * ( -8.908910206761537356617e-6); };
+		neg ^= (int)n % 2;
+	} else {
+		extern double modf();
+		double dn;
+
+		x = (modf(y, &dn) - 0.5) * 3.14159265358979323846;
+		if (modf(0.5 * dn, &dn))
+			neg ^= 1;
+	}
+	if (x < 0) {
+		x = -x;
+		neg ^= 1;
+	}
+	if (x > (1.0/(((8 * (int)sizeof(double)) - 11 + 1 - 1) % 2 ? (1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1)/2) * 1.41421356237309504880 : 1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1)/2))) { 
+		static double p[] = {
+			 0.27204790957888846175e-14,
+			-0.76429178068910467734e-12,
+			 0.16058936490371589114e-9,
+			-0.25052106798274584544e-7,
+			 0.27557319210152756119e-5,
+			-0.19841269841201840457e-3,
+			 0.83333333333331650314e-2,
+			-0.16666666666666665052e0,
+		};
+
+		y = x * x;
+		x += x * y * (((((((( ( ( ( ( ( ( p)))))))[0] * (((((((y))))))) + ( ( ( ( ( ( ( p)))))))[1]) * ((((((y)))))) + ( ( ( ( ( ( p))))))[2]) * (((((y))))) + ( ( ( ( ( p)))))[3]) * ((((y)))) + ( ( ( ( p))))[4]) * (((y))) + ( ( ( p)))[5]) * ((y)) + ( ( p))[6]) * (y) + ( p)[7]);
+		if (x > 1.0) 
+			x = 1.0;
+	}
+	exc.retval = neg ? -x : x;
+	if (exc.arg1 > ((double)(long)(3.14159265358979323846 * (((8 * (int)sizeof(double)) - 11 + 1 - 1) % 2 ? (1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1)/2) * 1.41421356237309504880 : 1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1)/2))) || exc.arg1 < -((double)(long)(3.14159265358979323846 * (((8 * (int)sizeof(double)) - 11 + 1 - 1) % 2 ? (1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1)/2) * 1.41421356237309504880 : 1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1)/2)))) {
+		exc.type = 6;
+		if (!matherr(&exc))
+			errno = 34;
+	}
+	return (exc.retval);
+}
+
+double
+cos(x)
+register double x;
+{
+	return (x ? sin_cos(x, 1) : 1.0);
+}
+cc: too many temporary files!
+	file	""
+	data	1
+cc: too many temporary files!
+Nonexistent file
+sqrt.c:
+cc: too many temporary files!
+# 1 "sqrt.c"
+
+
+
+
+
+
+
+#ident	"@(#)libm:sqrt.c	1.11"
+
+
+
+
+
+
+
+
+# 1 "/usr/include/errno.h"
+
+
+
+
+
+
+# 1 "/usr/include/sys/errno.h"
+
+
+
+
+
+
+
+#ident	"@(#)kern-port:sys/errno.h	10.7"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 8 "/usr/include/errno.h"
+extern int errno;
+# 18 "sqrt.c"
+# 1 "/usr/include/math.h"
+
+
+
+
+
+extern int errno, signgam;
+
+extern double atof(), frexp(), ldexp(), modf();
+extern double j0(), j1(), jn(), y0(), y1(), yn();
+extern double erf(), erfc();
+extern double exp(), log(), log10(), pow(), sqrt();
+extern double floor(), ceil(), fmod(), fabs();
+extern double gamma();
+extern double hypot();
+extern int matherr();
+extern double sinh(), cosh(), tanh();
+extern double sin(), cos(), tan(), asin(), acos(), atan(), atan2();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 35 "/usr/include/math.h"
+
+
+
+
+
+
+
+
+
+
+    extern double _MaXdOuB, _MiNdOuB;
+    extern float _MaXfLoA, _MiNfLoA;
+
+
+
+# 52 "/usr/include/math.h"
+
+# 55 "/usr/include/math.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+struct exception {
+	int type;
+	char *name;
+	double arg1;
+	double arg2;
+	double retval;
+};
+
+
+
+
+
+
+
+
+
+
+
+# 19 "sqrt.c"
+
+
+double
+sqrt(x)
+register double x;
+{
+	register double y;
+	int iexp; 
+	register int i = 4;
+
+	if (x <= 0) {
+		struct exception exc;
+
+		if (!x)
+			return (x); 
+		exc.type = 1;
+		exc.name = "sqrt";
+		exc.arg1 = x;
+		exc.retval = 0.0;
+		if (!matherr(&exc)) {
+			(void) write(2, "sqrt: DOMAIN error\n", 19);
+			errno = 33;
+		}
+		return (exc.retval);
+	}
+	y = frexp(x, &iexp); 
+	if (iexp % 2) { 
+		--iexp;
+		y += y; 
+	}
+	y = ldexp(y + 1.0, iexp/2 - 1); 
+	do {
+		y = 0.5 * (y + x/y);
+	} while (--i > 0);
+	return (y);
+}
+cc: too many temporary files!
+	file	""
+	data	1
+cc: too many temporary files!
+Nonexistent file
+tan.c:
+cc: too many temporary files!
+# 1 "tan.c"
+
+
+
+
+
+
+
+#ident	"@(#)libm:tan.c	1.14"
+
+
+
+
+
+
+
+# 1 "/usr/include/math.h"
+
+
+
+
+
+extern int errno, signgam;
+
+extern double atof(), frexp(), ldexp(), modf();
+extern double j0(), j1(), jn(), y0(), y1(), yn();
+extern double erf(), erfc();
+extern double exp(), log(), log10(), pow(), sqrt();
+extern double floor(), ceil(), fmod(), fabs();
+extern double gamma();
+extern double hypot();
+extern int matherr();
+extern double sinh(), cosh(), tanh();
+extern double sin(), cos(), tan(), asin(), acos(), atan(), atan2();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 35 "/usr/include/math.h"
+
+
+
+
+
+
+
+
+
+
+    extern double _MaXdOuB, _MiNdOuB;
+    extern float _MaXfLoA, _MiNfLoA;
+
+
+
+# 52 "/usr/include/math.h"
+
+# 55 "/usr/include/math.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+struct exception {
+	int type;
+	char *name;
+	double arg1;
+	double arg2;
+	double retval;
+};
+
+
+
+
+
+
+
+
+
+
+
+# 17 "tan.c"
+# 1 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+# 12 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 60 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+    extern double _MaXdOuB, _MiNdOuB;
+    extern float _MaXfLoA, _MiNfLoA;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 119 "/usr/include/values.h"
+
+# 130 "/usr/include/values.h"
+
+# 133 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+
+
+# 147 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 18 "tan.c"
+# 1 "/usr/include/errno.h"
+
+
+
+
+
+
+# 1 "/usr/include/sys/errno.h"
+
+
+
+
+
+
+
+#ident	"@(#)kern-port:sys/errno.h	10.7"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 8 "/usr/include/errno.h"
+extern int errno;
+# 19 "tan.c"
+
+double
+tan(x)
+register double x;
+{
+	register double y;
+	register int neg = 0, invert;
+	struct exception exc;
+
+	exc.name = "tan";
+	exc.arg1 = x;
+	if (x < 0) {
+		x = -x;
+		neg++;
+	}
+	if (x > (3.14159265358979323846 * ((double)(1L << (8 * (int)sizeof(long)) - 2) * (1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1) - (8 * (int)sizeof(long)) + 1)))/2) {
+		exc.type = 5;
+		exc.retval = 0.0;
+		if (!matherr(&exc)) {
+			(void) write(2, "tan: TLOSS error\n", 17);
+			errno = 34;
+		}
+		return (exc.retval);
+	}
+	y = x * 0.63661977236758134308 + 0.5;
+	if (x <= (~(1L << (8 * (int)sizeof(long)) - 1))) { 
+		register long n = (long)y;
+
+		y = (double)n;
+		{ double x1 = (double)(long) x, x2 =  x - x1;  x = x1 - ( y) * ( 1.57080078125);  x += x2;  x -= ( y) * ( -4.454455103380768678308e-6); };
+		invert = (int)n % 2;
+	} else {
+		extern double modf();
+		double dn;
+
+		x = (modf(y, &dn) - 0.5) * 1.57079632679489661923;
+		invert = modf(0.5 * dn, &dn) ? 1 : 0;
+	}
+	if (x > -(1.0/(((8 * (int)sizeof(double)) - 11 + 1 - 1) % 2 ? (1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1)/2) * 1.41421356237309504880 : 1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1)/2)) && x < (1.0/(((8 * (int)sizeof(double)) - 11 + 1 - 1) % 2 ? (1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1)/2) * 1.41421356237309504880 : 1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1)/2))) {
+		if (!x && invert)
+			
+
+
+
+
+
+
+
+
+			x = 1.0/(3.14159265358979323846 * ((double)(1L << (8 * (int)sizeof(long)) - 2) * (1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1) - (8 * (int)sizeof(long)) + 1)));
+		y = 1.0; 
+	} else {
+		static double p[] = {
+			-0.17861707342254426711e-4,
+			 0.34248878235890589960e-2,
+			-0.13338350006421960681e+0,
+		}, q[] = {
+			 0.49819433993786512270e-6,
+			-0.31181531907010027307e-3,
+			 0.25663832289440112864e-1,
+			-0.46671683339755294240e+0,
+			 1.0,
+		};
+
+		y = x * x;
+		x += x * y * ((( ( p))[0] * ((y)) + ( ( p))[1]) * (y) + ( p)[2]);
+		y = ((((( ( ( ( q))))[0] * ((((y)))) + ( ( ( ( q))))[1]) * (((y))) + ( ( ( q)))[2]) * ((y)) + ( ( q))[3]) * (y) + ( q)[4]);
+	}
+	if (neg)
+		x = -x;
+	exc.retval = invert ? -y/x : x/y;
+	if (exc.arg1 > ((double)(long)(3.14159265358979323846 * (((8 * (int)sizeof(double)) - 11 + 1 - 1) % 2 ? (1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1)/2) * 1.41421356237309504880 : 1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1)/2)))/2 || exc.arg1 < -((double)(long)(3.14159265358979323846 * (((8 * (int)sizeof(double)) - 11 + 1 - 1) % 2 ? (1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1)/2) * 1.41421356237309504880 : 1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1)/2)))/2) {
+		exc.type = 6;
+		if (!matherr(&exc))
+			errno = 34;
+	}
+	return (exc.retval);
+}
+cc: too many temporary files!
+	file	""
+	data	1
+cc: too many temporary files!
+Nonexistent file
+tanh.c:
+cc: too many temporary files!
+# 1 "tanh.c"
+
+
+
+
+
+
+
+#ident	"@(#)libm:tanh.c	1.10"
+
+
+
+
+
+
+
+
+# 1 "/usr/include/math.h"
+
+
+
+
+
+extern int errno, signgam;
+
+extern double atof(), frexp(), ldexp(), modf();
+extern double j0(), j1(), jn(), y0(), y1(), yn();
+extern double erf(), erfc();
+extern double exp(), log(), log10(), pow(), sqrt();
+extern double floor(), ceil(), fmod(), fabs();
+extern double gamma();
+extern double hypot();
+extern int matherr();
+extern double sinh(), cosh(), tanh();
+extern double sin(), cos(), tan(), asin(), acos(), atan(), atan2();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 35 "/usr/include/math.h"
+
+
+
+
+
+
+
+
+
+
+    extern double _MaXdOuB, _MiNdOuB;
+    extern float _MaXfLoA, _MiNfLoA;
+
+
+
+# 52 "/usr/include/math.h"
+
+# 55 "/usr/include/math.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+struct exception {
+	int type;
+	char *name;
+	double arg1;
+	double arg2;
+	double retval;
+};
+
+
+
+
+
+
+
+
+
+
+
+# 18 "tanh.c"
+# 1 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+# 12 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 60 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+    extern double _MaXdOuB, _MiNdOuB;
+    extern float _MaXfLoA, _MiNfLoA;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 119 "/usr/include/values.h"
+
+# 130 "/usr/include/values.h"
+
+# 133 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+
+
+# 147 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 19 "tanh.c"
+
+
+
+double
+tanh(x)
+register double x;
+{
+	register int neg = 0;
+
+	if (x < 0) {
+		x = -x;
+		neg++;
+	}
+	if (x > (0.5 * ((0.69314718055994530942 * ((1 << 11 - 1) - 1 + 1)) + 0.69314718055994530942)))
+		x = 1.0;
+	else if (x > 0.54930614433405484570) {
+		x = 0.5 - 1.0/(exp(x + x) + 1.0); 
+		x += x;
+	} else if (x > (1.0/(((8 * (int)sizeof(double)) - 11 + 1 - 1) % 2 ? (1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1)/2) * 1.41421356237309504880 : 1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1)/2))) { 
+		static double p[] = {
+			-0.96437492777225469787e0,
+			-0.99225929672236083313e2,
+			-0.16134119023996228053e4,
+		}, q[] = {
+			 1.0,
+			 0.11274474380534949335e3,
+			 0.22337720718962312926e4,
+			 0.48402357071988688686e4,
+		};
+		register double y = x * x;
+
+		x += x * y * ((( ( p))[0] * ((y)) + ( ( p))[1]) * (y) + ( p)[2])/(((( ( ( q)))[0] * (((y))) + ( ( ( q)))[1]) * ((y)) + ( ( q))[2]) * (y) + ( q)[3]);
+	}
+	return (neg ? -x : x);
+}
+cc: too many temporary files!
+	file	""
+	data	1
+cc: too many temporary files!
+Nonexistent file
+sinh.c:
+cc: too many temporary files!
+# 1 "sinh.c"
+
+
+
+
+
+
+
+#ident	"@(#)libm:sinh.c	1.11"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 1 "/usr/include/math.h"
+
+
+
+
+
+extern int errno, signgam;
+
+extern double atof(), frexp(), ldexp(), modf();
+extern double j0(), j1(), jn(), y0(), y1(), yn();
+extern double erf(), erfc();
+extern double exp(), log(), log10(), pow(), sqrt();
+extern double floor(), ceil(), fmod(), fabs();
+extern double gamma();
+extern double hypot();
+extern int matherr();
+extern double sinh(), cosh(), tanh();
+extern double sin(), cos(), tan(), asin(), acos(), atan(), atan2();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 35 "/usr/include/math.h"
+
+
+
+
+
+
+
+
+
+
+    extern double _MaXdOuB, _MiNdOuB;
+    extern float _MaXfLoA, _MiNfLoA;
+
+
+
+# 52 "/usr/include/math.h"
+
+# 55 "/usr/include/math.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+struct exception {
+	int type;
+	char *name;
+	double arg1;
+	double arg2;
+	double retval;
+};
+
+
+
+
+
+
+
+
+
+
+
+# 27 "sinh.c"
+# 1 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+# 12 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 60 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+    extern double _MaXdOuB, _MiNdOuB;
+    extern float _MaXfLoA, _MiNfLoA;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 119 "/usr/include/values.h"
+
+# 130 "/usr/include/values.h"
+
+# 133 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+
+
+# 147 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 28 "sinh.c"
+# 1 "/usr/include/errno.h"
+
+
+
+
+
+
+# 1 "/usr/include/sys/errno.h"
+
+
+
+
+
+
+
+#ident	"@(#)kern-port:sys/errno.h	10.7"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 8 "/usr/include/errno.h"
+extern int errno;
+# 29 "sinh.c"
+
+
+
+
+extern double sinh_exc();
+
+double
+sinh(x)
+register double x;
+{
+	register double y = ((x) < 0 ? -(x) : (x));
+
+	if (y <= 1) {
+		static double p[] = {
+			-0.78966127417357099479e0,
+			-0.16375798202630751372e3,
+			-0.11563521196851768270e5,
+			-0.35181283430177117881e6,
+		}, q[] = {
+			 1.0,
+			-0.27773523119650701667e3,
+			 0.36162723109421836460e5,
+			-0.21108770058106271242e7,
+		};
+
+		if (y < (1.0/(((8 * (int)sizeof(double)) - 11 + 1 - 1) % 2 ? (1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1)/2) * 1.41421356237309504880 : 1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1)/2))) 
+			return (x);
+		y = x * x;
+		return (x + x * y * (((( ( ( p)))[0] * (((y))) + ( ( ( p)))[1]) * ((y)) + ( ( p))[2]) * (y) + ( p)[3])/(((( ( ( q)))[0] * (((y))) + ( ( ( q)))[1]) * ((y)) + ( ( q))[2]) * (y) + ( q)[3]));
+	}
+	if (y > (0.69314718055994530942 * ((1 << 11 - 1) - 1 + 1))) 
+		return (sinh_exc(x, y, 1));
+	x = exp(x);
+	return (0.5 * (x - 1.0/x));
+}
+
+double
+cosh(x)
+register double x;
+{
+	register double y = ((x) < 0 ? -(x) : (x));
+
+	if (y > (0.69314718055994530942 * ((1 << 11 - 1) - 1 + 1))) 
+		return (sinh_exc(x, y, 0));
+	x = exp(y);
+	return (0.5 * (x + 1.0/x));
+}
+
+static double
+sinh_exc(x, y, sinhflag)
+register double x, y;
+register int sinhflag;
+{
+	int neg = (x < 0 && sinhflag); 
+	struct exception exc;
+
+	if (y < ((0.69314718055994530942 * ((1 << 11 - 1) - 1 + 1)) + 0.69314718055994530942)) { 
+		x = exp(y - 0.6931610107421875);
+		x += 0.13830277879601902638e-4 * x;
+		return (neg ? -x : x);
+	}
+	exc.type = 3;
+	exc.name = sinhflag ? "sinh" : "cosh";
+	exc.arg1 = x;
+	exc.retval = neg ? -_MaXfLoA : _MaXfLoA;
+	if (!matherr(&exc))
+		errno = 34;
+	return (exc.retval);
+}
+cc: too many temporary files!
+	file	""
+	data	1
+cc: too many temporary files!
+Nonexistent file
+exp.c:
+cc: too many temporary files!
+# 1 "exp.c"
+
+
+
+
+
+
+
+#ident	"@(#)libm:exp.c	1.13"
+
+
+
+
+
+
+
+
+
+# 1 "/usr/include/math.h"
+
+
+
+
+
+extern int errno, signgam;
+
+extern double atof(), frexp(), ldexp(), modf();
+extern double j0(), j1(), jn(), y0(), y1(), yn();
+extern double erf(), erfc();
+extern double exp(), log(), log10(), pow(), sqrt();
+extern double floor(), ceil(), fmod(), fabs();
+extern double gamma();
+extern double hypot();
+extern int matherr();
+extern double sinh(), cosh(), tanh();
+extern double sin(), cos(), tan(), asin(), acos(), atan(), atan2();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 35 "/usr/include/math.h"
+
+
+
+
+
+
+
+
+
+
+    extern double _MaXdOuB, _MiNdOuB;
+    extern float _MaXfLoA, _MiNfLoA;
+
+
+
+# 52 "/usr/include/math.h"
+
+# 55 "/usr/include/math.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+struct exception {
+	int type;
+	char *name;
+	double arg1;
+	double arg2;
+	double retval;
+};
+
+
+
+
+
+
+
+
+
+
+
+# 19 "exp.c"
+# 1 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+# 12 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 60 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+    extern double _MaXdOuB, _MiNdOuB;
+    extern float _MaXfLoA, _MiNfLoA;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 119 "/usr/include/values.h"
+
+# 130 "/usr/include/values.h"
+
+# 133 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+
+
+# 147 "/usr/include/values.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 20 "exp.c"
+# 1 "/usr/include/errno.h"
+
+
+
+
+
+
+# 1 "/usr/include/sys/errno.h"
+
+
+
+
+
+
+
+#ident	"@(#)kern-port:sys/errno.h	10.7"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 8 "/usr/include/errno.h"
+extern int errno;
+# 21 "exp.c"
+
+double
+exp(x)
+register double x;
+{
+	static double p[] = {
+		0.31555192765684646356e-4,
+	        0.75753180159422776666e-2,
+	        0.25000000000000000000e0,
+	}, q[] = {
+		0.75104028399870046114e-6,
+	        0.63121894374398503557e-3,
+	        0.56817302698551221787e-1,
+	        0.50000000000000000000e0,
+	};
+	register double y;
+	register int n;
+	struct exception exc;
+
+	exc.arg1 = x;
+	if (x < 0)
+		x = -x;
+	if (x < (1.0/(((8 * (int)sizeof(double)) - 11 + 1 - 1) % 2 ? (1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1)/2) * 1.41421356237309504880 : 1L << ((8 * (int)sizeof(double)) - 11 + 1 - 1)/2))) 
+		return (1.0 + exc.arg1);
+	exc.name = "exp";
+	if (exc.arg1 <= (0.69314718055994530942 * ((-(((1 << 11 - 1) - 1 + 1)) + 1) - 1))) {
+		if (exc.arg1 == (0.69314718055994530942 * ((-(((1 << 11 - 1) - 1 + 1)) + 1) - 1))) 
+			return (_MiNdOuB); 
+		exc.type = 4;
+		exc.retval = 0.0;
+		if (!matherr(&exc))
+			errno = 34;
+		return (exc.retval);
+	}
+	if (exc.arg1 >= (0.69314718055994530942 * ((1 << 11 - 1) - 1 + 1))) {
+		if (exc.arg1 == (0.69314718055994530942 * ((1 << 11 - 1) - 1 + 1))) 
+			return (_MaXdOuB); 
+		exc.type = 3;
+		exc.retval = _MaXfLoA;
+		if (!matherr(&exc)) 
+			errno = 34;
+		return (exc.retval);
+	}
+	n = (int)(x * 1.4426950408889634074 + 0.5);
+	y = (double)n;
+	{ double x1 = (double)(int) x, x2 =  x - x1;  x = x1 - ( y) * ( 0.693359375);  x += x2;  x -= ( y) * ( -2.1219444005469058277e-4); };
+	if (exc.arg1 < 0) {
+		x = -x;
+		n = -n;
+	}
+	y = x * x;
+	x *= ((( ( p))[0] * ((y)) + ( ( p))[1]) * (y) + ( p)[2]);
+	return (ldexp(0.5 + x/((((( ( ( q)))[0] * (((y))) + ( ( ( q)))[1]) * ((y)) + ( ( q))[2]) * (y) + ( q)[3]) - x), n + 1));
+}
+cc: too many temporary files!
+	file	""
+	data	1
+cc: too many temporary files!
+Nonexistent file
+matherr.c:
+cc: too many temporary files!
+# 1 "matherr.c"
+
+
+
+
+
+
+
+#ident	"@(#)libm:matherr.c	1.4"
+
+
+# 1 "/usr/include/math.h"
+
+
+
+
+
+extern int errno, signgam;
+
+extern double atof(), frexp(), ldexp(), modf();
+extern double j0(), j1(), jn(), y0(), y1(), yn();
+extern double erf(), erfc();
+extern double exp(), log(), log10(), pow(), sqrt();
+extern double floor(), ceil(), fmod(), fabs();
+extern double gamma();
+extern double hypot();
+extern int matherr();
+extern double sinh(), cosh(), tanh();
+extern double sin(), cos(), tan(), asin(), acos(), atan(), atan2();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 35 "/usr/include/math.h"
+
+
+
+
+
+
+
+
+
+
+    extern double _MaXdOuB, _MiNdOuB;
+    extern float _MaXfLoA, _MiNfLoA;
+
+
+
+# 52 "/usr/include/math.h"
+
+# 55 "/usr/include/math.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+struct exception {
+	int type;
+	char *name;
+	double arg1;
+	double arg2;
+	double retval;
+};
+
+
+
+
+
+
+
+
+
+
+
+# 12 "matherr.c"
+
+
+int
+matherr(x)
+struct exception *x;
+{
+	return (0);
+}
+cc: too many temporary files!
+	file	""
+	data	1
+cc: too many temporary files!
+ccom:can't open @,e
+Nonexistent file
+*** Error code 55
+
+Stop.

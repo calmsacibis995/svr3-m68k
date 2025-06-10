@@ -1,0 +1,33 @@
+* kdb
+*
+Description File:	"Kernel Debugger"
+*
+* kdb
+*
+Device Description:	"Kernel Debugger"
+Description Keyword:	"kdb"
+Device Name:	"kdb"
+Handler Prefix:	"kdb_"
+Interrupt Vectors Size:	0
+Major Block Device Number:	0
+Major Character Device Number:	0
+Maximum Bus Request Level:	0
+Maximum Devices Per Controller:	1
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Has an initialization handler.
+Device Type Information:
+Do not create a count field for this device.
+This is a required device.
+This is an interrupt driven device.
+Device Configuration Tables Declarations:
+*
+* kdb #1
+*
+Board Description:	"Kernel Debugger"
+Description Keyword:	"kdb #1"
+Device Type:	"kdb"
+Bus Request Level:	0
+Address:	0
+Interrupt Vector Location:	0
+Default Number Of Devices:	1

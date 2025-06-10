@@ -1,0 +1,40 @@
+# this file is derived from the info in netinet/in.h
+# these	entries	should be compared to something	real for verification
+#			Deb Brown	CMC	9 August 1984
+
+# Port/socket numbers: network standard	functions
+
+echo	7/tcp	ECHO
+discard	9/tcp	DISCARD
+systat	11/tcp	SYSTAT
+daytime	13/tcp	DAYTIME
+netstat	15/tcp	NETSTAT
+ftp	21/tcp	FTP
+telnet	23/tcp	TELNET
+smtp	25/tcp	SMTP
+time	37/tcp	TIME timeserver TIMESERVER
+name	42/tcp	NAME nameserver NAMESERVER
+whois	43/tcp	WHOIS
+mtp	57/tcp	MTP
+
+# Port/socket numbers: host specific functions
+
+tftp	69/udp	TFTP
+rje	77/udp	RJE
+finger	79/udp	FINGER
+ttylink	87/udp	TTYLINK
+supdup	95/udp	SUPDUP
+
+# UNIX TCP sockets
+
+exec	512/tcp	EXEC execserver EXECSERVER
+login	513/tcp	LOGIN loginserver LOGINSERVER
+cmd	514/tcp	CMD shell SHELL cmdserver CMDSERVER
+efs	520/tcp	EFS efsserver EFSSERVER
+xsink	2000/tcp XSINK sink sinkserver
+
+# UNIX UDP sockets
+
+biff	512/udp	BIFF biffudp BIFFUDP
+who	513/udp	WHO whoserver WHOSERVER
+route	520/udp	ROUTE routeserver ROUTESERVER	# /* 520+1 also used */

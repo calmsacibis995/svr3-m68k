@@ -1,0 +1,11 @@
+if [ $# -ne 1 ]
+then
+	echo "Usage: tomk file"
+	exit 1
+fi
+
+ed - $1<<!!
+g/u3b2/s/u3b2/m68k/
+w
+q
+!!

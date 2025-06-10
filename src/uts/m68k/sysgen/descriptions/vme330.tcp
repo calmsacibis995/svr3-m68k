@@ -1,0 +1,150 @@
+Description File:	"MVME330 Ethernet Board with TCP/IP"
+Device Description:	""
+Description Keyword:	"vme330"
+Device Name:	"cmc"
+Handler Prefix:	"enp"
+Interrupt Vectors Size:	4
+Major Block Device Number:	0
+Major Character Device Number:	0
+Maximum Bus Request Level:	5
+Maximum Devices Per Controller:	1
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Device Type Information:
+Do not create a count field for this device.
+This is an interrupt driven device.
+Device Configuration Tables Declarations:
+Board Description:	""
+Description Keyword:	"vme330 #1"
+Device Type:	"cmc"
+Bus Request Level:	4
+Address:	0
+Interrupt Vector Location:	0x304
+Default Number Of Devices:	0
+Device Description:	""
+Description Keyword:	"net0"
+Device Name:	"net0"
+Handler Prefix:	"so_"
+Interrupt Vectors Size:	0
+Major Block Device Number:	0
+Major Character Device Number:	12
+Maximum Bus Request Level:	5
+Maximum Devices Per Controller:	64
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Has an open handler.
+Has a close handler.
+Has a read handler.
+Has a write handler.
+Has an ioctl handler.
+Device Type Information:
+Do not create a count field for this device.
+This is a character device.
+Device Configuration Tables Declarations:
+Board Description:	""
+Description Keyword:	"net0 #1"
+Device Type:	"net0"
+Bus Request Level:	0
+Address:	0
+Interrupt Vector Location:	0
+Default Number Of Devices:	20
+Device Description:	""
+Description Keyword:	"enp"
+Device Name:	"enp"
+Handler Prefix:	"enpr"
+Interrupt Vectors Size:	0
+Major Block Device Number:	0
+Major Character Device Number:	13
+Maximum Bus Request Level:	5
+Maximum Devices Per Controller:	64
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Has an open handler.
+Has a close handler.
+Has a read handler.
+Has a write handler.
+Has an ioctl handler.
+Device Type Information:
+Do not create a count field for this device.
+Do not create an interrupt vector for this device.
+This is a character device.
+Device Configuration Tables Declarations:
+Board Description:	""
+Description Keyword:	"enp #1"
+Device Type:	"enp"
+Bus Request Level:	0
+Address:	0
+Interrupt Vector Location:	0
+Default Number Of Devices:	10
+Device Description:	""
+Description Keyword:	"ptc"
+Device Name:	"ptc"
+Handler Prefix:	"ptc"
+Interrupt Vectors Size:	0
+Major Block Device Number:	0
+Major Character Device Number:	15
+Maximum Bus Request Level:	5
+Maximum Devices Per Controller:	64
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Has an open handler.
+Has a close handler.
+Has a read handler.
+Has a write handler.
+Has an ioctl handler.
+Device Type Information:
+Do not create a count field for this device.
+Do not create an interrupt vector for this device.
+This is a character device.
+Device Configuration Tables Declarations:
+Board Description:	""
+Description Keyword:	"ptc #1"
+Device Type:	"ptc"
+Bus Request Level:	0
+Address:	0
+Interrupt Vector Location:	0
+Default Number Of Devices:	10
+Device Description:	""
+Description Keyword:	"pts"
+Device Name:	"pts"
+Handler Prefix:	"pts"
+Interrupt Vectors Size:	0
+Major Block Device Number:	0
+Major Character Device Number:	14
+Maximum Bus Request Level:	5
+Maximum Devices Per Controller:	64
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Has an open handler.
+Has a close handler.
+Has a read handler.
+Has a write handler.
+Has an ioctl handler.
+Device Type Information:
+Do not create a count field for this device.
+Do not create an interrupt vector for this device.
+This is a character device.
+Device Configuration Tables Declarations:
+Board Description:	""
+Description Keyword:	"pts #1"
+Device Type:	"pts"
+Bus Request Level:	0
+Address:	0
+Interrupt Vector Location:	0
+Default Number Of Devices:	10
+Device Description:	""
+Description Keyword:	"swab"
+Device Name:	"swab"
+Handler Prefix:	"swab"
+Interrupt Vectors Size:	4
+Major Block Device Number:	0
+Major Character Device Number:	0
+Maximum Bus Request Level:	7
+Maximum Devices Per Controller:	1
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Device Type Information:
+Allow only one of these devices.
+Do not create a count field for this device.
+This is an interrupt driven device.
+Device Configuration Tables Declarations:

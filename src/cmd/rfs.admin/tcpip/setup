@@ -1,0 +1,324 @@
+#ident	"@(#)sadmin:admin/menu/packagemgmt/rfs/tcpip/setup	1.00"
+#menu#	Installation procedure for new or restructured rfs networks
+#help#
+#help#	This subcommand will allow the creation or restructuring of the
+#help#	files used by the rfs subsystem.  This menu item should be run
+#help#	synchronously on all systems in the domain, with the primary as
+#help#	last system configured.  The primary should be the last system
+#help#	so that all the addresses of the hosts will be known for the creation
+#help#	of the domain and rfmaster files.  Run the other hosts to the
+#help#	question concerning the primary being up, and then configure
+#help#	the primary with the addresses.
+
+#	definitions for file locations
+ETC=/etc
+TMP=/usr/tmp
+ENP=/tcpip/enp
+NSERVE=/usr/nserve
+
+#	local definitions
+true="TRUE"
+false="FALSE"
+unknown="UNKNOWN"
+primary=$unknown
+
+# flags for checkyn to implement [q] (quit)
+flags="-qq -k$$"
+
+trap 'exit 0' 1 2 15
+
+#	download if not currently running
+if [ ! -f $ENP/enp_param.S ]
+then
+	cd $ENP; cp default.S enp_param.S; cp default.desc enp_param.desc 
+fi
+
+(cd $ENP; /etc/enpload enp0 enp_param.S enpcode.S >/dev/null 2>&1; >/dev/tcpip)
+uname=`uname -n`
+eaddr=`netaddr | cut -f2 -d\ `
+iaddr=`netaddr | cut -f1 -d\ `
+domain=`netaddr | cut -f3 -d\ `
+netid=`netaddr | cut -f4 -d\ `
+
+while `checkyn ${flags} -f  -H '
+	The Internet address is used by RFS to identify a host to the network.
+	The address consists of 2 parts, network id and a unique serial number.
+	The network id must be the same for all systems in an rfs domain or
+	in domains wishing to communicate.
+	This menu interface has the facility to build an internet address
+	from the Ethernet address.  After selecting the address, the
+	system data files will be built.' \
+	"
+	This machine is currently called \"${uname}\"
+	The Ethernet address is \"${eaddr}\"
+	The internet address is \"${iaddr}\"
+	The Domain is \"${domain}\"
+	The Network ID is \"${netid}\"
+
+Do you want to change network id or internet address?" ` 
+do
+	# if listener active - blow off changes
+	if nlsadmin -q tcpip >/dev/null 2>&1
+	then
+		echo "Network Listener is active - change aborted"
+		exit 0
+	fi
+
+	if `checkyn -f -H '
+	You may choose your own internet address or have the system build
+	one from the Ethernet address.  Every system must have a unique
+	internet address, while staying in the same network.' \
+	"
+	Would you like the system to build the internet address?"`
+	then
+		netid=`checkre ${flags} -fe "	To what network should \"${uname}\" belong ? [1-254,q]" \
+		'.' 'There must be a netid.' \
+		'^[0-9]\{1,\}$' 'Only numbers are permitted.' \
+		'^.\{1,2\}$' 'No more than 2 numbers are permitted.'`
+
+		iaddr=`netaddr -a -n $netid | cut -f1 -d\ `
+		inet_hex=`netaddr -a -n $netid | cut -f5 -d\ `
+		domain=`netaddr -a -n $netid | cut -f3 -d\ `
+		netid=`netaddr -a -n $netid | cut -f4 -d\ `
+	else
+		iaddr=`checkre ${flags} -fe "	What is the internet address of system \"${uname}\"? [q]" \
+			'.' 'Internet address is required for Remote File Sharing.' \
+			'^[0-9\.]\{1,\}$' 'Only numbers and \".\" are permitted.' \
+			'^.\{1,15\}$' 'No more than 15 characters are permitted.'`
+		inet_hex=`netaddr -c ${iaddr} | cut -f5 -d\ `
+		domain=`netaddr -c ${iaddr} | cut -f3 -d\ `
+		netid=`netaddr -c ${iaddr} | cut -f4 -d\ `
+		
+	fi
+
+
+#
+#	first build the enp_param.desc file with current uname
+	mv $ENP/enp_param.desc $TMP/desc
+	sed '/host/ c\
+host \"'${uname}'\"' < $TMP/desc >$ENP/enp_param.desc
+	rm -f $TMP/desc
+
+#	
+#	next add internet address to /etc/hosts and build new
+#	/tcpip/enp/enp_param.S with enpconfig
+#
+	if [ -f $ETC/hosts ]
+	then
+		sed "/${uname}/d" < $ETC/hosts >$TMP/hosts
+		echo "${iaddr}	${uname}" | cat - $TMP/hosts > $ETC/hosts
+		rm -f $TMP/hosts
+	else
+		echo "${iaddr}	${uname}" > $ETC/hosts
+	fi
+	(cd $ENP; enpconfig enp_param.desc > enp_param.S)
+
+#
+#	Build /.rhosts and /etc/hosts.equiv for cmc utilities
+#
+	if [ -f /.rhosts ]
+	then
+		sed "/${uname}/d" < /.rhosts >$TMP/.rhosts
+		echo ${uname} | cat - $TMP/.rhosts > /.rhosts
+		rm -f $TMP/.rhosts
+	else
+		echo ${uname} > /.rhosts
+	fi
+
+	if [ -f $ETC/hosts.equiv ]
+	then
+		sed "/${uname}/d" < $ETC/hosts.equiv > $TMP/hosts.equiv
+		echo ${uname} | cat - $TMP/hosts.equiv > $ETC/hosts.equiv
+		rm -f $TMP/hosts.equiv
+	else
+		echo ${uname} > $ETC/hosts.equiv
+	fi
+
+#
+#	Setup network and domain
+	dname -N tcpip
+	if [ ${domain} = 'Default' ]
+	then
+		domain=`checkre ${flags} -fe "	What is the Domain name? [q]" \
+		'.' 'There must be a domain.' \
+		'^[0-9a-zA-Z_\-]\{1,\}$' 'Only letters, numbers, and \"_\" or \"-\" are permitted.' \
+		'^.\{1,14\}$' 'No more than 14 characters are permitted.'`
+		dname -D ${domain}
+	fi
+
+#
+#	Build rfmaster file for this system ... if required
+#	Ask if Primary, Secondary, or Other
+	if `checkyn ${flags} -f  -H '
+	Indicate if this machine is a primary domain nameserver.' \
+	"	Is this the Primary domain nameserver for \"${domain}\"?" ` 
+	then
+		primary=$true
+		if [ -f $NSERVE/rfmaster ]
+		then
+			sed "/\.${uname}/d" < $NSERVE/rfmaster > $TMP/rfmaster
+			echo "${domain} P ${domain}.${uname}\n"\
+			     "${domain}.${uname} A \\x022b${inet_hex}" \
+			      | cat - $TMP/rfmaster > $NSERVE/rfmaster
+			rm -f $TMP/rfmaster
+		else
+			echo "${domain} P ${domain}.${uname}\n"\
+			     "${domain}.${uname} A \\x022b${inet_hex}" \
+			     > $NSERVE/rfmaster
+		fi
+
+#
+#	setup domain if primary
+		while `checkyn ${flags} -f -H '
+	Enter systems desired in the domain that this primary nameserver
+	serves.  Each system entered will request a password.  NULL passwords 
+	are allowed.' \
+	"
+	Enter a host into network?"`
+		do
+		host=`checkre ${flags} -fe "What is the host name? [q]" \
+		'.' 'There must be a host.' \
+		'^[0-9a-zA-Z]\{1,\}$' 'Only letters and numbers are permitted.' \
+		'^.\{1,8\}$' 'No more than 8 characters are permitted.'`
+
+		if [ ${host} != ${uname} ]
+		then
+		host_iaddr=`checkre ${flags} -fe "What is the internet address of system \"${host}\"? [q]" \
+			'.' 'Internet address is required for Remote File Sharing.' \
+			'^[0-9\.]\{1,\}$' 'Only numbers and \".\" are permitted.' \
+			'^.\{1,15\}$' 'No more than 15 characters are permitted.'`
+		sed "/${host}/d" < $ETC/hosts >$TMP/hosts
+		echo "${host_iaddr}	${host}" | cat - $TMP/hosts > $ETC/hosts
+		sed "/${host}/d" < /.rhosts >$TMP/.rhosts
+		echo ${host} | cat - $TMP/.rhosts > /.rhosts
+		sed "/${host}/d" < $ETC/hosts.equiv > $TMP/hosts.equiv
+		echo ${host} | cat - $TMP/hosts.equiv > $ETC/hosts.equiv
+		sed "/\.${host}/d" < $NSERVE/rfmaster > $TMP/rfmaster
+		host_inet_hex=`netaddr -c ${host_iaddr} | cut -f5 -d\ `
+		station=`checkre ${flags} -fe "Is this a (P)rimary, (S)econdary, or (O)ther system? [P,S,O,q]" \
+		'.' 'Every system is one of the above.' \
+		'^[PSO]\{1,\}$' 'Only "P", "S", or "O" are permitted.' \
+		'^.\{1,1\}$' 'Only "P", "S", or "O" permitted.'`
+		if [ ${station} != "O" ]
+		then
+			alt_domain=`checkre ${flags} -fe "	What is the Domain name? [q]" \
+			'.' 'There must be a domain.' \
+			'^[0-9a-zA-Z_\-]\{1,\}$' 'Only letters, numbers, and \"_\" or \"-\" are permitted.' \
+			'^.\{1,14\}$' 'No more than 14 characters are permitted.'`
+			echo "${alt_domain} ${station} ${alt_domain}.${host}\n"\
+			     "${alt_domain}.${host} A \\x022b${host_inet_hex}" \
+		      		| cat - $TMP/rfmaster > $NSERVE/rfmaster
+			if [ ${alt_domain} = ${domain} ]
+			then
+				rfadmin -a ${domain}.${host}
+			fi
+		else
+			rfadmin -a ${domain}.${host}
+			echo "${domain}.${host} A \\x022b${host_inet_hex}" \
+		      	     | cat - $TMP/rfmaster > $NSERVE/rfmaster
+		fi
+		rm -f $TMP/hosts.equiv $TMP/hosts $TMP/.rhosts $TMP/rfmaster
+		else	# if primary and uname
+			rfadmin -a ${domain}.${host}
+		fi
+		done
+	else
+		primary=${false}
+	fi
+
+#	setup network listener
+#
+	if [ ! -d /usr/net/nls/tcpip ]
+	then
+		nlsadmin -i tcpip
+		nlsadmin -a 105 -c /usr/net/servers/rfs/rfsetup -y "rfsetup" -p timod tcpip
+	fi
+	nlsadmin -l \\x022b${inet_hex} -t \\x02ff${inet_hex} tcpip
+
+done
+
+`checkyn ${flags} -f -H '
+	Do initial bring up of Remote File Sharing.  The initial
+	invocation is slightly different in that the machine password
+	is requested.  This section will start the network listener
+	and start rfs.' \
+	"
+	Bring up initial RFS?"` || exit 0
+
+#	bring up rfs for first time
+#
+nlsadmin -k tcpip >/dev/null 2>&1
+echo "	Downloading LAN code"
+(cd $ENP; /etc/enpload -r enp0 enp_param.S enpcode.S >/dev/null 2>&1)
+nlsadmin -s tcpip
+echo "	Network Listener started"
+if [ ${primary} = ${unknown} ]
+then
+	if `checkyn ${flags} -f  -H '
+	Indicate if this machine is a primary domain nameserver.' \
+	"	Is this the Primary domain nameserver for \"${domain}\"?" ` 
+	then
+		primary=$true
+	else
+		primary=$false
+	fi
+fi
+
+if [ ${primary} != ${true} ]
+then
+	until `checkyn ${flags} -f  -H '
+	The Primary domain name server must be the first system started
+	for initial bring up.  Make sure the primary is initialized.' \
+	"
+	This machine is currently called \"${uname}\"
+	The Ethernet address is \"${eaddr}\"
+	The internet address is \"${iaddr}\"
+	The Domain is \"${domain}\"
+	The Network ID is \"${netid}\"
+
+	Wait here on non primary machines for the primary to
+	be activated.  The addresses are provided for reference
+	when running setup on the primary.
+
+	Is the Primary Domain Nameserver running?"`
+	do
+		`checkyn ${flags} -f -H '
+	The Primary domain name server must be the first system started
+	for initial bring up.  Make sure the primary is initialized.' \
+	"
+	Make sure primary is active.  When the primary is active, continue
+	with menu's. A no response will abort the initial bringup.
+	Continue with Initial bringup of RFS?"` || exit 0
+	done
+
+	inet_pri=`checkre ${flags} -fe "What is the internet address of the Primary domain nameserver? [q]" \
+		'.' 'There must be a primary for each system on the network.' \
+		'^[0-9\.]\{1,\}$' 'Only numbers and \".\" are permitted.' \
+		'^.\{1,11\}$' 'No more than 11 characters are permitted.'`
+	inet_pri_hex=`netaddr -c ${inet_pri} | cut -f5 -d\ `
+fi
+
+echo "	Initial Startup of RFS for ${uname}"
+if [ $primary != $true ]
+then
+	rfstart -p \\x022b${inet_pri_hex}
+	if rfadmin >/dev/null 2>&1
+	then
+		echo "	OK to use \"Init 3\" for rfs "
+	else
+		echo "	Error occurred in initial bringup - check addresses"
+	fi
+	rfstop
+else
+	rfstart
+	`checkyn ${flags} -f -H '
+	Bring up each system in this domain to establish the password
+	on this system for use with rfs.  All of the hosts should exit
+	with "OK to use Init 3" message.' \
+	"
+	Bring up all systems in this domain.  After all systems have
+	successfully connected, exit this menu.
+	Ok to exit"` || exit 0
+	rfstop
+fi
+

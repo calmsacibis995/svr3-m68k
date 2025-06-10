@@ -1,0 +1,8 @@
+coffcmp as/m68k/as /bin/xxas
+coffcmp cmd/m68k/cc /bin/xxcc
+coffcmp comp2/m68k/c0 /lib/xxc0
+coffcmp comp2/m68k/c1 /lib/xxc1
+coffcmp cpp/m68k/cpp /lib/xxcpp
+coffcmp hloptim/m68k/coptim /lib/xxcoptim
+coffcmp ld/m68k/ld /bin/xxld
+coffcmp optim/m68k/optim /lib/xxoptim

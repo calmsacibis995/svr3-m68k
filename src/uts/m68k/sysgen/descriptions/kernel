@@ -1,0 +1,643 @@
+* kernel
+*
+Description File:	"Kernel, Paging, and Streams Parameters"
+*
+* CPRAM
+*
+Parameter Description:	"Clearpoint ECC memory parity parameter"
+Description Keyword:	"CPRAM"
+Parameter Name:	"cpram"
+Conf.c Name:	"CPRAM"
+Default Value:	"1"
+*
+* NUMTIMOD
+*
+Parameter Description:	"# of Transport Interface Modules"
+Description Keyword:	"NUMTIMOD"
+Parameter Name:	"numtimod"
+Conf.c Name:	"NUMTIMOD"
+Default Value:	"10 "
+*
+* BADDISKS
+*
+Parameter Description:	"# of bad disk track mappings supported"
+Description Keyword:	"BADDISKS"
+Parameter Name:	"baddsks"
+Conf.c Name:	"BADDISKS"
+Default Value:	"4"
+*
+* DISK23
+*
+Parameter Description:	"Disk 2, 3"
+Description Keyword:	"DISK23"
+Parameter Name:	"disk23"
+Conf.c Name:	"DISK23"
+Default Value:	"WD70"
+*
+* SPCNT
+*
+Parameter Description:	"# of STREAMS Pipe Modules"
+Description Keyword:	"SPCNT"
+Parameter Name:	"spcnt"
+Conf.c Name:	"SPCNT"
+Default Value:	"20"
+*
+* M204
+*
+Parameter Description:	"MVME204 memory parity parameter"
+Description Keyword:	"M204"
+Parameter Name:	"m204"
+Conf.c Name:	"M204"
+Default Value:	"2"
+*
+* RFS_VLOW
+*
+Parameter Description:	"RFS heap parameter"
+Description Keyword:	"RFS_VLOW"
+Parameter Name:	"rfs_vlow"
+Conf.c Name:	"RFS_VLOW"
+Default Value:	"1"
+*
+* DISK01
+*
+Parameter Description:	"Disk 0, 1"
+Description Keyword:	"DISK01"
+Parameter Name:	"disk01"
+Conf.c Name:	"DISK01"
+Default Value:	"WD70"
+*
+* RFS_VHIGH
+*
+Parameter Description:	"RFS heap parameter"
+Description Keyword:	"RFS_VHIGH"
+Parameter Name:	"rfs_vhigh"
+Conf.c Name:	"RFS_VHIGH"
+Default Value:	"1"
+*
+* MAXSEPGCNT
+*
+Parameter Description:	"# Of Additional Event Cell Memory Pages"
+Description Keyword:	"MAXSEPGCNT"
+Parameter Name:	"maxsepgcnt"
+Conf.c Name:	"MAXSEPGCNT"
+Default Value:	"1"
+*
+* MINASMEM
+*
+Parameter Description:	"# Of System Reserved Memory/Swap Pages"
+Description Keyword:	"MINASMEM"
+Parameter Name:	"minasmem"
+Conf.c Name:	"MINASMEM"
+Default Value:	"25"
+*
+* NHBUF
+*
+Parameter Description:	"# of Hash Buckets for buffers"
+Description Keyword:	"NHBUF"
+Parameter Name:	"hashbuf"
+Conf.c Name:	"NHBUF"
+Default Value:	"64"
+*
+* NAUTOUP
+*
+Parameter Description:	"Auto FS Buffer Update Rate (Seconds)"
+Description Keyword:	"NAUTOUP"
+Parameter Name:	"nautoup"
+Conf.c Name:	"NAUTOUP"
+Default Value:	"30"
+*
+* NCALL
+*
+Parameter Description:	"Call-Out Table Size"
+Description Keyword:	"NCALL"
+Parameter Name:	"calls"
+Conf.c Name:	"NCALL"
+Default Value:	"50"
+*
+* NCLIST
+*
+Parameter Description:	"Character List Buffer Count"
+Description Keyword:	"NCLIST"
+Parameter Name:	"clists"
+Conf.c Name:	"NCLIST"
+Default Value:	"125"
+*
+* PUTBUFSZ
+*
+Parameter Description:	"Console circular buffer Size"
+Description Keyword:	"PUTBUFSZ"
+Parameter Name:	"putbfsz"
+Conf.c Name:	"PUTBUFSZ"
+Default Value:	"2000"
+*
+* BDFLUSHR
+*
+Parameter Description:	"Disk Buffer Flush Rate (Seconds)"
+Description Keyword:	"BDFLUSHR"
+Parameter Name:	"bdflushr"
+Conf.c Name:	"BDFLUSHR"
+Default Value:	"60"
+*
+* GREEK
+*
+Parameter Description:	"Enable greek translation in tty (ISP)"
+Description Keyword:	"GREEK"
+Parameter Name:	"greek"
+Conf.c Name:	"GREEK"
+Default Value:	"1"
+*
+* NMOUNT
+*
+Parameter Description:	"Filesystem Mount Table Size"
+Description Keyword:	"NMOUNT"
+Parameter Name:	"mounts"
+Conf.c Name:	"NMOUNT"
+Default Value:	"50"
+*
+* NINODE
+*
+Parameter Description:	"I-Node Table Size"
+Description Keyword:	"NINODE"
+Parameter Name:	"inodes"
+Conf.c Name:	"NINODE"
+Default Value:	"512"
+*
+* NSTREVENT
+*
+Parameter Description:	"Initial Number Of STREAMS Event Cells"
+Description Keyword:	"NSTREVENT"
+Parameter Name:	"nstrevent"
+Conf.c Name:	"NSTREVENT"
+Default Value:	"64"
+*
+* STRLOFRAC
+*
+Parameter Description:	"Low-Priority Block Allocations Cutoff"
+Description Keyword:	"STRLOFRAC"
+Parameter Name:	"strlofrac"
+Conf.c Name:	"STRLOFRAC"
+Default Value:	"80"
+*
+* MACHINE
+*
+Parameter Description:	"Machine Type"
+Description Keyword:	"MACHINE"
+Parameter Name:	"machine"
+Conf.c Name:	"MACHINE"
+Default Value:	"\"M68020\""
+*
+* MAXUMEM
+*
+Parameter Description:	"Max # Of Mem Pages In User Virtual Space"
+Description Keyword:	"MAXUMEM"
+Parameter Name:	"maxumem"
+Conf.c Name:	"MAXUMEM"
+Default Value:	"4096"
+*
+* NADVERTISE
+*
+Parameter Description:	"Max # of Locally Advertised File System"
+Description Keyword:	"NADVERTISE"
+Parameter Name:	"nadvertise"
+Conf.c Name:	"NADVERTISE"
+Default Value:	"25"
+*
+* MAXGDP
+*
+Parameter Description:	"Max # of RFS open virtual circuits"
+Description Keyword:	"MAXGDP"
+Parameter Name:	"maxgdp"
+Conf.c Name:	"MAXGDP"
+Default Value:	"24"
+*
+* NRCVD
+*
+Parameter Description:	"Max # of RFS receive descriptors"
+Description Keyword:	"NRCVD"
+Parameter Name:	"nrcvd"
+Conf.c Name:	"NRCVD"
+Default Value:	"150"
+*
+* NSNDD
+*
+Parameter Description:	"Max # of RFS send descriptors"
+Description Keyword:	"NSNDD"
+Parameter Name:	"nsndd"
+Conf.c Name:	"NSNDD"
+Default Value:	"100"
+*
+* NRDUSER
+*
+Parameter Description:	"Max # of RFS user receive descriptors  "
+Description Keyword:	"NRDUSER"
+Parameter Name:	"nrduser"
+Conf.c Name:	"NRDUSER"
+Default Value:	"250"
+*
+* NSRMOUNT
+*
+Parameter Description:	"Max # of Remotely Mounted File Systems "
+Description Keyword:	"NSRMOUNT"
+Parameter Name:	"nsrmount"
+Conf.c Name:	"NSRMOUNT"
+Default Value:	"50"
+*
+* MAXSWAPLIS
+*
+Parameter Description:	"Max No. of pages swapped out together"
+Description Keyword:	"MAXSWAPLIS"
+Parameter Name:	"maxswaplist"
+Conf.c Name:	"MAXSWAPLIST"
+Default Value:	"25"
+*
+* MAXSERVE
+*
+Parameter Description:	"Max no. of server processes for RFS"
+Description Keyword:	"MAXSERVE"
+Parameter Name:	"maxserve"
+Conf.c Name:	"MAXSERVE"
+Default Value:	"6"
+*
+* MAXRDAHEAD
+*
+Parameter Description:	"Max readahead for consecutive file blks"
+Description Keyword:	"MAXRDAHEAD"
+Parameter Name:	"maxrdahead"
+Conf.c Name:	"MAXRDAHEAD"
+Default Value:	"8"
+*
+* NSTRPUSH
+*
+Parameter Description:	"Maximum # Of Modules Pushed On Stream"
+Description Keyword:	"NSTRPUSH"
+Parameter Name:	"nstrpush"
+Conf.c Name:	"NSTRPUSH"
+Default Value:	"9"
+*
+* SHLBMAX
+*
+Parameter Description:	"Maximum Attached Shared Library Count"
+Description Keyword:	"SHLBMAX"
+Parameter Name:	"shlbmax"
+Conf.c Name:	"SHLBMAX"
+Default Value:	"0"
+*
+* FLCKREC
+*
+Parameter Description:	"Maximum File Record Count"
+Description Keyword:	"FLCKREC"
+Parameter Name:	"flckrec"
+Conf.c Name:	"FLCKREC"
+Default Value:	"50"
+*
+* CDLIMIT
+*
+Parameter Description:	"Maximum File Write Address"
+Description Keyword:	"CDLIMIT"
+Parameter Name:	"cdlimit"
+Conf.c Name:	"CDLIMIT"
+Default Value:	"32768"
+*
+* NOFILES
+*
+Parameter Description:	"Maximum Number Of Open Files Per Process"
+Description Keyword:	"NOFILES"
+Parameter Name:	"nofiles"
+Conf.c Name:	"NOFILES"
+Default Value:	"100"
+*
+* MAXPMEM
+*
+Parameter Description:	"Maximum Number Of Physical Memory Pages"
+Description Keyword:	"MAXPMEM"
+Parameter Name:	"maxpmem"
+Conf.c Name:	"MAXPMEM"
+Default Value:	"0"
+*
+* MAXUP
+*
+Parameter Description:	"Maximum Number Of Processes Per User"
+Description Keyword:	"MAXUP"
+Parameter Name:	"maxproc"
+Conf.c Name:	"MAXUP"
+Default Value:	"75"
+*
+* MAXSLICE
+*
+Parameter Description:	"Maximum Process Time Slice (Ticks)"
+Description Keyword:	"MAXSLICE"
+Parameter Name:	"maxslice"
+Conf.c Name:	"MAXSLICE"
+Default Value:	"60"
+*
+* STRMEDFRAC
+*
+Parameter Description:	"Medium Priority Block Allocations Cutoff"
+Description Keyword:	"STRMEDFRAC"
+Parameter Name:	"strmedfrac"
+Conf.c Name:	"STRMEDFRAC"
+Default Value:	"90"
+*
+* VHNDFRAC
+*
+Parameter Description:	"Memory Fraction when page ageing starts"
+Description Keyword:	"VHNDFRAC"
+Parameter Name:	"vhndfrac"
+Conf.c Name:	"VHNDFRAC"
+Default Value:	"10"
+*
+* MINARMEM
+*
+Parameter Description:	"Min # Of Memory Pages For User Processes"
+Description Keyword:	"MINARMEM"
+Parameter Name:	"minarmem"
+Conf.c Name:	"MINARMEM"
+Default Value:	"25"
+*
+* MINSERVE
+*
+Parameter Description:	"Min no. of server processes for RFS"
+Description Keyword:	"MINSERVE"
+Parameter Name:	"minserve"
+Conf.c Name:	"MINSERVE"
+Default Value:	"3"
+*
+* NMUXLINK
+*
+Parameter Description:	"Multiplexer Link Count Maximum"
+Description Keyword:	"NMUXLINK"
+Parameter Name:	"nmuxlink"
+Conf.c Name:	"NMUXLINK"
+Default Value:	"87"
+*
+* SCKSANITY
+*
+Parameter Description:	"Mvme330 tcp/ip sanity checker - on = 1"
+Description Keyword:	"SCKSANITY"
+Parameter Name:	"scksanity"
+Conf.c Name:	"SCKSANITY"
+Default Value:	"1"
+*
+* NBLK1024
+*
+Parameter Description:	"No. of 1024 byte buffers for stream msg"
+Description Keyword:	"NBLK1024"
+Parameter Name:	"nblk1024"
+Conf.c Name:	"NBLK1024"
+Default Value:	"8"
+*
+* NBLK128
+*
+Parameter Description:	"No. of 128 byte buffers for stream msgs"
+Description Keyword:	"NBLK128"
+Parameter Name:	"nblk128"
+Conf.c Name:	"NBLK128"
+Default Value:	"64"
+*
+* NBLK16
+*
+Parameter Description:	"No. of 16 byte buffers for stream msgs"
+Description Keyword:	"NBLK16"
+Parameter Name:	"nblk16"
+Conf.c Name:	"NBLK16"
+Default Value:	"128"
+*
+* NBLK2048
+*
+Parameter Description:	"No. of 2048 byte buffers for stream msg"
+Description Keyword:	"NBLK2048"
+Parameter Name:	"nblk2048"
+Conf.c Name:	"NBLK2048"
+Default Value:	"32"
+*
+* NBLK256
+*
+Parameter Description:	"No. of 256 byte buffers for stream msgs"
+Description Keyword:	"NBLK256"
+Parameter Name:	"nblk256"
+Conf.c Name:	"NBLK256"
+Default Value:	"32"
+*
+* NBLK4
+*
+Parameter Description:	"No. of 4 byte buffers for stream msgs"
+Description Keyword:	"NBLK4"
+Parameter Name:	"nblk4"
+Conf.c Name:	"NBLK4"
+Default Value:	"128"
+*
+* NBLK4096
+*
+Parameter Description:	"No. of 4096 byte buffers for stream msg"
+Description Keyword:	"NBLK4096"
+Parameter Name:	"nblk4096"
+Conf.c Name:	"NBLK4096"
+Default Value:	"4"
+*
+* NBLK512
+*
+Parameter Description:	"No. of 512 byte buffers for stream msgs"
+Description Keyword:	"NBLK512"
+Parameter Name:	"nblk512"
+Conf.c Name:	"NBLK512"
+Default Value:	"12"
+*
+* NBLK64
+*
+Parameter Description:	"No. of 64 byte buffers for stream msgs"
+Description Keyword:	"NBLK64"
+Parameter Name:	"nblk64"
+Conf.c Name:	"NBLK64"
+Default Value:	"128"
+*
+* NSTREAM
+*
+Parameter Description:	"Number Of \"Stream-Head\" Structures"
+Description Keyword:	"NSTREAM"
+Parameter Name:	"nstream"
+Conf.c Name:	"NSTREAM"
+Default Value:	"32"
+*
+* DBUF
+*
+Parameter Description:	"Number Of Double Buffers"
+Description Keyword:	"DBUF"
+Parameter Name:	"dbuf"
+Conf.c Name:	"DBUF"
+Default Value:	"1"
+*
+* NQUEUE
+*
+Parameter Description:	"Number Of STREAMS Queues"
+Description Keyword:	"NQUEUE"
+Parameter Name:	"nqueue"
+Conf.c Name:	"NQUEUE"
+Default Value:	"196"
+*
+* NS5INODE
+*
+Parameter Description:	"Number Of System V Inodes"
+Description Keyword:	"NS5INODE"
+Parameter Name:	"ns5inode"
+Conf.c Name:	"NS5INODE"
+Default Value:	"512"
+*
+* NLOG
+*
+Parameter Description:	"Number of minor devices for log driver"
+Description Keyword:	"NLOG"
+Parameter Name:	"nlog"
+Conf.c Name:	"NLOG"
+Default Value:	"3"
+*
+* CSNTTY
+*
+Parameter Description:	"Number of ports on system (ISP)"
+Description Keyword:	"CSNTTY"
+Parameter Name:	"csntty"
+Conf.c Name:	"CSNTTY"
+Default Value:	"34"
+*
+* NFILE
+*
+Parameter Description:	"Open File Table Size"
+Description Keyword:	"NFILE"
+Parameter Name:	"files"
+Conf.c Name:	"NFILE"
+Default Value:	"512"
+*
+* REL
+*
+Parameter Description:	"Operating System Release"
+Description Keyword:	"REL"
+Parameter Name:	"rel"
+Conf.c Name:	"REL"
+Default Value:	"\"3.0\""
+*
+* GPGSMSK
+*
+Parameter Description:	"Paging Daemon Aging Mask"
+Description Keyword:	"GPGSMSK"
+Parameter Name:	"gpgsmsk"
+Conf.c Name:	"GPGSMSK"
+Default Value:	"0x00000108"
+*
+* NPBUF
+*
+Parameter Description:	"Physical I/O Buffer Count"
+Description Keyword:	"NPBUF"
+Parameter Name:	"physbuf"
+Conf.c Name:	"NPBUF"
+Default Value:	"50"
+*
+* NPROC
+*
+Parameter Description:	"Process Table Size"
+Description Keyword:	"NPROC"
+Parameter Name:	"procs"
+Conf.c Name:	"NPROC"
+Default Value:	"128"
+*
+* RFHEAP
+*
+Parameter Description:	"RFS Information Heap size in bytes"
+Description Keyword:	"RFHEAP"
+Parameter Name:	"rfheap"
+Conf.c Name:	"RFHEAP"
+Default Value:	"3072"
+*
+* NREGION
+*
+Parameter Description:	"Region Table Size"
+Description Keyword:	"NREGION"
+Parameter Name:	"nregion"
+Conf.c Name:	"NREGION"
+Default Value:	"300"
+*
+* STRCTLSZ
+*
+Parameter Description:	"STREAMS Message Control Maximum Size"
+Description Keyword:	"STRCTLSZ"
+Parameter Name:	"strctlsz"
+Conf.c Name:	"STRCTLSZ"
+Default Value:	"1024"
+*
+* STRMSGSZ
+*
+Parameter Description:	"STREAMS Message Data Maximum Size"
+Description Keyword:	"STRMSGSZ"
+Parameter Name:	"strmsgsz"
+Conf.c Name:	"STRMSGSZ"
+Default Value:	"4096"
+*
+* DBUFSZSTAT
+*
+Parameter Description:	"Size Of Static Double Buffers"
+Description Keyword:	"DBUFSZSTAT"
+Parameter Name:	"dbufszstatic"
+Conf.c Name:	"DBUFSZSTATIC"
+Default Value:	"(64*1024)"
+*
+* NBUF
+*
+Parameter Description:	"System Buffers Count"
+Description Keyword:	"NBUF"
+Parameter Name:	"buffers"
+Conf.c Name:	"NBUF"
+Default Value:	"400"
+*
+* SYS
+*
+Parameter Description:	"System Name"
+Description Keyword:	"SYS"
+Parameter Name:	"sys"
+Conf.c Name:	"SYS"
+Default Value:	"\"sysV68\""
+*
+* NODE
+*
+Parameter Description:	"System Node Name"
+Description Keyword:	"NODE"
+Parameter Name:	"node"
+Conf.c Name:	"NODE"
+Default Value:	"\"sysV68\""
+*
+* SPTMAP
+*
+Parameter Description:	"System Page Table map of virtual space"
+Description Keyword:	"SPTMAP"
+Parameter Name:	"sptmap"
+Conf.c Name:	"SPTMAP"
+Default Value:	"200"
+*
+* GPGSHI
+*
+Parameter Description:	"VHAND Free Memory High Water Mark"
+Description Keyword:	"GPGSHI"
+Parameter Name:	"gpgshi"
+Conf.c Name:	"GPGSHI"
+Default Value:	"200"
+*
+* GPGSLO
+*
+Parameter Description:	"VHAND Free Memory Low Water Mark"
+Description Keyword:	"GPGSLO"
+Parameter Name:	"gpgslo"
+Conf.c Name:	"GPGSLO"
+Default Value:	"20"
+*
+* VHANDR
+*
+Parameter Description:	"VHAND Maximum Run Rate (Seconds)"
+Description Keyword:	"VHANDR"
+Parameter Name:	"vhandr"
+Conf.c Name:	"VHANDR"
+Default Value:	"2"
+*
+* VERSION
+*
+Parameter Description:	"Version"
+Description Keyword:	"VERSION"
+Parameter Name:	"version"
+Conf.c Name:	"VERSION"
+Default Value:	"\"1-Rev_A\""

@@ -1,0 +1,101 @@
+#ident	"@(#)sadmin:admin/menu/softwaremgmt/removepkg	2.6"
+#menu# remove software package onto built-in disk
+#help# 
+#help#	Removepkg performs the necessary work to remove a software package.
+#help#	From then on, you will not have access to those commands.
+
+trap 'exit 0' 1 2  15
+
+INSDIR=/usr/tmp/igfdir
+REMOVESCR=${INSDIR}/UNINSTALL
+question="
+Insert the removable medium for the package you want to remove
+into the tape cartridge drive.
+Press <RETURN> when ready.  Type  q  to quit."
+
+echo "$question"
+read rep
+if [ x$rep = xq ]
+then
+	exit 0
+fi
+
+#
+# Get package description and name during this pass
+# Remember:
+#	$OUT in quotes, "", will have new-lines, and space
+#	searaters if not inclosed in qoutes.
+#
+OUT=`ixf -xdp /dev/rmt/m350_0an`
+rtn=$?
+#
+# Check return value
+#
+if [ $rtn -eq 1  -o $rtn -eq 2 ]
+then
+	admerr $0 'Failed to read removalbe medium, exiting'
+	</dev/rmt/m350_0t
+	exit 1
+elif [ $rtn -ne 13 ]
+then
+	admerr $0 'No SCRIPTS entry on media, removepkg not supported'
+	exit 1
+fi
+#
+# Check command output
+#
+if [ `echo "$OUT" | wc -l` = 2 ]
+then
+	set $OUT
+	PACK_NAME=$1 ; shift
+	PACK_DESC="$*"
+else
+	PACK_DESC="$*"
+fi
+echo  "\nRemoving \"$PACK_DESC\""
+
+echo "\nPress <RETURN> to continue, type q to quit."
+read rep
+if [ x$rep = xq ]
+then
+	exit 0
+fi
+
+Here=`pwd`
+mkdir -p $INSDIR 2>/dev/null
+cd $INSDIR 2>/dev/null
+ixf -s $INSDIR /dev/rmt/m350_0an
+
+if [ $? -ne 0 ]
+then
+	admerr $0 'Failed to completely remove package, exiting'
+	</dev/rmt/m350_0t
+	rm -rf $INSDIR
+	exit 1
+fi
+
+if [ -f $REMOVESCR ]
+then
+	if [ ! -x $REMOVESCR ]
+	then
+		chmod 755 $REMOVESCR
+	fi
+
+	$REMOVESCR
+	Rtn=$?
+else
+	Rtn=0
+fi
+
+cd $Here
+#
+# Remove temporary directory and package name file used
+# by 'listpkg'
+#
+rm -rf $INSDIR
+if [ $Rtn = 0 ]
+then
+	rm -f /usr/options/$PACK_NAME
+	echo "\n\"$PACK_DESC\" is now removed"
+fi
+exit 0

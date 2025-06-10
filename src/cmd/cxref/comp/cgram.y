@@ -714,4 +714,565 @@ statement:	   e   SM
 					else if ($5->in.op == ICON &&
 						$5->tn.lval != 0)
 					{
-						fl
+						flP))
+				reached = 1;
+			else
+				reached = 0;
+			resetbc(0);
+		}
+		| switchpart statement
+			={  if( reached ) branch( brklab );
+			    deflab( $1 );
+			   swend();
+			    deflab(brklab);
+			    if( (flostat&FBRK) || !(flostat&FDEF) ) reached = 1;
+			    resetbc(FCONT);
+			    }
+		|  BREAK  SM
+			/* "illegal break" */
+			={  if( brklab == NOLAB ) UERROR( MESSAGE( 50 ));
+			    else if(reached) branch( brklab );
+			    flostat |= FBRK;
+			    if( brkflag ) goto rch;
+			    reached = 0;
+			    }
+		|  CONTINUEult:
+				cerror("bad for loop code gen. value");
+				/*NOTREACHED*/
+			case LL_TOP:	/* test at loop top */
+				branch($<intval>7);
+				break;
+			case LL_BOT:	/* test at loop bottom */
+				if ($5)
+					deflab($<intval>1);
+				/*FALLTHROUGH*/
+			case LL_DUP:	/* dup. test at top & bottom */
+				if ($5)
+				{
+					ecomp(buildtree(CBRANCH,
+						buildtree(NOT, $5, NIL),
+						bcon($<intval>7)));
+				}
+				else
+					branch($<intval>7);
+				break;
+			}
+			deflab(brklab);
+			if ((flostat & FBRK) || !(flostat & FLOOP))
+				reached = 1;
+			else
+				reached = 0;
+			resetbc(0);
+		}
+		| switchpart statement
+			={  if( reached ) branch( brklab );
+			    deflab( $1 );
+			   swend();
+			    deflab(brklab);
+			    if( (flostat&FBRK) || !(flostat&FDEF) ) reached = 1;
+			    resetbc(FCONT);
+			    }
+		|  BREAK  SM
+			/* "illegal break" */
+			={  if( brklab == NOLAB ) UERROR( MESSAGE( 50 ));
+			    else if(reached) branch( brklab );
+			    flostat |= FBRK;
+			    if( brkflag ) goto rch;
+			    reached = 0;
+			    }
+		|  CONTINUE  SM
+			/* "illegal continue" */
+			={  if( contlab == NOLAB ) UERROR( MESSAGE( 55 ));
+			    else branch( contlab );
+			    flostat |= FCONT;
+			    goto rch;
+			    }
+		|  RETURN  SM
+			={  retstat |= NRETVAL;
+			    branch( retlab );
+			rch:
+			    /* "statement not reached" */
+			    if( !reached && !reachflg ) WERROR( MESSAGE( 100 ));
+			    reached = 0;
+			    reachflg = 0;
+			    }
+		|  RETURN e  SM
+			={  register NODE *temp;
+			    idname = curftn;
+			    temp = buildtree( NAME, NIL, NIL );
+			    if(temp->in.type == TVOID)
+				/* "void function %s cannot return value" */
+				UERROR(MESSAGE( 116 ),
+					stab[idname].sname);
+			    temp->in.type = DECREF( temp->in.type );
+			    temp = buildtree( RETURN, temp, $2 );
+			    /* now, we have the type of the RHS correct */
+			    temp->in.left->in.op = FREE;
+			    temp->in.op = FREE;
+			    ecomp( buildtree( FORCE, temp->in.right, NIL ) );
+			    retstat |= RETVAL;
+			    branch( retlab );
+			    reached = 0;
+			    reachflg = 0;
+			    }
+		|  GOTO NAME SM
+			={  register NODE *q;
+			    q = block( FREE, NIL, NIL, INT|ARY, 0, INT );
+			    q->tn.rval = idname = $2;
+			    defid( q, ULABEL );
+			    stab[idname].suse = -lineno;
+			    branch( stab[idname].offset );
+			    /*CXREF ref($2, lineno); */
+			    goto rch;
+			    }
+		|   SM
+		|  error  SM
+		|  error RC
+		|  label statement
+		;
+label:		   NAME COLON
+			={  register NODE *q;
+			    q = block( FREE, NIL, NIL, INT|ARY, 0, LABEL );
+			    q->tn.rval = $1;
+			    defid( q, LABEL );
+			    reached = 1;
+			    /*CXREF def($1, lineno); */
+			    }
+		|  CASE e COLON
+			={  addcase($2);
+			    reached = 1;
+			    }
+		|  DEFAULT COLON
+			={  reached = 1;
+			    adddef();
+			    flostat |= FDEF;
+			    }
+		;
+doprefix:	DO
+			={  savebc();
+			    /* "loop not entered at top" */
+			    if( !reached ) WERROR( MESSAGE( 75 ));
+			    brklab = getlab();
+			    contlab = getlab();
+			    deflab( $$ = getlab() );
+			    reached = 1;
+			    }
+		;
+ifprefix:	IF LP e RP
+			={  ecomp( buildtree( CBRANCH, $3, bcon( $$=getlab()) ) ) ;
+			    reached = 1;
+			    }
+		;
+ifelprefix:	  ifprefix statement ELSE
+			={  if( reached ) branch( $$ = getlab() );
+			    else $$ = NOLAB;
+			    deflab( $1 );
+			    reached = 1;
+			    }
+		;
+
+switchpart:	   SWITCH  LP  e  RP
+			={	int type;
+				savebc();
+			    brklab = getlab();
+				type = BTYPE( $3->in.type );
+				if (type == FLOAT || type == DOUBLE)
+					/* switch expression must have integer type */
+					UERROR( MESSAGE( 130 ) );
+				else if( ( SZLONG > SZINT ) && ( type == LONG || type == ULONG ) )
+					/* long in case or switch statement may be truncated */
+					WERROR( MESSAGE( 123 ));
+			    ecomp( buildtree( FORCE, $3, NIL ) );
+			    branch( $$ = getlab() );
+			    swstart();
+			    reached = 0;
+			    }
+		;
+/*	EXPRESSIONS	*/
+con_e:		   { $<intval>$=instruct; stwart=instruct=0; } e
+			%prec CM
+			={  $$ = icons( $2 );  instruct=$<intval>1; }
+		;
+.e:		   e
+		|
+			={ $$=0; }
+		;
+elist:		   e
+			%prec CM
+		|  elist  CM  e
+			={  goto bop; }
+		;
+
+e:		   e RELOP e
+			={
+			preconf:
+			    if( yychar==RELOP||yychar==EQUOP||yychar==AND||yychar==OR||yychar==ER ){
+			    precplaint:
+				/* "precedence confusion possible: parenthesize!" */
+				if( hflag ) WERROR( MESSAGE( 92 ) );
+				}
+			bop:
+			    $$ = buildtree( $2, $1, $3 );
+			    }
+		|  e CM e
+			={  $2 = COMOP;
+			    goto bop;
+			    }
+		|  e DIVOP e
+			={  goto bop; }
+		|  e PLUS e
+			={  if(yychar==SHIFTOP) goto precplaint; else goto bop; }
+		|  e MINUS e
+			={  if(yychar==SHIFTOP ) goto precplaint; else goto bop; }
+		|  e SHIFTOP e
+			={  if(yychar==PLUS||yychar==MINUS) goto precplaint; else goto bop; }
+		|  e MUL e
+			={  goto bop; }
+		|  e EQUOP  e
+			={  goto preconf; }
+		|  e AND e
+			={  if( yychar==RELOP||yychar==EQUOP ) goto preconf;  else goto bop; }
+		|  e OR e
+			={  if(yychar==RELOP||yychar==EQUOP) goto preconf; else goto bop; }
+		|  e ER e
+			={  if(yychar==RELOP||yychar==EQUOP) goto preconf; else goto bop; }
+		|  e ANDAND e
+			={  goto bop; }
+		|  e OROR e
+			={  goto bop; }
+		|  e MUL ASSIGN e
+			={  abop:
+				$$ = buildtree( ASG $2, $1, $4 );
+				}
+		|  e DIVOP ASSIGN e
+			={  goto abop; }
+		|  e PLUS ASSIGN e
+			={  goto abop; }
+		|  e MINUS ASSIGN e
+			={  goto abop; }
+		|  e SHIFTOP ASSIGN e
+			={  goto abop; }
+		|  e AND ASSIGN e
+			={  goto abop; }
+		|  e OR ASSIGN e
+			={  goto abop; }
+		|  e ER ASSIGN e
+			={  goto abop; }
+		|  e QUEST e COLON e
+			={  $$=buildtree(QUEST, $1, buildtree( COLON, $3, $5 ) );
+			    }
+		|  e ASOP e
+			/* "old-fashioned assignment operator"  */
+			={  UERROR( MESSAGE( 87 ) );  goto bop; }
+		|  e ASSIGN e
+			={  goto bop; }
+		|  term
+		;
+term:		   term INCOP
+			={  $$ = buildtree( $2, $1, bcon(1) ); }
+		|  MUL term
+			={ ubop:
+			    $$ = buildtree( UNARY $1, $2, NIL );
+			    }
+		|  AND term
+			={  if( ISFTN($2->in.type) || ISARY($2->in.type) ){
+				/* "& before array or function: ignored" */
+				WERROR( MESSAGE( 7 ) );
+				$$ = $2;
+				}
+			    else goto ubop;
+			    }
+		|  MINUS term
+			={  goto ubop; }
+		|  UNOP term
+			={
+			    $$ = buildtree( $1, $2, NIL );
+			    }
+		|  INCOP term
+			={  $$ = buildtree( $1==INCR ? ASG PLUS : ASG MINUS,
+						$2,
+						bcon(1)  );
+			    }
+		|  SIZEOF term
+			={  $$ = doszof( $2 ); }
+		|  LP cast_type RP term  %prec INCOP
+			={  $$ = buildtree( CAST, $2, $4 );
+
+		/* carefully, now...
+		/* paintdown in buildtree returns the right child, thus
+		/* we don't have to FREE nodes and return the right child here--
+		/* we know this by the cast being tossed and having an ICON in
+		/* hand upon the return from buildtree */
+
+			    if ($$->in.op != ICON)
+			    {
+				    $$->in.left->in.op = FREE;
+				    $$->in.op = FREE;
+				    $$ = $$->in.right;
+			    }
+			}
+		|  SIZEOF LP cast_type RP  %prec SIZEOF
+			={  $$ = doszof( $3 ); }
+		|  term LB e RB
+			={  $$ = buildtree( UNARY MUL, buildtree( PLUS, $1, $3 ), NIL ); }
+		|  funct_idn  RP
+			={  $$=buildtree(UNARY CALL,$1,NIL); }
+		|  funct_idn elist  RP
+			={  $$=buildtree(CALL,$1,$2); }
+		|  term STROP NAME
+			={  if( $2 == DOT ){
+				/* "structure reference must be addressable" */
+				if( notlval( $1 ) )UERROR(MESSAGE( 105 ));
+				$1 = buildtree( UNARY AND, $1, NIL );
+				}
+			    idname = $3;
+			    $$ = buildtree( STREF, $1, buildtree( NAME, NIL, NIL ) );
+			    /*CXREF ref($3, lineno); */
+			    }
+		|  NAME
+			={  idname = $1;
+			    if (stab[idname].sclass == LABEL)
+				/* Label used in expression */
+				UERROR( MESSAGE(129) );
+
+			    /* recognize identifiers in initializations */
+			    if( blevel==0 && stab[idname].stype == UNDEF ) {
+				register NODE *q;
+				/* "undeclared initializer name %.8s" */
+				/* "undeclared initializer name %s" */
+				WERROR( MESSAGE( 111 ), stab[idname].sname );
+				q = block( FREE, NIL, NIL, INT, 0, INT );
+				q->tn.rval = idname;
+				defid( q, EXTERN );
+				}
+			    $$=buildtree(NAME,NIL,NIL);
+			    stab[$1].suse = -lineno;
+			    /*CXREF ref($1, lineno); */
+			}
+		|  ICON
+			={  $$=bcon(0);
+			    $$->tn.lval = lastcon;
+			    $$->tn.rval = NONAME;
+			    if( $1 ) $$->fn.csiz = $$->in.type = ctype(LONG);
+			    }
+		|  FCON
+			={  $$=buildtree(FCON,NIL,NIL);
+			    $$->fpn.dval = dcon;
+			    }
+		|  STRING
+			={  $$ = getstr(); /* get string contents */ }
+		|   LP  e  RP
+			={ $$=$2; }
+		;
+
+cast_type:	  type null_decl
+			={
+			$$ = tymerge( $1, $2 );
+			$$->in.op = NAME;
+			$1->in.op = FREE;
+			}
+		;
+
+null_decl:	   /* empty */
+			={ $$ = bdty( NAME, NIL, -1 ); }
+		|  LP RP
+			={ $$ = bdty( UNARY CALL, bdty(NAME,NIL,-1),0); }
+		|  LP null_decl RP LP RP
+			={  $$ = bdty( UNARY CALL, $2, 0 ); }
+		|  MUL null_decl
+			={  goto umul; }
+		|  null_decl LB RB
+			={  goto uary; }
+		|  null_decl LB con_e RB
+			={  goto bary;  }
+		|  LP null_decl RP
+			={ $$ = $2; }
+		;
+
+funct_idn:	   NAME  LP 
+			={  if( stab[$1].stype == UNDEF ){
+				register NODE *q;
+				q = block( FREE, NIL, NIL, FTN|INT, 0, INT );
+				q->tn.rval = $1;
+				defid( q, EXTERN );
+				}
+			    idname = $1;
+			    $$=buildtree(NAME,NIL,NIL);
+			    stab[idname].suse = -lineno;
+			    /*CXREF ref($1, lineno); */
+			}
+		|  term  LP 
+		;
+%%
+
+NODE *
+mkty( t, d, s ) unsigned t; {
+	return( block( TYPE, NIL, NIL, t, d, s ) );
+	}
+
+NODE *
+bdty( op, p, v ) NODE *p; {
+	register NODE *q;
+
+	q = block( op, p, NIL, INT, 0, INT );
+
+	switch( op ){
+
+	case UNARY MUL:
+	case UNARY CALL:
+		break;
+
+	case LB:
+		q->in.right = bcon(v);
+		break;
+
+	case NAME:
+		q->tn.rval = v;
+		break;
+
+	default:
+		cerror( "bad bdty" );
+		}
+
+	return( q );
+	}
+
+dstash( n ){ /* put n into the dimension table */
+	if( curdim >= DIMTABSZ-1 ){
+		cerror( "dimension table overflow");
+		}
+	dimtab[ curdim++ ] = n;
+	}
+
+savebc() {
+	if( psavbc > & asavbc[BCSZ-4 ] ){
+		cerror( "whiles, fors, etc. too deeply nested");
+		}
+	*psavbc++ = brklab;
+	*psavbc++ = contlab;
+	*psavbc++ = flostat;
+	*psavbc++ = swx;
+	flostat = 0;
+	}
+
+resetbc(mask){
+
+	swx = *--psavbc;
+	flostat = *--psavbc | (flostat&mask);
+	contlab = *--psavbc;
+	brklab = *--psavbc;
+
+	}
+
+addcase(p) NODE *p; { /* add case to switch */
+  int type;
+	p = optim( p );  /* change enum to ints */
+	if( p->in.op != ICON ){
+		/* "non-constant case expression" */
+		UERROR( MESSAGE( 80 ));
+		return;
+		}
+	type = BTYPE( p->in.type );
+	if( ( SZLONG > SZINT ) && ( type == LONG || type == ULONG ) )
+		/* long in case or switch statement may be truncated */
+		WERROR( MESSAGE( 123 ));
+	if( swp == swtab ){
+		/* "case not in switch" */
+		UERROR( MESSAGE( 20 ));
+		return;
+		}
+	if( swp >= &swtab[SWITSZ] ){
+		cerror( "switch table overflow");
+		}
+	swp->sval = p->tn.lval;
+	deflab( swp->slab = getlab() );
+	++swp;
+	tfree(p);
+	}
+
+adddef(){ /* add default case to switch */
+	if( swtab[swx].slab >= 0 ){
+		/* "duplicate default in switch" */
+		UERROR( MESSAGE( 34 ));
+		return;
+		}
+	if( swp == swtab ){
+		/* "default not inside switch" */
+		UERROR( MESSAGE( 29 ));
+		return;
+		}
+	deflab( swtab[swx].slab = getlab() );
+	}
+
+swstart(){
+	/* begin a switch block */
+	if( swp >= &swtab[SWITSZ] ){
+		cerror( "switch table overflow");
+		}
+	swx = swp - swtab;
+	swp->slab = -1;
+	++swp;
+	}
+
+swend(){ /* end a switch block */
+
+	register struct sw *swbeg, *p, *q, *r, *r1;
+	CONSZ temp;
+	int tempi;
+
+	swbeg = &swtab[swx+1];
+
+	/* sort */
+
+	r1 = swbeg;
+	r = swp-1;
+
+	while( swbeg < r ){
+		/* bubble largest to end */
+		for( q=swbeg; q<r; ++q ){
+			if( q->sval > (q+1)->sval ){
+				/* swap */
+				r1 = q+1;
+				temp = q->sval;
+				q->sval = r1->sval;
+				r1->sval = temp;
+				tempi = q->slab;
+				q->slab = r1->slab;
+				r1->slab = tempi;
+				}
+			}
+		r = r1;
+		r1 = swbeg;
+		}
+
+	/* it is now sorted */
+
+	for( p = swbeg+1; p<swp; ++p ){
+		if( p->sval == (p-1)->sval ){
+			/* "duplicate case in switch, %d" */
+			UERROR( MESSAGE( 33 ), tempi=p->sval );
+			return;
+			}
+		}
+
+	genswitch( swbeg-1, swp-swbeg );
+	swp = swbeg-1;
+	}
+
+setdim() { /*  store dimtab info on block entry */
+	dimptr++;
+	if (dimptr >= &dimrec[BNEST]) uerror("block nesting too deep");
+	dimptr->index  = curdim;
+	dimptr->cextern = 0;
+	}
+
+cleardim(){ /* clear dimtab info on block exit */
+	if(dimptr->cextern == 0) {
+		curdim = dimptr->index;
+		dimptr--;
+		}
+	else {
+		dimptr--;
+		if (dimptr >= dimrec) dimptr->cextern = 1;
+		}
+	}

@@ -1,0 +1,79 @@
+# lp interface for line printer
+#
+# SCCS @(#) lp       1.1
+
+# Construct lock file name
+
+exec 0<&1
+LOCKFILE=`tty` 
+LOCKFILE=`expr $LOCKFILE : '/dev/\(tty..\)'`
+LOCKFILE=/usr/tmp/LCK..$LOCKFILE
+
+# This trap will be executed when a print request is cancelled
+
+trap "echo '\n\n\n\nRequest Cancelled'; \
+      echo '\014\c'; \
+      sleep 30; \
+      rm -f $LOCKFILE >/dev/null 2>&1; \
+      exit 0" 15
+
+# wait for printer if in use by Q-ONE
+
+if test -x /usr/bin/Qplock  
+then
+   /usr/bin/Qplock get "" "" "" "" $LOCKFILE >/dev/null 2>&1
+   sleep 20
+fi
+
+# set tty to some reasonable modes -- AFTER exclusive use of printer
+# established via lock file.
+
+stty 9600 cs8 -icanon opost onlcr ixon tab3 <&1
+
+x="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+echo "\014\c"
+echo "$x\n$x\n$x\n$x\n"
+banner "$2"
+echo "\n"
+user=`grep "^$2:" /etc/passwd | line | cut -d: -f5`
+if [ -n "$user" ]
+then
+	echo "User: $user\n"
+else
+	echo "\n"
+fi
+echo "Request id: $1    Printer: `basename $0`\n"
+date
+echo "\n"
+if [ -n "$3" ]
+then
+	banner $3
+fi
+copies=$4
+echo "\014\c"
+shift; shift; shift; shift; shift
+files="$*"
+i=1
+while [ $i -le $copies ]
+do
+	for file in $files
+	do
+		cat "$file" 2>&1
+		echo "\014\c"
+	done
+	i=`expr $i + 1`
+done
+echo "$x\n$x\n$x\n$x\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+echo "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n$x\n$x\n$x\n$x"
+echo "$x\n$x\n$x\n$x\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+echo "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+echo "$x\n$x\n$x\n$x\n$x\n$x\n$x\n$x\n"
+
+# Remove the lock so others can use the Q-ONE printer
+
+if test -x /usr/bin/Qplock
+then
+   sleep 20
+   /usr/bin/Qplock release "" "" "" ""  $LOCKFILE >/dev/null 2>&1
+fi
+exit 0

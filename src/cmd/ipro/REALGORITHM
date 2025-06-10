@@ -1,0 +1,76 @@
+for FILE
+
+   in $*
+do
+   if [ ! -f s.$FILE ]
+   then
+      echo "$0: $FILE: SCCS file, s.$FILE, does not exist."
+      continue
+   fi
+
+   rm -f $FILE.A $FILE.B $FILE p.$FILE
+
+   get -s -p s.$FILE  > $FILE
+
+   if [ `fgrep '/***  ALGORITHM: ' $FILE | wc -l` -eq 0 ]
+   then
+      echo "$0: $FILE: no ALGORITHM line."
+      continue
+
+   elif [ `fgrep '/***     begin ' $FILE | wc -l` -eq 0 ]
+   then
+      echo "$0: $FILE: no begin line."
+      continue
+
+   elif [ `fgrep '/***     end ' $FILE | wc -l` -eq 0 ]
+   then
+      echo "$0: $FILE: no end line."
+      continue
+
+   fi
+
+   ed - $FILE  > /dev/null  2> /dev/null  <<%%
+1
+/\/\*\*\*  ALGORITHM: /+1,/\/\*\*\*     end /+1w $FILE.A
+w
+q
+%%
+
+   cat $FILE                  |\
+      sed -e '/\/\* /s/^/Z/p'     |\
+         sed -e '/^[^Z]/d'            |\
+            sed -e '/^Z/s///p'            |\
+               sed -e '/\/\* /s//      /p'    |\
+                  sed -e '/^    /s//\/\*\*\*/p'   |\
+                     sed -e '/ \*\/$/s//  \*\*\*\//p' |\
+                        sed -e '/  *$/s///p'              |\
+                           sed -e '/^$/d'  > $FILE.X
+
+   uniq $FILE.X  > $FILE.B
+
+   rm -f $FILE $FILE.X
+
+   if [ `diff $FILE.A $FILE.B | tee $FILE.C | wc -l` -ne 0 ]
+   then
+      echo "$FILE has changed."
+
+      mv $FILE.B $FILE.A
+
+      get -s -e s.$FILE
+
+      ed - $FILE  > /dev/null  2> /dev/null  <<%%
+1
+/\/\*\*\*  ALGORITHM: /+1,/\/\*\*\*     end /+1d
+1
+/\/\*\*\*  ALGORITHM: /r $FILE.A
+w
+q
+%%
+
+      delta -s -y s.$FILE
+   fi
+
+   rm -f $FILE.A $FILE.B
+done
+
+exit 0

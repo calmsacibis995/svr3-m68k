@@ -1,0 +1,10 @@
+#ident	"@(#)sadmin:admin/menu/diskmgmt/hdsetup/format	2.12"
+#menu#  format a hard disk
+#help# 
+#help#	This procedure will format a 40 or 70 Mb Winchester,
+#help#  337 Mb SMD, or 182 Mb ESDI.  Formatting always includes bad
+#help#	track initialization.
+
+
+trap 'exit 0' 1 2  15
+sh /usr/lbin/hdsetup f

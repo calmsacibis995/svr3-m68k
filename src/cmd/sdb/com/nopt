@@ -1,0 +1,16 @@
+			case 'n':
+				printf("nflag set\n");
+				if (*(p+1)) { /* there's a char */ 
+				   namelist= p+1;
+				   printf("namelist = %s\n", namelist);
+				   quit = 1;
+				}
+				else {
+				   ++argv;
+				   namelist= &argv[0][0];
+				   printf("namelist = %s\n", namelist);
+				   quit = 1;
+				}
+				break;
+			if (quit)
+			      break;

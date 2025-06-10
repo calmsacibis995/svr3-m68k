@@ -1,0 +1,264 @@
+
+
+
+     MMMMAAAASSSSTTTTEEEERRRR((((4444))))						     MMMMAAAASSSSTTTTEEEERRRR((((4444))))
+
+
+
+     NNNNAAAAMMMMEEEE
+	  master - master device information table
+
+     DDDDEEEESSSSCCCCRRRRIIIIPPPPTTTTIIIIOOOONNNN
+	  The _m_a_s_t_e_r file is used by the _c_o_n_f_i_g(1M) program to obtain
+	  device information that enables it to	generate the
+	  configuration	files, lllloooowwww....ssss, ccccoooonnnnffff....cccc, and mmmm66668888kkkkvvvveeeecccc....ssss.  _C_o_n_f_i_g
+	  reads	_d_f_i_l_e and places information from each Part 1 entry
+	  into the arrays provided by _m_a_s_t_e_r.  Refer to	_c_o_n_f_i_g(1M) for
+	  information about the	files produced and to _d_f_i_l_e(4) for
+	  information about the	fields in the first part of the	user-
+	  supplied _d_f_i_l_e.
+
+	  _M_a_s_t_e_r has 5 parts, each separated by	a line with a dollar
+	  sign ($$$$) in column 1.	 Any line with an asterisk (****) in
+	  column 1 is treated as a comment.  Part 1 contains device
+	  information; part 2 contains names of	devices	that have
+	  aliases; part	3 contains tunable parameter information.
+	  Parts	4 and 5	contain	information related to configuring the
+	  M68000 family	systems	only.  Part 4, the microprocessor
+	  specification, must appear in	_m_a_s_t_e_r and cannot be in	the
+	  user-specified _d_f_i_l_e.	 Part 5	contains lines exactly like
+	  those	for the	M68000-specific	portion	of _d_f_i_l_e.  Refer to
+	  _d_f_i_l_e(4) for a description of	these lines.
+
+	  The following	paragraphs describe the	5 parts	of the _m_a_s_t_e_r
+	  file.	 In this description, the VM22 disk controller is used
+	  as an	example.
+
+				     PART 1
+
+	  Part 1 contains lines	consisting of at least 10 fields and
+	  at most 13 fields.  The fields are delimited by tabs and/or
+	  blanks.
+
+	  Field	1:	    device name	(8 characters maximum).
+
+	  Field	2:	    interrupt vectors size (decimal);
+			    the	size is	the number of vectors
+			    multiplied by four.	 Refer to Table
+			    4-2	in the M68000 16/32-Bit
+			    Microprocessor Programmer's
+			    Reference Manual (M68000UM)	for
+			    information	on the memory map for
+			    exception vectors.
+
+	  Field	3:	    device mask	(octal)	- each ``on''
+			    bit	indicates that the handler
+			    exists:
+
+
+
+
+
+
+     Page 1					     (printed 2/15/85)
+
+
+
+
+
+
+     MMMMAAAASSSSTTTTEEEERRRR((((4444))))						     MMMMAAAASSSSTTTTEEEERRRR((((4444))))
+
+
+
+			    000400	 separate open and
+					 close for block and
+					 character devices;
+					 setting the 000400 bit
+					 and the 000020	bit
+					 results, for example,
+					 in vvvvmmmm22222222bbbbooooppppeeeennnn for
+					 opening the block
+					 device	and vvvvmmmm22222222ccccooooppppeeeennnn
+					 for opening the
+					 character device.
+			    000200	 device	has a tty
+					 structure
+			    000100	 initialization	handler
+			    000040	 power-failure handler
+			    000020	 open handler
+			    000010	 close handler
+			    000004	 read handler
+			    000002	 write handler
+			    000001	 ioctl handler
+
+	  Field	4:	    device type	indicator
+			    (octal):
+			    004000	 create	interrupt vector array;	e.g.,
+					 vvvvmmmm22222222____iiiivvvveeeecccc[[[[]]]]; each vector (hexadecimal)
+					 specified in _d_f_i_l_e (vector number
+					 multiplied by 4) is placed in this
+					 array.
+			    002000	 create	character major	number and block
+					 major number for the device (e.g.,
+					 vvvvmmmm22222222____ccccmmmmaaaajjjj and vvvvmmmm22222222____bbbbmmmmaaaajjjj).
+			    001000	 create	interrupt level	array; e.g.,
+					 vvvvmmmm22222222____iiiilllleeeevvvv[[[[]]]]; interrupt	levels are
+					 specified in the fourth field (``bus'')
+					 of each line in the first part	of the
+					 _d_f_i_l_e.
+			    000200	 allow only one	of these devices
+			    000100	 suppress count	field in the ccccoooonnnnffff....cccc file
+			    000040	 suppress interrupt vector
+			    000020	 required device
+			    000010	 block device
+			    000004	 character device
+			    000002	 interrupt driven device other than
+					 block or char.	device
+			    000001	 allow for a single vector definition
+					 with multiple addresses
+
+	  Field	5:	    handler prefix (4 chars. maximum); e.g.,
+			    vm21, vm22.
+
+
+
+
+
+
+     Page 2					     (printed 2/15/85)
+
+
+
+
+
+
+     MMMMAAAASSSSTTTTEEEERRRR((((4444))))						     MMMMAAAASSSSTTTTEEEERRRR((((4444))))
+
+
+
+	  Field	6:	    page registers size	(decimal); the span of
+			    memory for all the device registers	on the
+			    device page, starting at the dfile
+			    address.
+
+	  Field	7:	    major device number	for block-type device.
+
+	  Field	8:	    major device number	for character-type
+			    device.
+
+	  Field	9:	    maximum number of devices per controller
+			    (decimal); e.g., vvvvmmmm22222222____ccccnnnntttt; _c_n_t is the
+			    optional fifth field on each line in the
+			    first part of _d_f_i_l_e.  A number specified
+			    in _d_f_i_l_e overrides this field in _m_a_s_t_e_r.
+
+	  Field	10:	    maximum bus	request	level (1 through 7).
+
+	  Fields 11-13:	    optional configuration table structure
+			    declarations (8 chars. maximum)
+
+	  Devices that are not interrupt-driven	have an	interrupt
+	  vector size of zero.	The 040	bit in Field 4 causes
+	  _c_o_n_f_i_g(1M) to	record the interrupt vectors although the
+	  mmmm66668888kkkkvvvveeeecccc....ssss file will show no interrupt	vector assignment at
+	  those	locations (interrupts here will	be treated as strays).
+				     PART 2
+
+	  Part 2 contains lines	with 2 fields each:
+
+	  Field	1:    alias name of device (8 chars. maximum).
+
+	  Field	2:    reference	name of	device (8 chars. maximum; specified in part 1).
+
+				     PART 3
+	  Part 3 contains lines	with 2 or 3 fields each:
+
+	  Field	1:    parameter	name (as it appears in _d_f_i_l_e; 30 chars.	maximum)
+
+	  Field	2:    parameter	name (as it appears in the ccccoooonnnnffff....cccc file;	30 chars. maximum)
+
+	  Field	3:    default parameter	value (30 chars. maximum; parameter specification
+		      is required if this field	is omitted)
+
+				     PART 4
+
+	  Part 4 contains one line with	two fields for the
+	  microprocessor specification.
+
+	  Field	1   mpu
+
+
+
+
+
+     Page 3					     (printed 2/15/85)
+
+
+
+
+
+
+     MMMMAAAASSSSTTTTEEEERRRR((((4444))))						     MMMMAAAASSSSTTTTEEEERRRR((((4444))))
+
+
+
+	  Field	2   _n_u_m_b_e_r   where _n_u_m_b_e_r is
+			     68000, 68010, or
+			     68020.  The
+			     default is
+			     68000.
+
+				     PART 5
+
+	  Part 5 contains M68000-specific lines	exactly	like those for
+	  the M68000-specific portion of the _d_f_i_l_e.  Refer to _d_f_i_l_e(4)
+	  for a	description of these lines.
+
+     SSSSEEEEEEEE AAAALLLLSSSSOOOO
+	  config(1M), sysdef(1M), dfile(4).
+
+     FFFFIIIILLLLEEEESSSS
+	  /etc/master
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     Page 4					     (printed 2/15/85)
+
+
+

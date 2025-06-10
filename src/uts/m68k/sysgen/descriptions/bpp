@@ -1,0 +1,65 @@
+Description File:	"MVME330 & MVME333 Buffered Pipe Protocol Driver"
+Device Description:	"Buffered Pipe Protocol Driver"
+Description Keyword:	"bpp"
+Device Name:	"bpp"
+Handler Prefix:	"bpp_"
+Interrupt Vectors Size:	4
+Major Block Device Number:	0
+Major Character Device Number:	10
+Maximum Bus Request Level:	5
+Maximum Devices Per Controller:	64
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Has an initialization handler.
+Has an open handler.
+Has a close handler.
+Has a read handler.
+Has a write handler.
+Has an ioctl handler.
+Device Type Information:
+Create interrupt vector array for this device.
+Create interrupt level array for this device.
+This is a character device.
+Device Configuration Tables Declarations:
+Board Description:	"BPP Device #1"
+Description Keyword:	"bpp #1"
+Device Type:	"bpp"
+Bus Request Level:	4
+Address:	0
+Interrupt Vector Location:	0x300
+Default Number Of Devices:	0
+Board Description:	"BPP Device #2"
+Description Keyword:	"bpp #2"
+Device Type:	"bpp"
+Bus Request Level:	2
+Address:	0
+Interrupt Vector Location:	0x39c
+Default Number Of Devices:	0
+Board Description:	"BPP Device #3"
+Description Keyword:	"bpp #3"
+Device Type:	"bpp"
+Bus Request Level:	2
+Address:	0
+Interrupt Vector Location:	0x3a0
+Default Number Of Devices:	0
+Multiple Handler Specification:	"BPP multiple hander #1"
+Description Keyword:	"bpp dup #1"
+On 0, go to the normal interrupt return point.
+Argument is to be passed to handler.
+Duplicate's Exception Vector:	0x300
+Duplicate's Name:	"bpp_intr"
+Optional Handler Argument:	0x1
+Multiple Handler Specification:	"BPP multiple hander #2"
+Description Keyword:	"bpp dup #2"
+On 0, go to the normal interrupt return point.
+Argument is to be passed to handler.
+Duplicate's Exception Vector:	0x39c
+Duplicate's Name:	"bpp_intr"
+Optional Handler Argument:	0x2
+Multiple Handler Specification:	"BPP multiple hander #3"
+Description Keyword:	"bpp dup #3"
+On 0, go to the normal interrupt return point.
+Argument is to be passed to handler.
+Duplicate's Exception Vector:	0x3a0
+Duplicate's Name:	"bpp_intr"
+Optional Handler Argument:	0x3

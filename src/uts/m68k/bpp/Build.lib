@@ -1,0 +1,46 @@
+# This script does things to install the BPP driver
+#    Created 6/30/86 -- jeh
+#
+ce=`pwd`/ce;export ce
+lib=${ce}/lib333; export lib
+object_lib=/usr/lib/bpp
+#
+
+
+  dir=" /usr/include /usr/include/sys /usr/include/sys/bpp /dev/bpp \
+       /usr/lib /usr/lib/bpp /usr/lib/bpp/lib333"
+  for i in $dir
+  do
+    if [ ! -d $i ]
+    then
+      echo $i
+      mkdir $i
+    fi
+  done
+#
+#  Copy the downld utility
+#
+#
+cp downld /usr/bin
+ln /usr/bin/downld /usr/lib/bpp
+ln /usr/bin/downld /usr/bin/bpp_downld
+ln /usr/bin/downld /usr/lib/bpp/bpp_downld
+chmod 775 /usr/bin/downld
+chmod 775 /usr/lib/bpp
+#
+  echo "Making BPP driver devices."
+  rm /dev/bpp/*	2>/dev/null
+
+  count="0"
+  while [ $count -le 9 ]
+  do
+     /etc/mknod /dev/bpp/soc00$count c 10 $count
+     count=`expr $count + 1`
+  done
+
+  while [ $count -le 32 ]
+  do
+     /etc/mknod /dev/bpp/soc0$count c 10 $count
+     count=`expr $count + 1`
+  done
+

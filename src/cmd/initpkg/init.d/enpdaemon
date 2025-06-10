@@ -1,0 +1,23 @@
+#ident	"@(#)initpkg:init.d/enpdeamon	1.3"
+
+#	start enp daemons
+case $1 in
+'start')
+	set `who -r`
+	if [ $9 = "S" ]		# comming from single-user mode
+	then
+		# sleep for race condition
+		(/etc/telnetd; sleep 5) >/dev/null
+		/etc/rshd		>/dev/null
+		/etc/ftpd		>/dev/null
+		/etc/tftpd		>/dev/null
+		/etc/rlogind		>/dev/null
+	fi
+	;;
+'stop')
+	# nothing to kill
+	;;
+*)
+	echo "usage: /etc/init.d/enpdaemon {start|stop}"
+	;;
+esac

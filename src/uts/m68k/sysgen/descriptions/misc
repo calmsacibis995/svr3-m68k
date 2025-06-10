@@ -1,0 +1,441 @@
+Description File:	"Miscellaneous System Declarations"
+MPU Specification:	""
+Description Keyword:	"m68020"
+MPU Type:	68020
+Multiple Handler Specification:	""
+Description Keyword:	"trceintr"
+On 0, go to the branch equal return point.
+Duplicate's Exception Vector:	0x24
+Duplicate's Name:	"trceintr"
+Alien Handler Entry Specification:	""
+Description Keyword:	"trce-alien"
+Alien Exception Vector Address:	0x24
+Alien Entry Point:	0
+Alien Handler Name:	"trceintr"
+Multiple Handler Specification:	""
+Description Keyword:	"instintr"
+On 0, go to the branch equal return point.
+Duplicate's Exception Vector:	0x10
+Duplicate's Name:	"instintr"
+Alien Handler Entry Specification:	""
+Description Keyword:	"inst-alien"
+Alien Exception Vector Address:	0x10
+Alien Entry Point:	0
+Alien Handler Name:	"instintr"
+Memory Configuration Specification:	""
+Description Keyword:	"memory"
+A single memory block may exist.
+Low Memory Address:	0
+High Memory Address:	0xf00000
+Memory Probe Specification:	"Enable Cache Accelerator Board"
+Description Keyword:	"cacheprobe"
+Address To Probe:	0xfffc0000
+Assign Value:	0xf1
+Multiple Handler Specification:	""
+Description Keyword:	"Xprotflt"
+On 0, go to the branch equal return point.
+Duplicate's Exception Vector:	0x8
+Duplicate's Name:	"Xprotflt"
+Alien Handler Entry Specification:	""
+Description Keyword:	"Xprot-Alie"
+Alien Exception Vector Address:	0x8
+Alien Entry Point:	0
+Alien Handler Name:	"Xprotflt"
+Multiple Handler Specification:	""
+Description Keyword:	"Xclock"
+On 0, go to the branch equal return point.
+Duplicate's Exception Vector:	0x108
+Duplicate's Name:	"Xclock"
+Alien Handler Entry Specification:	""
+Description Keyword:	"Xclk-Alien"
+Alien Exception Vector Address:	0x108
+Alien Entry Point:	0
+Alien Handler Name:	"Xclock"
+Multiple Handler Specification:	""
+Description Keyword:	"Xsyscall"
+On 0, go to the branch equal return point.
+Duplicate's Exception Vector:	0x80
+Duplicate's Name:	"Xsyscall"
+Alien Handler Entry Specification:	""
+Description Keyword:	"Xsys-alien"
+Alien Exception Vector Address:	0x80
+Alien Entry Point:	0
+Alien Handler Name:	"Xsyscall"
+Alien Handler Entry Specification:	""
+Description Keyword:	"swabintr"
+Alien Exception Vector Address:	0x100
+Alien Entry Point:	0
+Alien Handler Name:	"swabintr"
+Device Description:	""
+Description Keyword:	"swab"
+Device Name:	"swab"
+Handler Prefix:	"swab"
+Interrupt Vectors Size:	4
+Major Block Device Number:	0
+Major Character Device Number:	0
+Maximum Bus Request Level:	7
+Maximum Devices Per Controller:	1
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Device Type Information:
+Allow only one of these devices.
+Do not create a count field for this device.
+This is an interrupt driven device.
+Device Configuration Tables Declarations:
+Device Description:	""
+Description Keyword:	"tty"
+Device Name:	"tty"
+Handler Prefix:	"sy"
+Interrupt Vectors Size:	0
+Major Block Device Number:	0
+Major Character Device Number:	2
+Maximum Bus Request Level:	0
+Maximum Devices Per Controller:	1
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Has an open handler.
+Has a read handler.
+Has a write handler.
+Has an ioctl handler.
+Device Type Information:
+Allow only one of these devices.
+Do not create a count field for this device.
+This is a required device.
+This is a character device.
+Device Configuration Tables Declarations:
+Device Description:	""
+Description Keyword:	"memory"
+Device Name:	"memory"
+Handler Prefix:	"mm"
+Interrupt Vectors Size:	0
+Major Block Device Number:	0
+Major Character Device Number:	3
+Maximum Bus Request Level:	0
+Maximum Devices Per Controller:	1
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Has a read handler.
+Has a write handler.
+Device Type Information:
+Allow only one of these devices.
+Do not create a count field for this device.
+This is a required device.
+This is a character device.
+Device Configuration Tables Declarations:
+Device Description:	""
+Description Keyword:	"errlog"
+Device Name:	"errlog"
+Handler Prefix:	"err"
+Interrupt Vectors Size:	0
+Major Block Device Number:	0
+Major Character Device Number:	4
+Maximum Bus Request Level:	0
+Maximum Devices Per Controller:	1
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Has an initialization handler.
+Has an open handler.
+Has a close handler.
+Has a read handler.
+Device Type Information:
+Allow only one of these devices.
+Do not create a count field for this device.
+This is a required device.
+This is a character device.
+Device Configuration Tables Declarations:
+Device Description:	""
+Description Keyword:	"sxt"
+Device Name:	"sxt"
+Handler Prefix:	"sxt"
+Interrupt Vectors Size:	0
+Major Block Device Number:	0
+Major Character Device Number:	9
+Maximum Bus Request Level:	0
+Maximum Devices Per Controller:	32
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Has an open handler.
+Has a close handler.
+Has a read handler.
+Has a write handler.
+Has an ioctl handler.
+Device Type Information:
+Allow only one of these devices.
+Do not create an interrupt vector for this device.
+This is a character device.
+Device Configuration Tables Declarations:
+Board Description:	""
+Description Keyword:	"sxt #1"
+Device Type:	"sxt"
+Bus Request Level:	0
+Address:	0
+Interrupt Vector Location:	0
+Default Number Of Devices:	6
+Device Description:	""
+Description Keyword:	"ramd"
+Device Name:	"ramd"
+Handler Prefix:	"ramd"
+Interrupt Vectors Size:	0
+Major Block Device Number:	5
+Major Character Device Number:	6
+Maximum Bus Request Level:	0
+Maximum Devices Per Controller:	1
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Has an initialization handler.
+Has an open handler.
+Has a close handler.
+Has a read handler.
+Has a write handler.
+Device Type Information:
+Do not create an interrupt vector for this device.
+This is a block device.
+This is a character device.
+Device Configuration Tables Declarations:
+Board Description:	""
+Description Keyword:	"ramd #1"
+Device Type:	"ramd"
+Bus Request Level:	0
+Address:	0
+Interrupt Vector Location:	0
+Default Number Of Devices:	0
+Device Description:	""
+Description Keyword:	"buserr"
+Device Name:	"buserr"
+Handler Prefix:	"bus"
+Interrupt Vectors Size:	4
+Major Block Device Number:	0
+Major Character Device Number:	0
+Maximum Bus Request Level:	7
+Maximum Devices Per Controller:	1
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Device Type Information:
+Allow only one of these devices.
+Do not create a count field for this device.
+Device Configuration Tables Declarations:
+Device Description:	""
+Description Keyword:	"adderr"
+Device Name:	"adderr"
+Handler Prefix:	"addr"
+Interrupt Vectors Size:	4
+Major Block Device Number:	0
+Major Character Device Number:	0
+Maximum Bus Request Level:	7
+Maximum Devices Per Controller:	1
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Device Type Information:
+Allow only one of these devices.
+Do not create a count field for this device.
+Device Configuration Tables Declarations:
+Device Description:	""
+Description Keyword:	"insterr"
+Device Name:	"insterr"
+Handler Prefix:	"inst"
+Interrupt Vectors Size:	4
+Major Block Device Number:	0
+Major Character Device Number:	0
+Maximum Bus Request Level:	7
+Maximum Devices Per Controller:	1
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Device Type Information:
+Allow only one of these devices.
+Do not create a count field for this device.
+Device Configuration Tables Declarations:
+Device Description:	""
+Description Keyword:	"zeroerr"
+Device Name:	"zeroerr"
+Handler Prefix:	"zero"
+Interrupt Vectors Size:	4
+Major Block Device Number:	0
+Major Character Device Number:	0
+Maximum Bus Request Level:	7
+Maximum Devices Per Controller:	1
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Device Type Information:
+Allow only one of these devices.
+Do not create a count field for this device.
+Device Configuration Tables Declarations:
+Device Description:	""
+Description Keyword:	"chkerr"
+Device Name:	"chkerr"
+Handler Prefix:	"chk"
+Interrupt Vectors Size:	4
+Major Block Device Number:	0
+Major Character Device Number:	0
+Maximum Bus Request Level:	7
+Maximum Devices Per Controller:	1
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Device Type Information:
+Allow only one of these devices.
+Do not create a count field for this device.
+Device Configuration Tables Declarations:
+Device Description:	""
+Description Keyword:	"trapv"
+Device Name:	"trapv"
+Handler Prefix:	"trpv"
+Interrupt Vectors Size:	4
+Major Block Device Number:	0
+Major Character Device Number:	0
+Maximum Bus Request Level:	7
+Maximum Devices Per Controller:	1
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Device Type Information:
+Allow only one of these devices.
+Do not create a count field for this device.
+Device Configuration Tables Declarations:
+Device Description:	""
+Description Keyword:	"priverr"
+Device Name:	"priverr"
+Handler Prefix:	"priv"
+Interrupt Vectors Size:	4
+Major Block Device Number:	0
+Major Character Device Number:	0
+Maximum Bus Request Level:	7
+Maximum Devices Per Controller:	1
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Device Type Information:
+Allow only one of these devices.
+Do not create a count field for this device.
+Device Configuration Tables Declarations:
+Device Description:	""
+Description Keyword:	"em1010"
+Device Name:	"em1010"
+Handler Prefix:	"L101"
+Interrupt Vectors Size:	4
+Major Block Device Number:	0
+Major Character Device Number:	0
+Maximum Bus Request Level:	7
+Maximum Devices Per Controller:	1
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Device Type Information:
+Allow only one of these devices.
+Do not create a count field for this device.
+Device Configuration Tables Declarations:
+Device Description:	""
+Description Keyword:	"em1111"
+Device Name:	"em1111"
+Handler Prefix:	"L111"
+Interrupt Vectors Size:	4
+Major Block Device Number:	0
+Major Character Device Number:	0
+Maximum Bus Request Level:	7
+Maximum Devices Per Controller:	1
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Device Type Information:
+Allow only one of these devices.
+Do not create a count field for this device.
+Device Configuration Tables Declarations:
+Device Description:	""
+Description Keyword:	"syscall"
+Device Name:	"syscall"
+Handler Prefix:	"sys"
+Interrupt Vectors Size:	4
+Major Block Device Number:	0
+Major Character Device Number:	0
+Maximum Bus Request Level:	7
+Maximum Devices Per Controller:	1
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Device Type Information:
+Allow only one of these devices.
+Do not create a count field for this device.
+Device Configuration Tables Declarations:
+Device Description:	""
+Description Keyword:	"trce"
+Device Name:	"trce"
+Handler Prefix:	"trce"
+Interrupt Vectors Size:	4
+Major Block Device Number:	0
+Major Character Device Number:	0
+Maximum Bus Request Level:	7
+Maximum Devices Per Controller:	1
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Device Type Information:
+Allow only one of these devices.
+Do not create a count field for this device.
+Device Configuration Tables Declarations:
+Device Description:	""
+Description Keyword:	"brkpt"
+Device Name:	"brkpt"
+Handler Prefix:	"bkpt"
+Interrupt Vectors Size:	4
+Major Block Device Number:	0
+Major Character Device Number:	0
+Maximum Bus Request Level:	7
+Maximum Devices Per Controller:	1
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Device Type Information:
+Allow only one of these devices.
+Do not create a count field for this device.
+Device Configuration Tables Declarations:
+Device Description:	""
+Description Keyword:	"sigiot"
+Device Name:	"sigiot"
+Handler Prefix:	"iot"
+Interrupt Vectors Size:	4
+Major Block Device Number:	0
+Major Character Device Number:	0
+Maximum Bus Request Level:	7
+Maximum Devices Per Controller:	1
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Device Type Information:
+Allow only one of these devices.
+Do not create a count field for this device.
+Device Configuration Tables Declarations:
+Device Description:	""
+Description Keyword:	"sigemt"
+Device Name:	"sigemt"
+Handler Prefix:	"emt"
+Interrupt Vectors Size:	4
+Major Block Device Number:	0
+Major Character Device Number:	0
+Maximum Bus Request Level:	7
+Maximum Devices Per Controller:	1
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Device Type Information:
+Allow only one of these devices.
+Do not create a count field for this device.
+Device Configuration Tables Declarations:
+Device Description:	""
+Description Keyword:	"sigfpe"
+Device Name:	"sigfpe"
+Handler Prefix:	"fpe"
+Interrupt Vectors Size:	4
+Major Block Device Number:	0
+Major Character Device Number:	0
+Maximum Bus Request Level:	7
+Maximum Devices Per Controller:	1
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Device Type Information:
+Allow only one of these devices.
+Do not create a count field for this device.
+Device Configuration Tables Declarations:
+Device Description:	""
+Description Keyword:	"cprotv"
+Device Name:	"cprotv"
+Handler Prefix:	"cpv"
+Interrupt Vectors Size:	4
+Major Block Device Number:	0
+Major Character Device Number:	0
+Maximum Bus Request Level:	7
+Maximum Devices Per Controller:	1
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Device Type Information:
+Allow only one of these devices.
+Do not create a count field for this device.
+Device Configuration Tables Declarations:

@@ -1,0 +1,296 @@
+* sysdev
+*
+Description File:	"System Devices (root, pipe, and swap) [std system]"
+*
+* sysdev
+*
+System Devices Specification:	"System Device Sets for booting"
+Description Keyword:	"sysdev"
+Root Device Name:	"vme320"
+Pipe Device Name:	"vme320"
+Dump Device Name:	"vme350"
+Swap Device Name:	"vme320"
+Minor Device Number Specification
+Root Minor Device Number:	0
+Pipe Minor Device Number:	0
+Dump Minor Device Number:	0
+Swap Minor Device Number:	01
+Lowest Disk Block In Swap Area:	1
+Number Of Disk Blocks In Swap Area:	17279
+Minor Device Number Specification
+Root Minor Device Number:	010
+Pipe Minor Device Number:	010
+Dump Minor Device Number:	0
+Swap Minor Device Number:	011
+Lowest Disk Block In Swap Area:	1
+Number Of Disk Blocks In Swap Area:	17279
+Minor Device Number Specification
+Root Minor Device Number:	020
+Pipe Minor Device Number:	020
+Dump Minor Device Number:	0
+Swap Minor Device Number:	020
+Lowest Disk Block In Swap Area:	1245
+Number Of Disk Blocks In Swap Area:	19
+Minor Device Number Specification
+Root Minor Device Number:	030
+Pipe Minor Device Number:	030
+Dump Minor Device Number:	0
+Swap Minor Device Number:	030
+Lowest Disk Block In Swap Area:	1245
+Number Of Disk Blocks In Swap Area:	19
+Root Device Name:	"vme320"
+Pipe Device Name:	"vme320"
+Dump Device Name:	"vme350"
+Swap Device Name:	"vme320"
+Minor Device Number Specification
+Root Minor Device Number:	0100
+Pipe Minor Device Number:	0100
+Dump Minor Device Number:	0
+Swap Minor Device Number:	0101
+Lowest Disk Block In Swap Area:	1
+Number Of Disk Blocks In Swap Area:	17279
+Minor Device Number Specification
+Root Minor Device Number:	0110
+Pipe Minor Device Number:	0110
+Dump Minor Device Number:	0
+Swap Minor Device Number:	0111
+Lowest Disk Block In Swap Area:	1
+Number Of Disk Blocks In Swap Area:	17279
+Minor Device Number Specification
+Root Minor Device Number:	0120
+Pipe Minor Device Number:	0120
+Dump Minor Device Number:	0
+Swap Minor Device Number:	0120
+Lowest Disk Block In Swap Area:	1245
+Number Of Disk Blocks In Swap Area:	19
+Minor Device Number Specification
+Root Minor Device Number:	0130
+Pipe Minor Device Number:	0130
+Dump Minor Device Number:	0
+Swap Minor Device Number:	0130
+Lowest Disk Block In Swap Area:	1245
+Number Of Disk Blocks In Swap Area:	19
+Root Device Name:	"vme360"
+Pipe Device Name:	"vme360"
+Dump Device Name:	"vme350"
+Swap Device Name:	"vme360"
+Minor Device Number Specification
+Root Minor Device Number:	0
+Pipe Minor Device Number:	0
+Dump Minor Device Number:	0
+Swap Minor Device Number:	0
+Lowest Disk Block In Swap Area:	26880
+Number Of Disk Blocks In Swap Area:	16000
+Minor Device Number Specification
+Root Minor Device Number:	020
+Pipe Minor Device Number:	020
+Dump Minor Device Number:	0
+Swap Minor Device Number:	020
+Lowest Disk Block In Swap Area:	26880
+Number Of Disk Blocks In Swap Area:	16000
+Minor Device Number Specification
+Root Minor Device Number:	037777777777
+Pipe Minor Device Number:	037777777777
+Dump Minor Device Number:	0
+Swap Minor Device Number:	037777777777
+Lowest Disk Block In Swap Area:	26880
+Number Of Disk Blocks In Swap Area:	16000
+Minor Device Number Specification
+Root Minor Device Number:	037777777777
+Pipe Minor Device Number:	037777777777
+Dump Minor Device Number:	0
+Swap Minor Device Number:	037777777777
+Lowest Disk Block In Swap Area:	26880
+Number Of Disk Blocks In Swap Area:	16000
+Root Device Name:	"vme360"
+Pipe Device Name:	"vme360"
+Dump Device Name:	"vme350"
+Swap Device Name:	"vme360"
+Minor Device Number Specification
+Root Minor Device Number:	0200
+Pipe Minor Device Number:	0200
+Dump Minor Device Number:	0
+Swap Minor Device Number:	0200
+Lowest Disk Block In Swap Area:	26880
+Number Of Disk Blocks In Swap Area:	16000
+Minor Device Number Specification
+Root Minor Device Number:	0220
+Pipe Minor Device Number:	0220
+Dump Minor Device Number:	0
+Swap Minor Device Number:	0220
+Lowest Disk Block In Swap Area:	26880
+Number Of Disk Blocks In Swap Area:	16000
+Minor Device Number Specification
+Root Minor Device Number:	037777777777
+Pipe Minor Device Number:	037777777777
+Dump Minor Device Number:	0
+Swap Minor Device Number:	037777777777
+Lowest Disk Block In Swap Area:	26880
+Number Of Disk Blocks In Swap Area:	16000
+Minor Device Number Specification
+Root Minor Device Number:	037777777777
+Pipe Minor Device Number:	037777777777
+Dump Minor Device Number:	0
+Swap Minor Device Number:	037777777777
+Lowest Disk Block In Swap Area:	26880
+Number Of Disk Blocks In Swap Area:	16000
+Root Device Name:	"ramd"
+Pipe Device Name:	"ramd"
+Dump Device Name:	"vme350"
+Swap Device Name:	"ramd"
+Minor Device Number Specification
+Root Minor Device Number:	0
+Pipe Minor Device Number:	0
+Dump Minor Device Number:	0
+Swap Minor Device Number:	01
+Lowest Disk Block In Swap Area:	1
+Number Of Disk Blocks In Swap Area:	200
+Minor Device Number Specification
+Root Minor Device Number:	037777777777
+Pipe Minor Device Number:	037777777777
+Dump Minor Device Number:	0
+Swap Minor Device Number:	037777777777
+Lowest Disk Block In Swap Area:	1
+Number Of Disk Blocks In Swap Area:	1
+Minor Device Number Specification
+Root Minor Device Number:	037777777777
+Pipe Minor Device Number:	037777777777
+Dump Minor Device Number:	0
+Swap Minor Device Number:	037777777777
+Lowest Disk Block In Swap Area:	1
+Number Of Disk Blocks In Swap Area:	1
+Minor Device Number Specification
+Root Minor Device Number:	037777777777
+Pipe Minor Device Number:	037777777777
+Dump Minor Device Number:	0
+Swap Minor Device Number:	037777777777
+Lowest Disk Block In Swap Area:	1
+Number Of Disk Blocks In Swap Area:	1
+Root Device Name:	"ramd"
+Pipe Device Name:	"ramd"
+Dump Device Name:	"vme350"
+Swap Device Name:	"ramd"
+Minor Device Number Specification
+Root Minor Device Number:	0
+Pipe Minor Device Number:	0
+Dump Minor Device Number:	0
+Swap Minor Device Number:	01
+Lowest Disk Block In Swap Area:	1
+Number Of Disk Blocks In Swap Area:	200
+Minor Device Number Specification
+Root Minor Device Number:	037777777777
+Pipe Minor Device Number:	037777777777
+Dump Minor Device Number:	0
+Swap Minor Device Number:	037777777777
+Lowest Disk Block In Swap Area:	1
+Number Of Disk Blocks In Swap Area:	1
+Minor Device Number Specification
+Root Minor Device Number:	037777777777
+Pipe Minor Device Number:	037777777777
+Dump Minor Device Number:	0
+Swap Minor Device Number:	037777777777
+Lowest Disk Block In Swap Area:	1
+Number Of Disk Blocks In Swap Area:	1
+Minor Device Number Specification
+Root Minor Device Number:	037777777777
+Pipe Minor Device Number:	037777777777
+Dump Minor Device Number:	0
+Swap Minor Device Number:	037777777777
+Lowest Disk Block In Swap Area:	1
+Number Of Disk Blocks In Swap Area:	1
+Root Device Name:	"ramd"
+Pipe Device Name:	"ramd"
+Dump Device Name:	"vme350"
+Swap Device Name:	"ramd"
+Minor Device Number Specification
+Root Minor Device Number:	0
+Pipe Minor Device Number:	0
+Dump Minor Device Number:	0
+Swap Minor Device Number:	01
+Lowest Disk Block In Swap Area:	1
+Number Of Disk Blocks In Swap Area:	200
+Minor Device Number Specification
+Root Minor Device Number:	037777777777
+Pipe Minor Device Number:	037777777777
+Dump Minor Device Number:	0
+Swap Minor Device Number:	037777777777
+Lowest Disk Block In Swap Area:	1
+Number Of Disk Blocks In Swap Area:	1
+Minor Device Number Specification
+Root Minor Device Number:	037777777777
+Pipe Minor Device Number:	037777777777
+Dump Minor Device Number:	0
+Swap Minor Device Number:	037777777777
+Lowest Disk Block In Swap Area:	1
+Number Of Disk Blocks In Swap Area:	1
+Minor Device Number Specification
+Root Minor Device Number:	037777777777
+Pipe Minor Device Number:	037777777777
+Dump Minor Device Number:	0
+Swap Minor Device Number:	037777777777
+Lowest Disk Block In Swap Area:	1
+Number Of Disk Blocks In Swap Area:	1
+Root Device Name:	"ramd"
+Pipe Device Name:	"ramd"
+Dump Device Name:	"vme350"
+Swap Device Name:	"ramd"
+Minor Device Number Specification
+Root Minor Device Number:	0
+Pipe Minor Device Number:	0
+Dump Minor Device Number:	0
+Swap Minor Device Number:	01
+Lowest Disk Block In Swap Area:	1
+Number Of Disk Blocks In Swap Area:	200
+Minor Device Number Specification
+Root Minor Device Number:	037777777777
+Pipe Minor Device Number:	037777777777
+Dump Minor Device Number:	0
+Swap Minor Device Number:	037777777777
+Lowest Disk Block In Swap Area:	1
+Number Of Disk Blocks In Swap Area:	1
+Minor Device Number Specification
+Root Minor Device Number:	037777777777
+Pipe Minor Device Number:	037777777777
+Dump Minor Device Number:	0
+Swap Minor Device Number:	037777777777
+Lowest Disk Block In Swap Area:	1
+Number Of Disk Blocks In Swap Area:	1
+Minor Device Number Specification
+Root Minor Device Number:	037777777777
+Pipe Minor Device Number:	037777777777
+Dump Minor Device Number:	0
+Swap Minor Device Number:	037777777777
+Lowest Disk Block In Swap Area:	1
+Number Of Disk Blocks In Swap Area:	1
+Root Device Name:	"vme323"
+Pipe Device Name:	"vme323"
+Dump Device Name:	"vme350"
+Swap Device Name:	"vme323"
+Minor Device Number Specification
+Root Minor Device Number:	0
+Pipe Minor Device Number:	0
+Dump Minor Device Number:	0
+Swap Minor Device Number:	01
+Lowest Disk Block In Swap Area:	1
+Number Of Disk Blocks In Swap Area:	25199
+Minor Device Number Specification
+Root Minor Device Number:	020
+Pipe Minor Device Number:	020
+Dump Minor Device Number:	0
+Swap Minor Device Number:	021
+Lowest Disk Block In Swap Area:	1
+Number Of Disk Blocks In Swap Area:	25199
+Minor Device Number Specification
+Root Minor Device Number:	040
+Pipe Minor Device Number:	040
+Dump Minor Device Number:	0
+Swap Minor Device Number:	041
+Lowest Disk Block In Swap Area:	1
+Number Of Disk Blocks In Swap Area:	25199
+Minor Device Number Specification
+Root Minor Device Number:	060
+Pipe Minor Device Number:	060
+Dump Minor Device Number:	0
+Swap Minor Device Number:	061
+Lowest Disk Block In Swap Area:	1
+Number Of Disk Blocks In Swap Area:	25199

@@ -1,0 +1,179 @@
+#ident	"@(#)sadmin:admin/menu/diskmgmt/badtrack/fixfsys	2.3"
+#menu#  run fsck using fsck input files
+#help# 
+#help#	for each file in /etc/badtracks starting with prefix F. ,
+#help#	run fsck on the device described by the name, using the file
+#help#  contents as input for the -r option.
+
+flags="-qq -k$$"
+trap 'exit 1' 1 2 15
+WFLAG=n
+RTSEEN=n
+FSCK=/etc/fsck
+FSSTAT=/etc/fsstat
+UMOUNT=/etc/umount
+bopt=
+
+
+checkfs() {
+	checktype=`checklist ${flags} -fep -H '
+	The "check" looks for file system damage but does not attempt to
+	fix it.  The "interactive repair" asks you to decide what should be
+	done for each error.  The "automatic repair" makes standard repairs
+	when it finds errors.  "automatic" generally safe, although there are
+	some problems it cannot handle.  In those cases you need a file system
+	repair expert to fix things.
+	     Most users will be satisfied using "automatic".  For particularly
+	sensitive or unreproducible data we recommend that you use "check"
+	first and then use either "interactive" or "automatic" repair.' \
+	"
+Select:
+	check (no repairs attempted)
+	interactive repair
+	automatic repair
+
+[c, i, a, ?, q]:" check interactive automatic`
+
+	case "${checktype}" in
+	check )
+		${FSSTAT} ${blkdev} 1>/dev/null 2>&1
+		if [ $? = 3 ]
+		then
+			echo "\n${fsckdev} does not contain a real file system."
+		    	if checkyn ${flags} -D"y" -ef "Remove the file /etc/badtracks/F.${device} (default: y) ?"
+	 	    	then
+			    	rm -f /etc/badtracks/F.${device}
+			    	echo "The file /etc/badtracks/F.${device} has been removed."
+		    	fi
+			continue
+		else
+			cmd="${FSCK} -D -n -r ${fs} ${fsckdev}"
+		fi
+		;;
+	interactive )
+		validate
+		if [ ${check} = 'y' ]
+		then
+			cmd="${FSCK} -D -r ${fs} ${bopt} ${fsckdev}"
+		else
+			continue
+		fi
+		;;
+	automatic )
+		validate
+		if [ ${check} = 'y' ]
+		then
+			cmd="${FSCK} -D -y -r ${fs} ${bopt} ${fsckdev}"
+		else
+			continue
+		fi
+		;;
+	* )
+		admerr $0 Invalid checktype "'${checktype}'"
+		exit 1
+	esac
+
+# Note if the user interrupted us, or if fsck failed of its own accord.
+
+		abort=no
+		trap 'abort=yes' 2
+		${cmd}
+		exit=$?
+		trap 'exit 0' 2
+		if [ ${exit} -ne 0 -a ${abort} = no ]
+		then
+	echo "
+	File system check did not finish successfully.
+	Either the medium is damaged beyond this procedure's ability to 
+	repair it or there is some other problem.  Please call your service
+	representative if you think there is a machine problem."
+		else
+			trap "	trap '' 1 2 " 0
+		fi
+}
+
+validate() {
+	${FSSTAT} ${blkdev} 1>/dev/null 2>&1
+	STAT=$?
+	case "${STAT}" in
+		0 ) check=y
+		    ;;
+		1 ) check=y
+		    ;;
+		2 ) ${UMOUNT} ${blkdev} 1>/dev/null 2>&1
+		    if [ "$?" = 0 ]
+		    then
+			    check=y
+		    else
+			    echo "\n\tCannot unmount ${fsckdev}.  Unmount the file system"
+			    echo "\tmanually before repeating this file system check."
+			    check=n
+		    fi
+		    ;;
+		3 )
+		    echo "\n${fsckdev} does not contain a real file system."
+		    check=n
+		    if checkyn ${flags} -D"y" -ef "Remove the file /etc/badtracks/F.${device} (default: y) ?"
+	 	    then
+			    rm -f /etc/badtracks/F.${device}
+			    echo "The file /etc/badtracks/F.${device} has been removed."
+		    fi
+		    ;;
+		* )
+		    echo "\n\tDevice Status could not be obtained.  Consult"
+		    echo "\tyour service representative for assistance."
+		    exit 1
+		    ;;
+	esac
+}
+
+
+fslist=`ls /etc/badtracks/F.* 2>/dev/null`
+if [ -n "${fslist}" ]
+then
+	echo "\nThese fsck input files exist:\n"
+	echo "${fslist} \n"
+else
+	echo "\nThere are no fsck input files."
+	echo "No file systems will be checked.\n"
+	exit 0
+fi
+
+# get the root device numbers
+RTDEVNUM=`ls -ld /dev/rroot | cut -f17-19 -d" "`
+
+for fs in ${fslist}
+{
+	device=`echo ${fs} | cut -d'.' -f2`
+    	fsckdev=/dev/rdsk/${device}
+	# get device numbers and see if this is root, save it for later.
+	DEVNUM=`ls -ld /dev/rdsk/${device} | cut -f17-19 -d" "`
+	if [ "${DEVNUM}" = "${RTDEVNUM}" ]
+	then
+		RTSEEN=y
+		RTFILE=/etc/badtracks/F.${device}
+		RTFSCKDEV=/dev/rdsk/${device}
+		continue
+	fi
+	echo
+	if checkyn ${flags} -D"y" -ef "Check '$fsckdev' (default: y) ?"
+	then
+		blkdev=/dev/dsk/${device}
+		checkfs
+	fi
+}
+
+if [ "$RTSEEN" = 'y' ]
+then
+	# Find out if we're in single user mode
+	MODE=`who -r | cut -f12 -d" "`
+	if [ ${MODE} = 'S' ]
+	then 
+		bopt=" -b "
+		fs=$RTFILE
+		fsckdev=$RTFSCKDEV
+		checkfs
+	else
+		echo "\nNot in Single User mode. Cannot check root (${RTFSCKDEV}).\n"
+	fi
+fi

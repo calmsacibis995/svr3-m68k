@@ -1,0 +1,87 @@
+# synopsis:
+#
+#	linkboot
+#
+# if /stand/sysV68 is not linked to /sysV68 and
+#	the kernel was booted from /stand/sysV68
+# then
+#	if /sysV68 differs from /stand/sysV68
+#	then
+#		move /sysV68 to /oldsysV68
+#	fi
+#	link /stand/sysV68 to /sysV68
+# fi
+#	
+#
+# linkboot should be run each time the system is booted
+#
+
+PATH=/bin
+
+# Function Definitions
+
+inumber () {
+	# synopsis:
+	#
+	#	inumber <filename>
+	#
+	# outputs the decimal inumber of <filename>
+	#
+	ls -i $1 | (read a b; echo $a)
+}
+
+booted () {
+	# synopsis:
+	#
+	#	booted <filename>
+	#
+	# returns true if the current kernel was booted from <filename>
+	# otherwise returns false
+	#
+	#
+	# looks into the /dev/kmem and compares the i-number passed by
+	# the bootloader with the i-number of <filename>
+	#
+	addr=`nm -x $1 | grep bootinod | (IFS='|'; read a b c; echo $b)`
+	bootinum=`od -d /dev/kmem $addr | (read a b c d; echo $c)`
+
+	if [ "$bootinum" -eq `inumber $1` ]
+	then
+		return 0	# yes, we were booted from <filename>
+	else
+		return 1
+	fi
+}
+
+
+#
+# Main Program
+#
+
+# don't run if going from run level 2 to 3
+set `who -r`
+if [ $9 != S ]
+then
+	exit 0
+fi
+
+if [ `inumber /sysV68` -ne `inumber /stand/sysV68` ] && booted /stand/sysV68
+then
+	if cmp -s /sysV68 /stand/sysV68
+	then
+		:
+	else
+		if mv /sysV68 /oldsysV68
+		then
+			echo Moved /sysV68 to /oldsysV68
+		else
+			echo Could not move /sysV68 to /oldsysV68
+		fi
+	fi
+	if ln /stand/sysV68 /sysV68
+	then
+		echo Linked /stand/sysV68 to /sysV68
+	else
+		echo Could not link /stand/sysV68 to /sysV68
+	fi
+fi

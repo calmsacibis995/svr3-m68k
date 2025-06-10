@@ -1,0 +1,81 @@
+Description File:	"OfficeLAN Drivers"
+Device Description:	""
+Description Keyword:	"lan1"
+Device Name:	"lan1"
+Handler Prefix:	"sc_"
+Interrupt Vectors Size:	0
+Major Block Device Number:	0
+Major Character Device Number:	27
+Maximum Bus Request Level:	0
+Maximum Devices Per Controller:	32
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Has an open handler.
+Has a close handler.
+Has a read handler.
+Has a write handler.
+Has an ioctl handler.
+Device Type Information:
+Allow only one of these devices.
+Do not create an interrupt vector for this device.
+This is a character device.
+Device Configuration Tables Declarations:
+Board Description:	""
+Description Keyword:	"lan1.board"
+Device Type:	"lan1"
+Bus Request Level:	0
+Address:	0
+Interrupt Vector Location:	0
+Default Number Of Devices:	32
+Device Description:	""
+Description Keyword:	"lan2"
+Device Name:	"lan2"
+Handler Prefix:	"si_"
+Interrupt Vectors Size:	0
+Major Block Device Number:	0
+Major Character Device Number:	28
+Maximum Bus Request Level:	0
+Maximum Devices Per Controller:	1
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Has an ioctl handler.
+Device Type Information:
+Allow only one of these devices.
+Do not create an interrupt vector for this device.
+This is a character device.
+Device Configuration Tables Declarations:
+Board Description:	""
+Description Keyword:	"lan2.board"
+Device Type:	"lan2"
+Bus Request Level:	0
+Address:	0
+Interrupt Vector Location:	0
+Default Number Of Devices:	1
+Device Description:	""
+Description Keyword:	"lan3"
+Device Name:	"lan3"
+Handler Prefix:	"nt_"
+Interrupt Vectors Size:	0
+Major Block Device Number:	0
+Major Character Device Number:	29
+Maximum Bus Request Level:	0
+Maximum Devices Per Controller:	16
+Page Registers Size:	0
+Block Or Character Device Handler Lines:
+Has an open handler.
+Has a close handler.
+Has a read handler.
+Has a write handler.
+Has an ioctl handler.
+Device Type Information:
+Allow only one of these devices.
+Do not create an interrupt vector for this device.
+This is a character device.
+Device Configuration Tables Declarations:
+Board Description:	""
+Description Keyword:	"lan3.board"
+Device Type:	"lan3"
+Bus Request Level:	0
+Address:	0
+Interrupt Vector Location:	0
+Default Number Of Devices:	16

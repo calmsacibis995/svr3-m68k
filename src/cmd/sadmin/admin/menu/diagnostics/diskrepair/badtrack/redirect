@@ -1,0 +1,401 @@
+#ident	"@(#)sadmin:admin/menu/diskmgmt/badtrack/redirect	2.3"
+#menu#  redirect bad tracks on the disk
+#help# 
+#help#	Remap bad data tracks on the disk to good data tracks.  This is
+#help#	to be used when a track is reported to be damaged and unusable.
+#help#  After using this utilitiy, use the fixfsys menu option to get 
+#help#  a list of the files which are corrupted (ie: they had contents
+#help#  on the track which is now lost).
+#help#  REMEMBER, ALL DATA ON THE TRACK WILL BE LOST!!
+
+# Undo any environmental weirdness wrt the devices or their sizes.
+# since hdsetup loops through multiple devices, we'd really need
+# 2 sets of env vars (320/360). forget it for now.
+
+flags="-qq -k$$"
+trap 'rm -f /tmp/xf_m3*; exit 1' 1 2 15
+
+FMT=/etc/dinit
+CONV=/etc/xformtrk
+GEN=/etc/fblkgen
+DOUT=/tmp/tmp.$$
+HEAD_CYL=1		# badtrack file in <head><cyl> format */
+TRACK=0			# badtrack file in track format */
+
+validdevs='
+	1.  m320_0
+	2.  m320_1
+	3.  m320_1d0 
+	4.  m320_1d1 
+	5.  m360_0 		
+	6.  m360_2 		
+	7.  m360_1d0
+	8.  m360_1d2
+	9.  m323_0
+	10. m323_1
+	11. m323_1d0
+	12. m323_1d1'
+
+MANUF=2
+SIZE=2
+fmt=2
+def_dev=1
+WFLAG=n
+TFILE=0
+file_def=y
+fmtflag=
+rmflag=y
+dconv=n		# set to y if we started out with dev/blk format
+
+getdevice() {
+	echo "\n	Valid Devices Are:\c"
+	echo "${validdevs}\n"
+	device=`checklist ${flags} -D"${def_dev}" -H "Valid Devices: ${validdevs}"\
+	-fe "enter the device (default: ${def_dev}) [q] :" 1 2 3 4 5 6 7 8 9 10 11 12 `
+	case "${device}" in
+		'1') device=m320_0 
+		     def_dev=1 ;;
+		'2') device=m320_1 
+		     def_dev=2 ;;
+		'3') device=m320_1d0 
+		     def_dev=3 ;;
+		'4') device=m320_1d1 
+		     def_dev=4 ;;
+		'5') device=m360_0 
+		     def_dev=5 ;;
+		'6') device=m360_2 
+		     def_dev=6 ;;
+		'7') device=m360_1d0 
+		     def_dev=7 ;;
+		'8') device=m360_1d2 
+		     def_dev=8 ;;
+		'9') device=m323_0
+		     def_dev=9 ;;
+		'10') device=m323_1
+		     def_dev=10 ;;
+		'11') device=m323_1d0
+		     def_dev=11 ;;
+		'12') device=m323_1d1
+		     def_dev=12 ;;
+	esac
+	case $device in
+	    m320_[01] | m320_1d[01])
+		echo '
+	Valid Disk Sizes are:
+	1. 40 Megabyte
+	2. 70 Megabyte\n'
+		SIZE=`checklist ${flags} -D"${SIZE}" -ef "What size is your disk (default: ${SIZE})?" 1 2 `
+		case "${SIZE}" in
+			'1') Sz=40 
+			     pr_sz='40  Meg';;
+			'2') Sz=70 
+			     pr_sz='70  Meg';;
+		esac
+		DTYPE=m320${Sz}
+		echo '
+	Valid Manufacturers are:
+	1. Toshiba
+	2. Micropolis
+	3. Miniscribe
+	4. Priam\n'
+		MANUF=`checklist ${flags} -D"${MANUF}" -ef "Who Manufactures your Winchester (default: ${MANUF})?" 1 2 3 4`
+		case "${MANUF}" in
+			'1') Mfg=t 
+			     pr_man=Toshiba ;;
+			'2') Mfg=m 
+			     pr_man=Micropolis ;;
+			'3') Mfg=s 
+			     pr_man=Miniscribe ;;
+			'4') Mfg=p 
+			     pr_man=Priam ;;
+		esac
+		DTYPE=${DTYPE}${Mfg}
+		;;
+
+	    m360_[02] | m360_1d[02])
+		DTYPE=m360337
+		pr_man=NA
+	 	pr_sz=NA
+		;;
+
+	    m323_[01] | m323_1d[01])
+		DTYPE=m323182
+		pr_man=NA
+	 	pr_sz=NA
+		;;
+	    *)
+		    ;;
+	esac
+    if [ ${TFILE} = '0' ]
+    then
+    	if [ -f /etc/badtracks/${device} ]
+    	then
+    		TFILE=/etc/badtracks/${device}
+	else
+	  	TFILE=NONE
+    	fi
+    fi
+    FMTDEV=/dev/rdsk/${device}s7
+}
+
+getbfile() {
+	found=false
+	while [ $found -eq false ]
+	do
+		echo
+		bfile=`checkre ${flags} -fe -D"${TFILE}" \
+		"Enter full path name of bad track file (default: ${TFILE}) [q]: 
+	" \
+		'.' ' ' \
+		'^[^ ;	][^ ;	]*$' 'Blanks or tabs not permitted in the path name.' \
+		'^/' 'A full path name must begin with "/".' \
+		'[^/]$' 'No trailing "/" may be in the path name.' \
+		'/[^/]\{1,14\}$' 'No more than 14 characters in a file name.'`
+		if [ ! -f ${bfile} ]
+		then
+			if [ ${TFILE} = 'NONE' ]
+			then
+				echo "	There is no default file.\n"
+			else
+				echo "	Cannot find file '${bfile}'.\n"
+			fi
+		else
+			TFILE=${bfile}
+			return
+		fi
+	done
+}
+
+getffmt() {
+	echo '
+	Valid file formats are:
+	1. <Track>
+	2. <Head> <Cylinder>
+	3. <Log Device> <Block>\n'
+	fmt=`checklist ${flags} -D"${fmt}" -ef "In what format is the bad track file (default: ${fmt})? " 1 2 3`
+	case "${fmt}" in
+		'1') prfmt='<TRACK>' 
+		     fmtflag=-T ;;
+		'2') prfmt='<HEAD><CYL>' ;;
+		'3') prfmt='<DEV><BLOCK>'
+		     fmtflag=-D
+		     dconv=y ;;
+	esac
+}
+
+getintfmt() {
+	echo '
+	Valid input formats are:
+	1. <Track>
+	2. <Head> <Cylinder>
+	3. <Log Device> <Block>\n'
+	fmt=`checklist ${flags} -D"${fmt}" -ef "In what format will you enter the data (default: ${fmt})? " 1 2 3`
+	case "${fmt}" in
+		'1') prfmt='<TRACK>' 
+		     fmtflag=-T ;;
+		'2') prfmt='<HEAD><CYL>' ;;
+		'3') prfmt='<DEV><BLOCK>'
+		     fmtflag=-D ;;
+	esac
+}
+
+echo '\nAnytime you want to quit, type "q".
+If you are not sure how to answer any prompt, type "?" for help,
+or see the Administrator\047s Guide.
+\nIf a default appears in the question, press <RETURN> for the default.
+'
+while  true
+do
+	if checkyn ${flags} -D"${WFLAG}" -H"
+	If you answer no to this, the disk format will continue in a
+	non-destructive mode.  You will be able to see what would happen
+	without actually doing it.  Because the disk is not checked, if the
+	track values are not unique and unknown previously, you may get some
+	some files listed as potentially damaged which aren't.  To avoid this,
+	make sure the list you enter has unique values and none of them are
+	already known to the disk." \
+	-ef "Do you wish to WRITE (default: ${WFLAG})? "
+	then
+		WFLAG=y
+	else
+		WFLAG=n
+	fi
+	getdevice
+
+	if checkyn ${flags} -D"${file_def}" -H"
+	If the bad track information is contained within a file, it will be
+	read automatically, otherwise you must enter the information by hand.
+	The numbers you type in will be added to the permanent bad track file
+	at the end so they will not be lost." \
+	-ef "Will the track information be from a file (default:${file_def})? "
+	then
+		getbfile
+		getffmt
+	else
+		getintfmt
+		bfile=interactive
+		file_def=n
+	fi
+	echo "\nThis is the information for the track redirection:\n
+	entered device:	${device}
+	manufacturer:	${pr_man}
+	disk size:    	${pr_sz}
+	badtrack file:	${bfile}
+	file format:	${prfmt}
+	device name:	${FMTDEV}
+	device type:	${DTYPE}
+	write:      	${WFLAG}\n"
+	case `checklist ${flags} -fep 'Do you want to begin redirection, or change this data [b, c, q]?' begin change ` in
+	begin )
+		fslist=`ls /etc/badtracks/F.* 2>/dev/null`
+		if [ -n "${fslist}" ]
+		then
+			echo "\nThese fsck input files exist:\n"
+			echo "${fslist} \n"
+			if checkyn ${flags} -D"${rmflag}" -H"
+	You must remove these files before you can run this utility.  The
+	information within them is old and not usable.  However, if you 
+	have any use for them, you should save them somewhere else first." \
+			-ef "Delete them (default: ${rmflag})? "
+			then
+				rm -f /etc/badtracks/F.*
+			else
+				exit 0
+			fi
+		fi
+		if [ ${file_def} = 'y' ]
+		then
+			topt="-t ${bfile}"
+			gopt=${bfile}
+		else
+			topt=
+			# set gopt later
+		fi
+		if [ ${bfile} = 'interactive' ]
+		then
+		   if [ -n "${fmtflag}" ]	# -T or -D options
+		   then
+			if [ ${fmtflag} = '-T' ]
+			then
+			   CMD="${CONV} -I t -O t  ${DTYPE} ${device}"
+			else
+			   CMD="${CONV} -I d -O t  ${DTYPE} ${device}"
+			fi
+			fmtflag=-T
+		   else				# no option, ie head,cyl
+			CMD="${CONV} -I c -O c  ${DTYPE} ${device}"
+		   fi
+		   ${CMD}  2>/dev/null
+		   if [ $? != 0 ]
+		   then
+			echo "\n\tCan't get new input."
+			exit 1
+		   fi
+		   gopt="/tmp/xf_${device}"
+		else	# not interactive, but may be in dev/blk format
+		   if [ -n "${fmtflag}" ]
+		   then
+			if [ ${fmtflag} = '-D' ]
+			then
+				${CONV} -I d -O t ${topt} ${DTYPE} ${device} >/dev/null 2>&1
+		   		if [ $? != 0 ]
+		   		then
+					echo "\n\tCan't convert new input."
+					exit 1
+		   		fi
+				gopt="/tmp/xf_${device}"
+				fmtflag=-T
+			fi
+		   fi
+		fi
+		if [ ${WFLAG} = 'y' ]
+		then
+			${FMT} ${fmtflag} -g${gopt} ${DTYPE} ${FMTDEV} 1>${DOUT} 2>/dev/null
+			if [ $? -ne 0 ]
+			then
+				echo "\nThe track redirection failed.  No files are updated.\n"
+				rm -f /tmp/xf_${device}
+				rm -f ${DOUT}
+				exit 1
+			fi
+		else
+			${FMT} ${fmtflag} -r -g${gopt} ${DTYPE} ${FMTDEV} 1>${DOUT} 2>/dev/null
+			if [ $? -ne 0 ]
+			then
+				echo "\nCannot generate list of tracks to be added.\n"
+				rm -f /tmp/xf_${device}
+				rm -f ${DOUT}
+				exit 1
+			fi
+		fi
+		${GEN} ${fmtflag} -t ${DOUT} ${DTYPE} ${device} >/dev/null 2>&1
+		if [ $? != 0 ]
+		then
+			echo "\n\tCan't generate file system block numbers."
+			exit 1
+		fi
+		if [ ${WFLAG} = 'y' ]	# real values from dinit 
+		then
+			echo "\nThe redirection operation is complete.  These tracks"
+			echo "have been added:\n"
+		else
+			echo "\nIf the redirection had been done, these tracks would "
+			echo "have been added:\n"
+		fi
+		if [ ! -n "${fmtflag}" ]
+		then
+			echo '<Head> <Cyl>'
+		fi
+		cat ${DOUT}
+		rm -f /tmp/xf_${device}
+		rm -f ${DOUT}
+
+		if [ ${WFLAG} = 'y' ]
+		then
+		    	# update the bad track list in /etc/badtracks
+		    	if [ -n "${fmtflag}" ]
+		    	then
+				list=`${FMT} -T -r ${DTYPE} ${FMTDEV} 2>/dev/null` 
+				ERRC=$?
+		    	else
+				list=`${FMT} -r ${DTYPE} ${FMTDEV} 2>/dev/null` 
+				ERRC=$?
+		    	fi
+			if [ $? != 0 ]
+			then
+				echo "\n\tCan't read disk bad track list.  The file"
+				echo "\n'/etc/badtracks/${device}' has not been updated."
+				# continue so we can tell about files created.
+			else
+				echo "${list}" > /etc/badtracks/${device}
+				echo "\nThe file '/etc/badtracks/${device}' has been updated"
+				echo "to reflect the bad track list contained on the disk.\n"
+			fi
+		fi
+		fslist=`ls /etc/badtracks/F.* 2>/dev/null`
+		if [ -n "${fslist}" ]
+		then
+			echo "\nThese fsck input files have been created:\n"
+			echo "${fslist} \n"
+			if [ ${WFLAG} = 'y' ]
+			then
+				echo "\nYou may now select the 'fixfsys' option of this menu to find"
+				echo "out which files are affected by the track redirection.\n"
+			else
+				echo "\nYou may now select the 'fixfsys' option of this menu to find"
+				echo "out which files will be affected by a track redirection.\n"
+			fi
+		else
+			if [ ${WFLAG} = 'y' ]
+			then
+				echo "\nNo file systems have been affected by the track redirection\n"
+			else
+				echo "\nNo file systems will be affected by a track redirection\n"
+			fi
+		fi
+		exit 0
+		;;
+	change )
+		;;
+	esac
+done

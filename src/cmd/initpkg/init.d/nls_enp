@@ -1,0 +1,29 @@
+#ident	"@(#)initpkg:init.d/nls_enp	1.3"
+
+#	Network Listener Service
+case $1 in
+'start')
+	set `who -r`
+	if [ $9 = S ]
+	then
+		if [ ! -r /tcpip/enp/enp_param.S ]
+		then
+			echo  $0: enp_param.S not initialized >/dev/console
+			exit 1
+		fi
+		nlsadmin -s tcpip
+	fi
+	;;
+'stop')
+	# if the listener is active, kill it
+	#
+	if nlsadmin -q tcpip >/dev/null 2>&1
+	then
+		nlsadmin -k tcpip
+		echo "Shutting down network listener service."
+	fi
+	;;
+*)
+	echo "usage: /etc/init.d/nls_enp {start|stop}"
+	;;
+esac

@@ -1,0 +1,470 @@
+#ident	"@(#)sadmin:shell/hdsetup	2.3"
+# This is the common code for the hdsetup routines, placed in /usr/lbin.
+
+flags="-qq -k$$"
+trap 'rm -f /tmp/xf_*; exit 1' 1 2 15
+
+FMT=/etc/dinit
+CONV=/etc/xformtrk
+fmt=2
+ffmt=2
+pfmt=2
+def_dev=1
+def_add=n
+check=n
+contbad=n
+MANUF=2
+SIZE=2
+FFMT=
+PFMT=
+IFMT=
+NEWFILE=n
+
+validdevs='
+	1.  m320_0
+	2.  m320_1
+	3.  m320_1d0 
+	4.  m320_1d1 
+	5.  m360_0 		
+	6.  m360_2 		
+	7.  m360_1d0
+	8.  m360_1d2
+	9.  m323_0
+	10. m323_1
+	11. m323_1d0
+	12. m323_1d1'
+
+getdevice() {
+	echo "\n	Valid Devices Are:\c"
+	echo "${validdevs}\n"
+	device=`checklist ${flags} -D"${def_dev}" -H "Valid Devices: ${validdevs}"\
+	-fe "enter the device (default: ${def_dev}) [q] :" 1 2 3 4 5 6 7 8 9 10 11 12 `
+	case "${device}" in
+		'1') device=m320_0 
+		     def_dev=1 ;;
+		'2') device=m320_1 
+		     def_dev=2 ;;
+		'3') device=m320_1d0 
+		     def_dev=3 ;;
+		'4') device=m320_1d1 
+		     def_dev=4 ;;
+		'5') device=m360_0 
+		     def_dev=5 ;;
+		'6') device=m360_2 
+		     def_dev=6 ;;
+		'7') device=m360_1d0 
+		     def_dev=7 ;;
+		'8') device=m360_1d2 
+		     def_dev=8 ;;
+		'9') device=m323_0
+		     def_dev=9 ;;
+		'10') device=m323_1
+		     def_dev=10 ;;
+		'11') device=m323_1d0
+		     def_dev=11 ;;
+		'12') device=m323_1d1
+		     def_dev=12 ;;
+	esac
+	case $device in
+	    m320_[01] | m320_1d[01])
+		echo '
+	Valid Disk Sizes are:
+	1. 40 Megabyte
+	2. 70 Megabyte\n'
+		SIZE=`checklist ${flags} -D"${SIZE}" -ef "What size is your disk (default: ${SIZE})?" 1 2 `
+		case "${SIZE}" in
+			'1') Sz=40
+			     pr_sz="40Mb" ;;
+			'2') Sz=70
+			     pr_sz="70Mb" ;;
+		esac
+		DTYPE=m320${Sz}
+		echo '
+	Valid Manufacturers are:
+	1. Toshiba
+	2. Micropolis
+	3. Miniscribe
+	4. Priam\n'
+		MANUF=`checklist ${flags} -D"${MANUF}" -ef "Who Manufactures your Winchester (default: ${MANUF})?" 1 2 3 4`
+		case "${MANUF}" in
+			'1') Mfg=t
+			     pr_man="Toshiba" ;;
+			'2') Mfg=m
+			     pr_man="Micropolis" ;;
+			'3') Mfg=s
+			     pr_man="Miniscribe" ;;
+			'4') Mfg=p
+			     pr_man="Priam" ;;
+		esac
+		DTYPE=${DTYPE}${Mfg}
+		;;
+
+	    m360_[02] | m360_1d[02])
+		DTYPE=m360337
+		Sz=NA
+		pr_man="Fujitsu"
+		pr_sz="337Mb"
+		;;
+
+	    m323_[01] | m323_1d[01])
+		DTYPE=m323182
+		Sz=NA
+		pr_man="CDC"
+		pr_sz="182Mb"
+		;;
+	    *)
+		    ;;
+	esac
+	echo
+    FMTDEV=/dev/rdsk/${device}s7
+    TFILE=/etc/badtracks/${device}
+}
+
+getfilefmt() {
+	echo '
+	Valid FILE formats are:
+	1. <Track>
+	2. <Head> <Cylinder>
+	3. <Log Device> <Block>\n'
+	fmt=`checklist ${flags} -H"
+The format of the existing badtrack file must be known before we can do any
+additions or conversions.
+
+Once you select a file format, you will not be able to change it during
+this invocation of the menu option.  If you want to just look at the file,
+select the 'track' option.  You may be able to tell by the data which
+format it really is in.  If you have guessed wrong, quit and start again from
+the 'HARD DISK SETUP' menu.
+
+	Valid FILE formats are:
+	1. <Track>
+	2. <Head> <Cylinder>
+	3. <Log Device> <Block>
+
+" -D"${ffmt}" -ef "In what format is the file $TFILE (default: ${ffmt})? " 1 2 3 `
+	case "${fmt}" in
+		'1') FFMT=t
+		     prfmt="TRACK" ;;
+		'2') FFMT=c
+		     prfmt="HEAD,CYL" ;;
+		'3') FFMT=d
+		     prfmt="DEVICE,BLK" ;;
+	esac
+}
+
+getinpfmt() {
+	echo '
+	Valid INPUT formats are:
+	1. <Track>
+	2. <Head> <Cylinder>
+	3. <Log Device> <Block>\n'
+	fmt=`checklist ${flags} -H"
+You may enter track numbers in any of the valid forms.  The numbers will be
+converted, if necessary, to the format of the badtrack file before being
+entered.
+
+	Valid INPUT formats are:
+	1. <Track>
+	2. <Head> <Cylinder>
+	3. <Log Device> <Block>
+
+" -D"${fmt}" -ef "In what format will you enter the data (default: ${fmt})? " 1 2 3`
+	case "${fmt}" in
+		'1') IFMT=t ;;
+		'2') IFMT=c ;;
+		'3') IFMT=d ;;
+	esac
+}
+
+getprfmt() {
+	echo '
+	Valid PRINT formats are:
+	1. <Track>
+	2. <Head> <Cylinder>
+	3. <Log Device> <Block>\n'
+	fmt=`checklist ${flags} -H"
+You may select at any time the first two formats for display but you may
+select the last, <dev><blk> format only if the file is already in that
+format.  
+
+The original file will NOT be changed if you, regardless of the format you
+choose.
+
+	Valid PRINT formats are:
+	1. <Track>
+	2. <Head> <Cylinder>
+	3. <Log Device> <Block>
+
+" -D"${pfmt}" -ef "Display file in which format (default: ${pfmt})? " 1 2 3`
+	case "${fmt}" in
+		'1') PFMT=t ;;
+		'2') PFMT=c ;;
+		'3') PFMT=d ;;
+	esac
+}
+
+getbads() {
+
+    # If formatting or setting up config/bad tracks, and we don't yet
+    # have a badtracks file to work from, get current bad
+    # list from disk.  If format or config is blown, this may fail,
+    # but it's worth a try.
+
+    if [ ! -f "$TFILE" -a "$CMD" != b ]
+    then
+	NEWFILE=y
+	${FMT} -r $DTYPE $FMTDEV >$TFILE 2>/dev/null
+	if [ $? != 0 ]
+	then
+	    if [ ${Sz} -eq 70 ]
+	    then
+	    	cat /etc/diskalts/m320fix70${Mfg}.hc > $TFILE 2>/dev/null
+		if [ $? = 0 ]
+		then
+  	    		echo "\n\tThe file $TFILE has been updated with"
+	    		echo "\tonly the list of FE cylinders.\n"
+		else
+			echo "\n\tCannot get list of FE cylinders.  The file"
+  	    		echo "\t${TFILE} contains no bad tracks.\n"
+		fi
+	    else
+		> $TFILE	# make sure the file is empty
+  	    	echo "\n\tThe file $TFILE contains no bad tracks.\n"
+	    fi
+	else
+	    if [ ${Sz} -eq 70 ]
+	    then
+	    	cat /etc/diskalts/m320fix70${Mfg}.hc >> $TFILE 2>/dev/null
+		if [ $? = 0 ]
+		then
+  	    		echo "\n\tThe file $TFILE has been updated with"
+	    		echo "\tthe badtrack list, including FE cyls.\n"
+		else
+			echo "\n\tCannot get list of FE cylinders.  The file"
+  	    		echo "\t${TFILE} contains only the list from the disk.\n"
+		fi
+	    else
+  	    	echo "\n\tThe file $TFILE has been updated"
+	    	echo "\twith the badtrack list.\n"
+	    fi
+	fi
+    fi
+
+    if [ "$CMD" != b ]
+    then
+	while :
+	do
+	case `checklist ${flags} -H"
+If you choose to add to the badtrack list, you will be able to enter the
+data in any format, regardless of the format of the file.  The data will
+be stored in the file's original format, but you can view the file in 
+any other format to check your entries.
+
+If you choose to view the file, you will be able to have it printed in
+the format of your choosing.
+
+If you wish to neither add nor view, just select 'continue'.
+
+" -fep 'Do you want to view the bad track list, add to the list 
+or continue [v, a, c, q]?' view add continue ` in
+	view )
+	    if [ "$NEWFILE" = 'y' ]
+	    then
+		FFMT=c		# If we made the file, it's cyl fmt
+		NEWFILE=n
+	    else
+		if [ -z "$FFMT" ]
+		then
+			getfilefmt	
+		fi
+	    fi
+	    getprfmt
+	    if [ ${PFMT} = ${FFMT} ]
+	    then
+	    	/usr/lbin/prbadlist ${PFMT} < ${TFILE} 
+	    else
+		if [ ${PFMT} = 'd' ]
+		then
+			echo "\n\tYou may only view in this format if the file is already"
+			echo "\tformatted as such.  The data cannot be converted to that type.\n"
+			continue
+		fi
+	    	${CONV} -I ${FFMT} -O ${PFMT} -t ${TFILE} ${DTYPE} ${device} 2>/dev/null
+	    	if [ $? != 0 ]
+	    	then
+    			echo "Unable to convert file to the requested format."
+	    		rm -f /tmp/xf_${device}
+	    	else
+	    		/usr/lbin/prbadlist ${PFMT} < /tmp/xf_${device} 
+	    		rm -f /tmp/xf_${device}
+	    	fi
+	    fi
+	    ;;
+	add )
+	    if [ "$NEWFILE" = 'y' ]
+	    then
+		FFMT=c		
+		NEWFILE=n
+	    else
+		if [ -z "$FFMT" ]
+		then
+	    		getfilefmt
+		fi
+	    fi
+	    getinpfmt
+	    if [ ${FFMT} = 'd' -a ${IFMT} != 'd' ]	
+	    then
+		${CONV} -I d -O c -t ${TFILE} ${DTYPE} ${device} 2>/dev/null
+	    	cat /tmp/xf_${device} > ${TFILE} 2>/dev/null
+		echo "\nNOTICE: The file ${TFILE} has been converted from <dev> <blk>"
+		echo "format to <head> <cyl> format in order to add your input data.\n"
+	    	rm -f /tmp/xf_${device}
+		FFMT=c
+		prfmt=HEAD,CYL
+	    fi
+	    ${CONV} -I ${IFMT} -O ${FFMT} ${DTYPE} ${device} 2>/dev/null
+	    if [ $? != 0 ]
+	    then
+    		if checkyn ${flags} -H"
+For some reason, the data could not be added to your bad track file.  If you
+choose to continue, the input will consist of the data already in the file.
+If you quit, you will be returned to the 'setup' menu.
+
+" -D"${contbad}" -ef "Unable to get new input.  Continue (default: ${contbad})? "
+		then
+	    		rm -f /tmp/xf_${device}
+		else
+			exit 1
+		fi
+	    else
+	    	cat /tmp/xf_${device} >> ${TFILE} 2>/dev/null
+	    	rm -f /tmp/xf_${device}
+  	    	echo "\n\tThe new bad tracks have "
+	    	echo "\tbeen appended to $TFILE.\n"
+	    fi
+	    ;;
+	continue )
+		break ;;
+	esac
+	done
+    fi
+
+    FMODES="-t $TFILE $FMODES"
+
+}
+
+chkdsk() {
+    echo
+    if checkyn ${flags} -H"
+If you choose to check the disk for new bad tracks during the format, it
+will read the entire disk during the format process and take substantially
+longer.  It may, however, uncover a new bad track on the disk.
+
+" -D"${check}" -ef "Check the disk for new bad tracks (default: ${check})? "
+    then
+	check=y
+	FMODES="-c $FMODES"
+    fi
+}
+
+echo '\nAnytime you want to quit, type "q".
+If you are not sure how to answer any prompt, type "?" for help,
+or see the Administrator\047s Guide.
+\nIf a default appears in the question, press <RETURN> for the default.
+'
+if [ $# -ne 1 ]
+then
+	exit 1
+fi
+CMD=$1
+while true
+do
+case "$CMD" in
+	f*)
+		getdevice
+		FMODES="-fo ${DTYPE} ${FMTDEV}"
+		getbads
+		chkdsk
+		prcmd="FORMAT"
+		;;
+	i*)
+		getdevice
+		FMODES="-o ${DTYPE} ${FMTDEV}"
+		getbads
+		chkdsk
+		prcmd="INITIALIZE"
+		;;
+	b*)
+		getdevice
+		FMODES="-b /stand/m68k/boots/vmeboot ${DTYPE} ${FMTDEV}"
+		prcmd="INSTALL BOOTLOADER"
+		;;
+	*)
+		exit 1
+		;;
+esac
+
+if [ "$check" = y ]
+then
+	echo "\n\tThe disk will be scanned for new bad tracks"
+	if [ -f "$TFILE" -a "$CMD" != b ]
+	then
+		echo "\twith known bad track numbers taken from"
+		echo "\tthe file $TFILE"
+	fi
+fi
+	if [ -z "${prfmt}" ]
+	then prfmt="HEAD,CYL"
+	fi
+	echo "\nThis is the information for the operation:\n
+	operation:	${prcmd}
+	entered device:	${device}
+	manufacturer:	${pr_man}
+	disk size:    	${pr_sz}
+	badtrack file:	${TFILE}
+	file format:	${prfmt}
+	device name:	${FMTDEV}
+	device type:	${DTYPE}
+"
+	case `checklist ${flags} -fep 'Do you want to begin operation, or change the information [b, c, q]?' begin change ` in
+	begin )
+
+	    case "${CMD}" in
+		f*)
+		echo "\n*** Begin format of  ${FMTDEV}"
+		    ;;
+		i*)
+		echo "\n*** Begin initialization configuration on  ${FMTDEV}"
+		    ;;
+		b*)
+		echo "\n*** Begin vmeboot install as bootloader on  ${FMTDEV}"
+		    ;;
+	    *)	;;
+	    esac
+	    ${FMT} $FMODES >/dev/null 2>&1
+	    if [ $? != 0 ]
+	    then
+		    echo "\nThe format has failed.  Contact your "
+		    echo "service representative for assistance.\n"
+		    exit 1
+	    elif [ "${CMD}" != b ]
+	    then
+		    ${FMT} -r ${DTYPE} ${FMTDEV} > $TFILE 2>/dev/null
+		    if [ $? = 0 ]
+		    then
+			    echo "\n\tThe operation is complete."
+			    echo "\n\tThe current bad track list for disk $device "
+			    echo "\thas been preserved in $TFILE"
+		    else
+			    echo "\n\tThe current bad track list for disk $device"
+			    echo "\tcan't be found after this operation.  Contact"
+			    echo "\tyour service representative for assistance."
+		    fi
+	    else
+		    echo "\n\tThe bootloader installation is complete."
+	    fi
+	    ;;
+	change )
+	    ;;
+	esac
+done

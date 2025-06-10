@@ -1,0 +1,43 @@
+h50092
+s 00032/00000/00000
+d D 1.1 86/07/29 14:43:51 fnf 1 0
+c Baseline code from 5.3 release for 3b2
+e
+u
+U
+t
+T
+I 1
+#ident	"@(#)xenv:m32/pted.integr	1.1"
+if [ "on" = "$INTGR" ]
+then
+	if [ $# -eq 0 ]
+	then
+		echo "usage: "${0}" mach"
+		exit 1
+	else	
+		mach=${1}
+		SRC=`cd ../../../../;pwd`
+		HEAD=$SRC/head
+		SYSHEAD=$SRC/uts/$mach/sys
+		BASE=`cd ../../../../../../;pwd`
+		INC=$BASE/usr/include
+		INCSYS=$INC/sys
+		MACHSYS=$INC/${mach}sys
+		if [ -d $HEAD -a -d $SYSHEAD ]
+		then
+			rm -rf $INC
+			mkdir $INC $INCSYS $MACHSYS
+			cd $HEAD
+			find . -print|cpio -pdu $INC
+			cd $SYSHEAD
+			find . -print|cpio -pdu $INCSYS
+			cd $INCSYS
+			find . -print|cpio -pdlu $MACHSYS
+		else
+			echo ${0}:" ERROR files not in expected places"
+			exit 1
+		fi
+	fi
+fi
+E 1

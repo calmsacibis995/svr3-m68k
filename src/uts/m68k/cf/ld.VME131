@@ -1,0 +1,11 @@
+/*	@(#)ld.VME131	6.1		*/
+MEMORY {
+	valid : org = 0x8000, len = 0x200000
+}
+SECTIONS {
+	.text	: { }
+	GROUP	ALIGN(1024) : {
+		.data : { }
+		.bss : { }
+	}
+}
